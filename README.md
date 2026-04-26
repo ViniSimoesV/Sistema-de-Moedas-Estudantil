@@ -17,7 +17,7 @@
     </td>
     <td>
       <div>
-        <img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/img/Lumen.png" alt="Logo do Projeto" width="120px"/>
+        <img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/img/Lumen.png" alt="Logo do Projeto" width="600px"/>
       </div>
     </td>
   </tr> 
