@@ -6,13 +6,13 @@
 
 <table>
   <tr>
-    <td width="800px">
+    <td width="60%">
       <div align="justify">
         Este é um projeto de <b>Sistema de Moeda Estudantil</b>, onde o aluno participante poderá resgatar vantagens atráves de seu empenho estudantil.
       </div>
     </td>
     <td>
-      <div>
+      <td width="40%">
         <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/img/Lumen.png" alt="Logo do Projeto" width="600px"/>
       </div>
     </td>
