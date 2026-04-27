@@ -1,7 +1,4 @@
 
-
-
-
 # 🏷️ Estudantes Lúmen 👨‍💻
 
 <table>
@@ -28,12 +25,9 @@
 ### Outros exemplos de badges:
 
 [![Versão](https://img.shields.io/badge/Versão-v1.0.0-blue?style=for-the-badge)](https://github.com/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software/releases) 
-![React](https://img.shields.io/badge/React-19.1.1-007ec6?style=for-the-badge&logo=react&logoColor=white) 
-![Vite](https://img.shields.io/badge/Vite-7.1.2-007ec6?style=for-the-badge&logo=vite&logoColor=white) 
 ![Java](https://img.shields.io/badge/Java-17-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) 
 ![Maven](https://img.shields.io/badge/Maven-3.9.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) 
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-007ec6?style=for-the-badge&logo=springboot&logoColor=white) 
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.1.1-007ec6?style=for-the-badge&logo=thymeleaf&logoColor=white) 
 ![GitHub repo size](https://img.shields.io/github/repo-size/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=files) 
 ![GitHub directory file count](https://img.shields.io/github/directory-file-count/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=files) 
 ![GitHub stars](https://img.shields.io/github/stars/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=github) 
@@ -50,6 +44,7 @@
 ## 📚 Índice
 - [Links Úteis](#-links-úteis)
 - [Sobre o Projeto](#-sobre-o-projeto)
+- [Histórias do Usuário](#-histórias-do-usuário)
 - [Funcionalidades Principais](#-funcionalidades-principais)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [Arquitetura](#-arquitetura)
@@ -86,43 +81,36 @@
 ## 🔗 Links Úteis
 * 🌐 **Demo Online:** [Acesse a Aplicação Web](<link-da-demo-web>)
   > 💻 **Descrição:** Link para a aplicação em ambiente de produção (Ex: hospedado na Vercel, Netlify ou AWS S3).
-* 📱 **Download Mobile:** [App Store](<link-app-store>) | [Google Play](<link-google-play>) | [APK Direto](<link-para-apk-direto>)
-  > 📱 **Descrição:** Links diretos para download nas lojas de aplicativos (se aplicável) e para o arquivo de instalação direta no Android (APK).
 * 📖 **Documentação:** [Leia a Wiki/Docs](<link-para-docs>)
   > 📚 **Descrição:** Acesso à documentação técnica completa do projeto (Ex: Swagger/OpenAPI para API, ou Wiki interna).
 
 ---
 
 ## 📝 Sobre o Projeto
-Nesta seção, descreva de forma clara e objetiva **o propósito do seu projeto**, explicando:
 
-- **Por que ele existe** — qual motivação levou à sua criação.  
-- **Qual problema ele resolve** — que dor, necessidade ou oportunidade ele atende.  
-- **Qual o contexto** — acadêmico, profissional, pessoal, experimental, etc.  
-- **Onde ele pode ser utilizado** — cenários reais ou simulados.  
+O Estudantes Lúmens é uma plataforma de gamificação voltada ao engajamento acadêmico. O sistema recompensa o esforço dos alunos (frequência e desempenho) com Lúmens, uma moeda virtual que pode ser trocada por benefícios e prêmios em empresas parceiras.
 
-Procure responder perguntas como:
-- *Qual foi a ideia inicial do projeto?*
-- *O que ele entrega de valor ao usuário?*
-- *Por que alguém utilizaria ou contribuiria com esse projeto?*
-- *O que o torna relevante ou interessante?*
+* 🎯 **Propósito:**
+  > Por que existe: Para combater a desmotivação e a falta de propósito percebida por muitos alunos durante a vida acadêmica.
+  > Problema que resolve: A baixa participação em aulas e a falta de incentivos tangíveis para o esforço estudantil além das notas.
+  > Contexto: Projeto desenvolvido no ambiente acadêmico para simular um ecossistema real de fidelização educacional.
+  > Onde utilizar: Escolas, faculdades e cursinhos que buscam reduzir a evasão e aumentar a produtividade dos estudantes.
 
-Escreva de forma objetiva, mas completa, para que qualquer pessoa entenda rapidamente **o que é** e **por que importa**.
-
-> [!NOTE]
-> Esta seção segue boas práticas de documentação profissional e deve ser ajustada conforme o tipo e o objetivo do seu projeto.
+* ✨ **Entrega de Valor:**
+  > O projeto transforma o estudo em uma experiência meritocrática: o aluno é recompensado pelo seu tempo e energia, as instituições aumentam sua retenção e empresas parceiras ganham um canal direto com o público jovem.
 
 ---
 
+## Histórias do Usuário
+
+---
 ## ✨ Funcionalidades Principais
 Liste as funcionalidades de forma clara e objetiva.
 
 - 🔐 **Autenticação Segura:** Login, Cadastro e Recuperação de Senha.
 - 📈 **Painel de Controle:** Visualização de dados em tempo real com gráficos.
 - ⚙️ **Gerenciamento de CRUD:** Criação, Leitura, Atualização e Deleção de recursos (e.g., Usuários, Itens, Posts).
-- 📊 **Relatórios Exportáveis:** Exportação de dados em PDF, CSV ou Excel.
 - 🌐 **Internacionalização (i18n):** Suporte a múltiplos idiomas.
-- 🧵 **Logs e Monitoramento:** Registro detalhado de atividades e análise de desempenho.
 - 🔄 **Integração com APIs Externas:** Conexão com serviços de terceiros (pagamentos, mapas, autenticação, etc.).
 - 📨 **Sistema de Notificações:** Envio de alertas por e-mail, push ou notificações internas.
 
@@ -134,30 +122,23 @@ As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construç
 
 ### 💻 Front-end
 
-* **Framework/Biblioteca:** [Ex: React v18, Vue.js v3, Angular v17]
-* **Linguagem/Superset:** [Ex: TypeScript, JavaScript ES6+]
-* **Estilização:** [Ex: Tailwind CSS, Sass, Styled Components, Material UI]
+* **Framework/Biblioteca:** HTML
+* **Linguagem/Superset:** JavaScript ES6+
+* **Estilização:** CSS
 * **Gerenciamento de Estado:** [Ex: Redux Toolkit, Zustand, Context API]
-* **Build Tool:** [Ex: Vite, Webpack]
 
 ### 🖥️ Back-end
 
-* **Linguagem/Runtime:** [Ex: Java 17 (JDK), Node.js v20, Python 3.11]
-* **Framework:** [Ex: Spring Boot 3.x, NestJS, Express, Django]
-* **Banco de Dados:** [Ex: PostgreSQL, MySQL, MongoDB]
-* **ORM / Query Builder:** [Ex: Hibernate/JPA, Prisma, TypeORM]
-* **Autenticação:** [Ex: JWT, OAuth2, Spring Security]
-
-### 📱 Mobile (Opcional)
-
-* **Framework:** [Ex: React Native, Flutter, Kotlin Multiplatform]
-* **Ferramentas:** [Ex: Expo, Android Studio, Xcode]
+* **Linguagem/Runtime:** Java 21 (JDK), Node.js
+* **Framework:** Spring Boot 3.x
+* **Banco de Dados:** PostgreSQL
+* **Autenticação:** Spring Security
 
 ### ⚙️ Infraestrutura & DevOps
 
-* **Containerização:** [Ex: Docker, Docker Compose]
+* **Containerização:** Docker
 * **Orquestração:** [Ex: Kubernetes (K8s)]
-* **Cloud:** [Ex: AWS (EC2, RDS, S3), Vercel, Heroku, Google Cloud]
+* **Cloud:**  Vercel, Render
 * **CI/CD:** [Ex: GitHub Actions, Jenkins, SonarQube]
 
 ---
@@ -168,9 +149,9 @@ Descreva aqui a **arquitetura completa do sistema**, explicando como as camadas,
 
 Você pode incluir:
 
-- **Visão geral da arquitetura** (ex.: camadas, módulos, microsserviços, monólito modular, hexagonal, MVC etc.)
+- **Visão geral da arquitetura** Camadas, MVC
 - **Principais componentes** e o papel de cada um
-- **Padrões de design adotados** (ex.: Repository, Service Layer, DTOs, Factory, Observer)
+- **Padrões de design adotados** Repository, Service Layer, DTOs, Facade, Security
 - **Fluxo de dados** entre as partes do sistema
 - **Tecnologias utilizadas em cada camada**
 - **Decisões arquiteturais importantes**
@@ -182,8 +163,8 @@ Para melhor visualização e entendimento da estrutura do sistema, os diagramas 
 
 | Diagrama de Arquitetura | Detalhe da Arquitetura |
 | :---: | :---: |
-| **Visão Geral (Macro)** | **Camada de Serviço (Micro)** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Visão Geral do Sistema" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Componentes ou Serviço X" width="120px" height="120px"> |
+| **Visão Geral (Macro)** | **Camada de Serviço (Micro)** | 
+| <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/img/Lumen.png" alt="Logo do Projeto" width="120px" height="120px"/> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Componentes ou Serviço X" width="120px" height="120px"> |
 | **Modelo de Dados (Entidades)** | **Fluxo de Autenticação** |
 | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Entidade-Relacionamento (DER)" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Sequência de Login" width="120px" height="120px"> |
 | **Infraestrutura (Cloud)** | **API Gateway (Rotas)** |
