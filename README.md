@@ -201,8 +201,8 @@ Para melhor visualização e entendimento da estrutura do sistema, os diagramas 
 
 | Diagrama de Arquitetura | Detalhe da Arquitetura |
 | :---: | :---: |
-| **Visão Geral (Macro)** | **Camada de Serviço (Micro)** | 
-| <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/img/Lumen.png" alt="Logo do Projeto" width="120px" height="120px"/> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Componentes ou Serviço X" width="120px" height="120px"> |
+| **Diagrama de Componentes** | **Diagrama de Classe** | 
+| <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/Diagrama/Diagrama de Componentes - Plant UML.png" alt="Logo do Projeto" width="200px" height="200px"/> |  <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/Diagrama/Diagrama de Classe.pdf" alt="Logo do Projeto" width="200px" height="200px"/> |
 | **Modelo de Dados (Entidades)** | **Fluxo de Autenticação** |
 | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Entidade-Relacionamento (DER)" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Sequência de Login" width="120px" height="120px"> |
 | **Infraestrutura (Cloud)** | **API Gateway (Rotas)** |
