@@ -91,17 +91,55 @@
 O Estudantes Lúmens é uma plataforma de gamificação voltada ao engajamento acadêmico. O sistema recompensa o esforço dos alunos (frequência e desempenho) com Lúmens, uma moeda virtual que pode ser trocada por benefícios e prêmios em empresas parceiras.
 
 * 🎯 **Propósito:**
-  > Por que existe: Para combater a desmotivação e a falta de propósito percebida por muitos alunos durante a vida acadêmica.
-  > Problema que resolve: A baixa participação em aulas e a falta de incentivos tangíveis para o esforço estudantil além das notas.
-  > Contexto: Projeto desenvolvido no ambiente acadêmico para simular um ecossistema real de fidelização educacional.
-  > Onde utilizar: Escolas, faculdades e cursinhos que buscam reduzir a evasão e aumentar a produtividade dos estudantes.
+  - Por que existe: Para combater a desmotivação e a falta de propósito percebida por muitos alunos durante a vida acadêmica.
+  - Problema que resolve: A baixa participação em aulas e a falta de incentivos tangíveis para o esforço estudantil além das notas.
+  - Contexto: Projeto desenvolvido no ambiente acadêmico para simular um ecossistema real de fidelização educacional.
+  - Onde utilizar: Escolas, faculdades e cursinhos que buscam reduzir a evasão e aumentar a produtividade dos estudantes.
 
 * ✨ **Entrega de Valor:**
-  > O projeto transforma o estudo em uma experiência meritocrática: o aluno é recompensado pelo seu tempo e energia, as instituições aumentam sua retenção e empresas parceiras ganham um canal direto com o público jovem.
+  - O projeto transforma o estudo em uma experiência meritocrática: o aluno é recompensado pelo seu tempo e energia, as instituições aumentam sua retenção e empresas parceiras ganham um canal direto com o público jovem.
 
 ---
 
 ## Histórias do Usuário
+
+* **Cadastro e Acesso**
+  * **HS01 - Aluno deseja ingressar no sistema**
+    - Como aluno, quero me cadastrar no sistema informando meus dados pessoais (nome, email, CPF, RG, endereço), selecionando minha instituição, meu curso e definhando uma senha.
+
+  * **HS02 - Cadastro de Empresa Parceira**
+    - Como representante de uma empresa, quero cadastrar minha organização no sistema, informando uma lista de professores e também oferecendo vantagens e produtos aos alunos em troca de moedas virtuais.
+
+  * **HS03 - Autenticação**
+    - Como usuário (aluno, professor ou empresa), quero realizar login com CPF e senha para acessar as funcionalidades restritas do sistema com segurança.
+
+* **Professor**
+  * **HS04 - Distribuição de Moeda**
+    - Como professor, quero enviar moedas do meu saldo para um aluno específico, inserindo uma mensagem obrigatória de justificativa, para reconhecer seu bom desempenho ou comportamento.
+
+  * **HS05 - Consulta de Saldo e Extrato (Professor)**
+    - Como professor, quero visualizar meu saldo atual de moedas e o histórico de envios realizados, para gerir minha distribuição de mérito.
+   
+* **Aluno**
+  * **HS06 - Notificação de Recebimento**
+    - Como aluno, quero ser notificado por um email automático sempre que um professor me enviar moedas e o reconhecimento recebido.
+
+  * **HS07 - Consulta de Saldo e Extrato (Aluno)**
+    - Como aluno, quero consultar meu saldo total e o extrato de transações (recebimentos de professores e trocas por vantagens) para acompanhar minha economia de moedas.
+
+  * **HS08 - Resgate de Vantagem**
+    - Como aluno, quero selecionar uma vantagem disponível no sistema e trocá-la por minhas moedas.
+
+  * **HS09 - Resgate de Cupom**
+    - Como aluno, ao realizar uma troca, quero receber um email com um código gerado pelo sistema para que eu possa apresentar a confirmação da troca presencialmente na empresa.
+
+* **Vantagens**
+  * **HS10 - Cadastro de Vantagens**
+    - Como empresa parceira, quero cadastrar produtos ou descontos, incluindo descrição, foto e custo em moedas, para ficarem visíveis no catálogo dos alunos.
+
+  * **HS11 - Notificação de Resgate**
+    - Como empresa parceira, quero receber um email com o código da transação sempre que um aluno resgatar uma vantagem minha, para que eu possa conferir e validar a entrega do produto ou serviço.
+
 
 ---
 ## ✨ Funcionalidades Principais
