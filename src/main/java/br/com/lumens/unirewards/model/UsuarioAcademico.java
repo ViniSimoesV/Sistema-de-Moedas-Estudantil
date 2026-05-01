@@ -18,7 +18,4 @@ public abstract class UsuarioAcademico extends Usuario {
     @JoinColumn(name = "instituicao_id") 
     private Instituicao instituicao;
 
-    @ManyToOne
-    @JoinColumn(name = "instituicao_id")
-    private Instituicao instituicaoObjeto;
 }

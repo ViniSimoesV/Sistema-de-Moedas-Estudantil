@@ -20,8 +20,8 @@ public class Instituicao {
     @Column(nullable = false, unique = true)
     private String nome;
 
-    @OneToMany(mappedBy = "instituicaoObjeto")
-    private List<Professor> professores;
+    @OneToMany(mappedBy = "instituicao")
+    private List<UsuarioAcademico> academicos;
 
     public void lancarListaProfessores(List<Professor> lista) {
         // Esta lógica será implementada no Service para validar e salvar em lote

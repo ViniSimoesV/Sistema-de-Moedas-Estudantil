@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import java.util.List;
 
 @Entity
 @Table(name = "alunos")
@@ -37,6 +38,10 @@ public class Aluno extends UsuarioAcademico {
     // Um aluno tem uma carteira para acumular os Lúmens
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Carteira carteira;
+
+    // Dentro de Aluno.java
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
+    private List<Inventario> cupons;
 
     // Métodos
     public Aluno cadastrarAluno(Aluno aluno) {
