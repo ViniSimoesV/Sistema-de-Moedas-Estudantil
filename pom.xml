@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.lumens</groupId>
-	<artifactId>estudantes-lumens</artifactId>
+	<artifactId>UniRewards</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>UniRewards</name>
+	<description>UniRewards</description>
 	<url/>
 	<licenses>
 		<license/>
