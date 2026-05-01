@@ -1,10 +1,46 @@
 package br.com.lumens.unirewards.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class Aluno {
-    
+@Entity
+@Table(name = "alunos")
+@PrimaryKeyJoinColumn(name = "usuario_id")
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Aluno extends UsuarioAcademico {
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    private String rg;
+    private String curso;
+
+    @Column(name = "end_rua")
+    private String rua;
+
+    @Column(name = "end_numero")
+    private Integer numero;
+
+    @Column(name = "end_complemento")
+    private String complemento;
+
+    @Column(name = "end_bairro")
+    private String bairro;
+
+    @Column(name = "end_cidade")
+    private String cidade;
+
+    // Um aluno tem uma carteira para acumular os Lúmens
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Carteira carteira;
+
+    // Métodos
+    public Aluno cadastrarAluno(Aluno aluno) {
+        // Lógica de cadastro no Service
+        return aluno;
+    }
 }
