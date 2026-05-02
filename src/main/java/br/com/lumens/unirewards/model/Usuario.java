@@ -22,6 +22,9 @@ public abstract class Usuario {
     @Column(name = "tipo_usuario")
     private String tipoUsuario; // Ex: 'ALUNO', 'PROFESSOR' ou 'EMPRESA'
 
+    @Column(name = "url_foto_perfil")
+    private String urlFotoPerfil; // Ex: "https://example.com/foto.jpg"
+
     // Métodos para edição e exclusão de perfil
     public void editarPerfil() {
         // Lógica de edição no Service

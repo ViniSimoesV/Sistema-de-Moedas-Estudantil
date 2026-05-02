@@ -19,6 +19,7 @@ public class Aluno extends UsuarioAcademico {
 
     private String rg;
     private String curso;
+    private int nivel = 1; // Nível inicial do aluno
 
     @Column(name = "end_rua")
     private String rua;
