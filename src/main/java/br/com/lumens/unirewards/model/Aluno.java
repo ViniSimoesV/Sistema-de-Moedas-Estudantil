@@ -14,9 +14,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public class Aluno extends UsuarioAcademico {
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     private String rg;
     private String curso;
     private int nivel = 1; // Nível inicial do aluno
