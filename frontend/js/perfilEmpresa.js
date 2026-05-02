@@ -1,5 +1,10 @@
 import { CONFIG } from './config.js';
 
+const modal = document.getElementById('modalEditar');
+const btnEditar = document.querySelector('.btn-edit-text');
+const btnFechar = document.getElementById('btnFecharModal');
+const formEditar = document.getElementById('formEditarPerfil');
+
 document.addEventListener('DOMContentLoaded', async () => {
     const empresaId = localStorage.getItem('usuarioId'); 
     
@@ -40,5 +45,91 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (error) {
         console.error('Erro ao carregar perfil:', error);
+    }
+});
+
+
+// Abrir modal
+btnEditar.addEventListener('click', () => {
+    // Preenche os dados nos campos do modal antes de abrir
+    document.getElementById('editNome').value = document.querySelector('.user-name').textContent;
+    const ramoAtual = document.querySelector('.ramo-valor').textContent;
+    document.getElementById('editRamo').value = ramoAtual === "Não informado" ? "" : ramoAtual;
+    
+    modal.classList.add('active');
+});
+
+// Fechar modal
+btnFechar.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
+
+// Fechar modal ao clicar fora da caixa branca
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.classList.remove('active');
+    }
+});
+
+// Enviar atualização para o Java
+formEditar.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = localStorage.getItem('usuarioId');
+    const fileInput = document.getElementById('editFotoFile');
+    let urlFotoFinal = document.querySelector('.perfil-avatar').src;
+
+    if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${id}-${Date.now()}.${fileExt}`;
+
+        try {
+            // Tentativa de Upload
+            const uploadResponse = await fetch(`${CONFIG.SUPABASE_URL}/storage/v1/object/foto_de_perfil/${fileName}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
+                    'Content-Type': file.type
+                },
+                body: file
+            });
+
+            // CRITICAL: Se o bucket continua vazio, esta verificação está falhando
+            if (uploadResponse.ok) {
+                urlFotoFinal = `${CONFIG.SUPABASE_URL}/storage/v1/object/public/foto_de_perfil/${fileName}`;
+                console.log("Upload realizado com sucesso: ", urlFotoFinal);
+            } else {
+                const errorData = await uploadResponse.json();
+                console.error("Erro detalhado do Supabase:", errorData);
+                alert("Erro ao subir imagem: " + (errorData.message || "Verifique as políticas do bucket."));
+                return; // PARA A EXECUÇÃO AQUI se o arquivo não subiu
+            }
+        } catch (error) {
+            console.error("Falha de conexão com Supabase:", error);
+            alert("Erro de rede ao tentar subir a foto.");
+            return;
+        }
+    }
+
+    // Só chega aqui se o upload funcionou ou se não havia foto nova
+    const dadosAtualizados = {
+        nome: document.getElementById('editNome').value,
+        ramoAtuacao: document.getElementById('editRamo').value,
+        urlFotoPerfil: urlFotoFinal 
+    };
+
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/api/empresas/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosAtualizados)
+        });
+
+        if (response.ok) {
+            alert("Perfil atualizado com sucesso!");
+            location.reload();
+        }
+    } catch (error) {
+        console.error("Erro ao salvar no Java:", error);
     }
 });

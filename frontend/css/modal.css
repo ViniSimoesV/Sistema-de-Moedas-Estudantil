@@ -1,0 +1,146 @@
+:root {
+    /* Paleta de Cores UniRewards */
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+    --bg-modal: #1a1d23;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --accent-yellow: #f1c40f;
+    --btn-confirm: #2d6a4f;
+    --btn-confirm-hover: #40916c;
+    --btn-cancel: #e0e0e0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --glass-effect: blur(10px);
+}
+
+/* Estrutura da Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-overlay);
+    backdrop-filter: var(--glass-effect);
+    
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease-in-out;
+}
+
+/* Quando a modal estiver ativa */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--bg-modal);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+}
+
+/* Estilização Interna */
+.modal-header h4 {
+    color: var(--accent-yellow);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-body .input-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-body input {
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background: #0d1117;
+    color: white;
+}
+
+/* Botões */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-cancelar {
+    background: var(--btn-cancel);
+    color: #333;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-salvar {
+    background: var(--btn-confirm);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-salvar:hover {
+    background: var(--btn-confirm-hover);
+}
+
+
+/* Responsividade */
+/* Media Query para dispositivos móveis */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1.5rem; /* Reduz o preenchimento interno */
+        width: 95%; /* Ocupa quase toda a largura da tela */
+        border-radius: 10px;
+    }
+
+    .modal-header h4 {
+        font-size: 1rem; /* Diminui levemente o título */
+    }
+
+    .modal-footer {
+        flex-direction: column; /* Empilha os botões verticalmente */
+        gap: 0.8rem;
+    }
+
+    .btn-cancelar, .btn-salvar {
+        width: 100%; /* Botões ocupam a largura total para facilitar o toque */
+        padding: 1rem; /* Aumenta a área de clique */
+        text-align: center;
+    }
+    
+    .modal-body input {
+        font-size: 16px; /* Evita o zoom automático do iOS ao focar no input */
+    }
+}
