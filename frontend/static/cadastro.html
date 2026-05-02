@@ -31,24 +31,23 @@
 
         <form id="form-cadastro">
             <div class="input-group">
-                <input type="text" id="nome" placeholder="Nome Completo" required>
+                <input type="text" id="nome" name="nome" placeholder="Nome Completo" required>
             </div>
             <div class="input-group">
-                <input type="email" id="email" placeholder="E-mail Acadêmico" required>
+                <input type="email" id="email" name="email" placeholder="E-mail Acadêmico" required>
             </div>
             <div class="input-group">
-                <input type="text" id="documento" placeholder="CPF" required>
+                <input type="text" id="documento" name="documento" placeholder="CPF" required>
             </div>
             <!-- Campo dinâmico para Alunos (selecionar Instituição cadastrada) -->
             <div class="input-group" id="group-vinculo">
-                <select id="vinculo" required>
+                <select id="vinculo" name="instituicao" required>
                     <option value="" disabled selected>Selecione sua Instituição</option>
-                    <option value="puc">PUC Minas</option>
-                    <!-- Instituições vêm do banco via Instituicao.java -->
+                    <option value="1">PUC Minas</option>
                 </select>
             </div>
             <div class="input-group">
-                <input type="password" id="senha" placeholder="Sua Senha" required>
+                <input type="password" id="senha" name="senha" placeholder="Sua Senha" required>
             </div>
             
             <button type="submit" class="btn btn-confirmar">Finalizar Cadastro</button>
@@ -56,7 +55,7 @@
         </form>
     </div>
 
-    <script src="../js/cadastro.js" defer></script>
+    <script type="module" src="../js/cadastro.js" defer></script>
     <script src="../js/energia.js" defer></script>
 </body>
 </html>

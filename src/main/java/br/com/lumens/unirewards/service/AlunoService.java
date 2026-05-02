@@ -3,7 +3,10 @@ package br.com.lumens.unirewards.service;
 import br.com.lumens.unirewards.dto.AlunoDTO;
 import br.com.lumens.unirewards.model.Aluno;
 import br.com.lumens.unirewards.model.Carteira;
+import br.com.lumens.unirewards.model.Instituicao;
 import br.com.lumens.unirewards.repository.AlunoRepository;
+import br.com.lumens.unirewards.repository.InstituicaoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,9 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private InstituicaoRepository instituicaoRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -44,10 +50,17 @@ public class AlunoService {
         aluno.setRg(dto.getRg());
         aluno.setCurso(dto.getCurso());
         aluno.setNivel(1); 
+
+        // Busca a instituição pelo ID enviado pelo front-end
+        Instituicao inst = instituicaoRepository.findById(dto.getInstituicaoId())
+            .orElseThrow(() -> new RuntimeException("Instituição não encontrada"));
+        
+        aluno.setInstituicao(inst);
         
         // Endereço
         aluno.setRua(dto.getRua());
         aluno.setNumero(dto.getNumero());
+        aluno.setComplemento(dto.getComplemento());
         aluno.setBairro(dto.getBairro());
         aluno.setCidade(dto.getCidade());
 
@@ -92,6 +105,7 @@ public class AlunoService {
         aluno.setNivel(dto.getNivel());
         aluno.setRua(dto.getRua());
         aluno.setNumero(dto.getNumero());
+        aluno.setComplemento(dto.getComplemento());
         aluno.setBairro(dto.getBairro());
         aluno.setCidade(dto.getCidade());
 

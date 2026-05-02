@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/empresas")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "https://unirewards.vercel.app"})
 public class EmpresaController {
 
     @Autowired

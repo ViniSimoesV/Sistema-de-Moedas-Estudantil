@@ -21,4 +21,7 @@ public abstract class UsuarioAcademico extends Usuario {
     @JoinColumn(name = "instituicao_id") 
     private Instituicao instituicao;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Carteira carteira;
+
 }

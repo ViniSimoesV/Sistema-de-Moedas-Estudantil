@@ -33,6 +33,7 @@ public class EmpresaService {
         empresa.setNome(dto.getNome());
         empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
         empresa.setUrlFotoPerfil(dto.getUrlFotoPerfil());
+        empresa.setTotalResgatados(dto.getTotalResgatados() != null ? dto.getTotalResgatados() : 0);
         empresa.setTipoUsuario("EMPRESA");
 
         // Dados específicos de Empresa
@@ -48,6 +49,7 @@ public class EmpresaService {
 
         empresa.setNome(dto.getNome());
         empresa.setUrlFotoPerfil(dto.getUrlFotoPerfil());
+        empresa.setRamoAtuacao(dto.getRamoAtuacao());
         
         if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
             empresa.setSenha(passwordEncoder.encode(dto.getSenha()));

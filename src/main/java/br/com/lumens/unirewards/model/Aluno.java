@@ -18,19 +18,19 @@ public class Aluno extends UsuarioAcademico {
     private String curso;
     private int nivel = 1; // Nível inicial do aluno
 
-    @Column(name = "end_rua")
+    @Column(name = "rua")
     private String rua;
 
-    @Column(name = "end_numero")
+    @Column(name = "numero")
     private Integer numero;
 
-    @Column(name = "end_complemento")
+    @Column(name = "complemento")
     private String complemento;
 
-    @Column(name = "end_bairro")
+    @Column(name = "bairro")
     private String bairro;
 
-    @Column(name = "end_cidade")
+    @Column(name = "cidade")
     private String cidade;
 
     // Um aluno tem uma carteira para acumular os Lúmens

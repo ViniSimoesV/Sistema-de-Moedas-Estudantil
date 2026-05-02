@@ -17,6 +17,12 @@ public class Empresa extends Usuario {
     @Column(nullable = false, unique = true)
     private String cnpj;
 
+    @Column(name = "total_resgatados", nullable = false)
+    private Integer totalResgatados = 0;
+
+    @Column(name = "ramo_atuacao")
+    private String ramoAtuacao;
+
     // Uma empresa oferece várias vantagens
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private List<Vantagem> vantagens;
