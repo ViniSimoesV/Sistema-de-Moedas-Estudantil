@@ -2,7 +2,7 @@ const canvas = document.getElementById('energyCanvas');
 const ctx = canvas.getContext('2d');
 
 let particles = [];
-const particleCount = 210; // Aumentei um pouco para compensar a lentidão
+const particleCount = 250;
 
 function resize() {
     canvas.width = window.innerWidth;
@@ -33,7 +33,7 @@ class Particle {
         this.size = Math.random() * 2.5 + 0.5; // Tamanhos variados como poeira estelar
         this.color = lumenColors[Math.floor(Math.random() * lumenColors.length)];
         
-        // Velocidade reduzida para um movimento bem lento
+        // Velocidade de movimento
         this.speedX = Math.random() * 0.4 + 0.1; 
         this.amplitude = Math.random() * 1.5 + 0.5; 
         this.frequency = Math.random() * 0.0015 + 0.0005; 
@@ -43,7 +43,7 @@ class Particle {
 
     update() {
         this.x += this.speedX;
-        // Ondulação muito suave
+        // Ondulação suave para simular energia fluindo
         this.y += Math.sin(this.x * this.frequency + this.offset) * 0.5;
 
         // Reset infinito

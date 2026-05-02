@@ -1,0 +1,222 @@
+.perfil-page {
+    padding-top: 100px; /* Espaço para o navbar fixo */
+    min-height: 100vh;
+}
+
+.perfil-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 3rem; 
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.perfil-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; 
+}
+
+/* Separação dos títulos */
+.module-title {
+    color: var(--lumen-gold);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem; 
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    padding-bottom: 0.8rem;
+    display: block;
+    width: 100%;
+}
+
+/* Estilização do texto dos dados */
+.data-group {
+    margin-bottom: 1.2rem;
+}
+
+.data-label {
+    display: block;
+    color: var(--navy-light);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.data-value {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+/* Efeito de Vidro */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+/* Sidebar e Gamificação */
+.perfil-card {
+    text-align: center;
+}
+
+.avatar-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* A Moldura de Onda (Atrás da imagem) */
+.avatar-container::before {
+    content: "";
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    background: linear-gradient(45deg, var(--lumen-gold), #8A2BE2); /* Cores do Lúmen */
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    animation: wave-morph 8s linear infinite;
+    opacity: 0.6;
+    z-index: 0;
+}
+
+/* Segunda camada de onda para dar profundidade */
+.avatar-container::after {
+    content: "";
+    position: absolute;
+    width: 115%;
+    height: 115%;
+    border: 2px solid var(--lumen-gold);
+    border-radius: 50% 50% 30% 70% / 50% 30% 70% 50%;
+    animation: wave-morph 12s linear infinite reverse;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.perfil-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: var(--navy-dark);
+    border-radius: 50%; 
+    position: relative;
+    z-index: 2;
+    padding: 10px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.level-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: linear-gradient(135deg, var(--lumen-gold) 0%, #FFA500 100%);
+    color: var(--navy-dark);
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    z-index: 3;
+    letter-spacing: 0.5px;
+}
+
+.lumen-balance {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 215, 0, 0.05); 
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem; 
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.wallet-lumen {
+    width: 8rem;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)); /* Brilho externo[cite: 2, 5] */
+    animation: mini-pulse 2s infinite alternate; /* Reutiliza a animação de pulso[cite: 4] */
+}
+
+.lumen-values {
+    text-align: left; /* Alinhamento para parecer uma carteira real[cite: 12] */
+}
+
+.lumen-count {
+    display: block;
+    font-size: 1.8rem; /* Número bem visível[cite: 13] */
+    font-weight: 800;
+    color: var(--lumen-gold);
+    line-height: 1;
+}
+
+.lumen-label {
+    font-size: 0.75rem;
+    color: var(--navy-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* Posicionamento do Editar */
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+/* Centralização do conteúdo de completar perfil */
+.module-body.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+/* Versão menor do botão */
+.btn-small {
+    padding: 0.6rem 1.5rem !important; 
+    font-size: 0.9rem !important;
+    width: auto !important;
+}
+
+/* Classe utilitária para esconder módulos via JS */
+.hidden {
+    display: none !important;
+}
+
+/* Ajuste no botão de texto */
+.btn-edit-text {
+    background: none;
+    border: none;
+    color: var(--lumen-gold);
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.btn-edit-text:hover { opacity: 1; }
+
+
+/* Animação */
+
+@keyframes wave-morph {
+    0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    33% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+    66% { border-radius: 30% 70% 70% 30% / 50% 70% 30% 50%; }
+    100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}

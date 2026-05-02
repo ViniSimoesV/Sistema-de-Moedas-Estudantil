@@ -1,0 +1,48 @@
+/* Animação de Órbita e Pulso da Moeda */
+@keyframes lumen-orbital-pulse {
+    0% {
+        transform: rotate(0deg) translateX(18px) rotate(0deg) scale(1);
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+    }
+    25% {
+        transform: rotate(90deg) translateX(18px) rotate(-90deg) scale(1.05);
+    }
+    50% {
+        transform: rotate(180deg) translateX(18px) rotate(-180deg) scale(1.1);
+        filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.8));
+    }
+    75% {
+        transform: rotate(270deg) translateX(18px) rotate(-270deg) scale(1.05);
+    }
+    100% {
+        transform: rotate(360deg) translateX(18px) rotate(-360deg) scale(1);
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+    }
+}
+
+/* Animação do Brilho de Fundo (Glow) */
+@keyframes glow-simple-pulse {
+    from { 
+        transform: scale(1); 
+        opacity: 0.3; 
+    }
+    to { 
+        transform: scale(1.6); 
+        opacity: 0.6; 
+    }
+}
+
+/* Aplicação das classes */
+.lumen-image {
+    animation: lumen-orbital-pulse 3.5s linear infinite;
+}
+
+.lumen-glow {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+    border-radius: 40%;
+    z-index: 1;
+    animation: glow-simple-pulse 5.25s ease-in-out infinite alternate;
+}

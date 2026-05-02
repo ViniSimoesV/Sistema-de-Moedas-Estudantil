@@ -89,7 +89,7 @@ body {
     gap: 1rem;
 }
 
-.btn {
+.btn{
     padding: 1rem 2.5rem;
     border-radius: 8px;
     font-weight: bold;
@@ -98,6 +98,10 @@ body {
     border: none;
     font-size: 1rem;
     text-decoration: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-confirmar {
@@ -134,7 +138,6 @@ body {
     height: auto;
     position: relative;
     z-index: 2;
-    animation: lumen-orbital-pulse 3.5s linear infinite;
     filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
 }
 
@@ -144,40 +147,4 @@ body {
     justify-content: center;
     align-items: center;
     padding-right: 50px;
-}
-
-.lumen-glow {
-    position: absolute;
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
-    border-radius: 40%;
-    animation: glow-simple-pulse 5.25s ease-in-out infinite alternate;
-    z-index: 1;
-}
-
-@keyframes lumen-orbital-pulse {
-    0% {
-        transform: rotate(0deg) translateX(18px) rotate(0deg) scale(1);
-        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
-    }
-    25% {
-        transform: rotate(90deg) translateX(18px) rotate(-90deg) scale(1.05);
-    }
-    50% {
-        transform: rotate(180deg) translateX(18px) rotate(-180deg) scale(1.1);
-        filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.8));
-    }
-    75% {
-        transform: rotate(270deg) translateX(18px) rotate(-270deg) scale(1.05);
-    }
-    100% {
-        transform: rotate(360deg) translateX(18px) rotate(-360deg) scale(1);
-        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
-    }
-}
-
-@keyframes glow-simple-pulse {
-    from { transform: scale(1); opacity: 0.3; }
-    to { transform: scale(1.6); opacity: 0.6; }
 }

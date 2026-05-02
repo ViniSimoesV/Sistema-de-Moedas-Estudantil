@@ -1,0 +1,52 @@
+/* Entrada suave do Card de Cadastro */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pulso sutil para o logo no formulário */
+@keyframes mini-pulse {
+    from { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); 
+    }
+    to { 
+        transform: scale(1.1); 
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); 
+    }
+}
+
+/* Nebulosas de fundo (Partículas lentas) */
+@keyframes floating-glow {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(100px, 50px) scale(1.2); }
+    100% { transform: translate(-50px, 150px) scale(0.9); }
+}
+
+/* Aplicação das classes */
+.cadastro-container {
+    animation: slideUpFade 0.8s ease-out forwards;
+}
+
+.form-logo {
+    animation: mini-pulse 2s ease-in-out infinite alternate;
+}
+
+.cadastro-page::before,
+.cadastro-page::after {
+    animation: floating-glow 15s infinite alternate;
+}
+
+#energyCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: var(--navy-dark);
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cadastro.css">
+    <link rel="stylesheet" href="../css/energia.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="cadastro-page">
+
+    <canvas id="energyCanvas"></canvas>
+
+    <div class="cadastro-container">
+        <header class="form-header">
+            <a href="../index.html">
+                <img src="../assets/Lumen.png" alt="Lúmen" class="form-logo">
+            </a>
+            <h2>Bem-vindo de volta</h2>
+        </header>
+
+        <form id="form-login">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="E-mail Acadêmico" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="senha" placeholder="Senha" required>
+            </div>
+            
+            <div class="form-options">
+                <a href="#" class="forgot-password">Esqueci minha senha</a>
+            </div>
+            
+            <button type="submit" class="btn btn-confirmar">Entrar</button>
+            <a href="./alunoPerfil.html">aluno</a>
+            <p class="form-footer">Não tem uma conta? <a href="cadastro.html">Cadastrar-se</a></p>
+        </form>
+    </div>
+
+    <!-- Scripts de animação e lógica -->
+    <script src="../js/energia.js" defer></script>
+</body>
+</html>
