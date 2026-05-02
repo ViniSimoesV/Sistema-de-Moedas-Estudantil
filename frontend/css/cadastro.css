@@ -1,0 +1,83 @@
+.cadastro-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--bg-gradient);
+}
+
+.cadastro-container {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    color: var(--navy-dark);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-logo {
+    width: 100px;
+    margin-bottom: 1rem;
+}
+
+.user-type-selector {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 2rem;
+}
+
+.type-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 1rem 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy-light);
+    transition: 0.3s;
+}
+
+.type-btn.active {
+    color: var(--lumen-gold);
+    border-bottom: 3px solid var(--lumen-gold);
+}
+
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--navy-light);
+}
+
+.btn-confirmar {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.form-footer a {
+    color: var(--navy-light);
+    font-weight: bold;
+    text-decoration: none;
+}

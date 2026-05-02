@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - UniRewards</title>
+    <link rel="icon" href="./assets/lumen.png" type="image/png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cadastro.css"> <!-- Arquivo de estilo específico -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="cadastro-page">
+    <div class="cadastro-container">
+        <header class="form-header">
+            <img src="../assets/lumen.png" alt="Lúmen" class="form-logo">
+            <h2>Crie sua conta</h2>
+        </header>
+        
+        <!-- Seletor de Tipo de Usuário -->
+        <div class="user-type-selector">
+            <button class="type-btn active" onclick="setFormType('aluno')">Sou Aluno</button>
+            <button class="type-btn" onclick="setFormType('empresa')">Sou Empresa</button>
+            <button class="type-btn" onclick="setFormType('instituicao')">Sou Instituição</button>
+        </div>
+
+        <form id="form-cadastro">
+            <div class="input-group">
+                <input type="text" id="nome" placeholder="Nome Completo" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="E-mail Acadêmico" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="documento" placeholder="CPF" required>
+            </div>
+            <!-- Campo dinâmico para Alunos (selecionar Instituição cadastrada) -->
+            <div class="input-group" id="group-vinculo">
+                <select id="vinculo" required>
+                    <option value="" disabled selected>Selecione sua Instituição</option>
+                    <option value="puc">PUC Minas</option>
+                    <!-- Instituições vêm do banco via Instituicao.java -->
+                </select>
+            </div>
+            <div class="input-group">
+                <input type="password" id="senha" placeholder="Sua Senha" required>
+            </div>
+            
+            <button type="submit" class="btn-confirmar">Finalizar Cadastro</button>
+            <p class="form-footer">Já tem uma conta? <a href="../static/login.html">Entrar</a></p>
+        </form>
+    </div>
+
+    <script src="../js/cadastro.js" defer></script>
+</body>
+</html>
