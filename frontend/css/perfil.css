@@ -220,3 +220,36 @@
     66% { border-radius: 30% 70% 70% 30% / 50% 70% 30% 50%; }
     100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
 }
+
+/* Responsividade */
+/* Media Query para Celulares e Tablets */
+@media (max-width: 768px) {
+    .perfil-container {
+        grid-template-columns: 1fr; /* Muda de 2 colunas para uma */
+        gap: 2rem;
+        padding: 2rem 1rem;
+        padding-top: 100px; /* Mantém o respiro para a navbar[cite: 4] */
+    }
+
+    .perfil-sidebar {
+        width: 100%; /* Sidebar ocupa a largura total[cite: 4] */
+    }
+
+    .avatar-container {
+        width: 140px; /* Reduz um pouco o tamanho do avatar no mobile[cite: 4] */
+        height: 140px;
+    }
+
+    .title {
+        font-size: 2.5rem; /* Ajusta títulos hero para mobile[cite: 6] */
+    }
+
+    .lumen-balance {
+        flex-direction: column; /* Alinha ícone e saldo verticalmente[cite: 4] */
+        text-align: center;
+    }
+
+    .lumen-values {
+        text-align: center;
+    }
+}

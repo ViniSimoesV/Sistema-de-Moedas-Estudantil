@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;800&display=swap');
+
 /* Variáveis baseadas na sua paleta */
 :root {
     --lumen-gold: #FFD700;
@@ -15,10 +17,17 @@
     font-family: 'Inter', sans-serif;
 }
 
+h1, h2, h3, h4, .module-title, .logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em; 
+}
+
 body {
     background: var(--bg-gradient);
     color: var(--white);
-    overflow: hidden; /* Mantém a animação focada */
+    overflow-y: auto; /* Mantém a animação focada overflow: hidden */
+    min-height: 100vh;
 }
 
 /* Header */
@@ -39,6 +48,16 @@ body {
 
 .logo span {
     color: var(--lumen-gold);
+    font-weight: 400;
+}
+
+.data-label {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: var(--navy-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .nav-link {
@@ -147,4 +166,54 @@ body {
     justify-content: center;
     align-items: center;
     padding-right: 50px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    /* Ajuste do Herói para empilhar conteúdo e imagem */
+    .hero {
+        flex-direction: column-reverse; /* Imagem fica em cima ou texto embaixo */
+        justify-content: center;
+        text-align: center;
+        padding: 8rem 5% 2rem 5%; /* Aumenta espaço para navbar absoluta */
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    /* Título Responsivo[cite: 6] */
+    .title {
+        font-size: 2.2rem; /* Reduz o tamanho para não quebrar feio[cite: 6] */
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Botões em coluna para facilitar o clique no mobile[cite: 6] */
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .btn {
+        width: 100%; /* Botões ocupam a largura total[cite: 6] */
+    }
+
+    /* Redimensionamento da Imagem do Lúmen[cite: 6] */
+    .lumen-image {
+        width: 250px; /* Reduz o tamanho do orbe no mobile[cite: 6] */
+        margin-bottom: 2rem;
+    }
+
+    .lumen-container {
+        padding-right: 0; /* Remove o recuo que descentralizava a imagem[cite: 6] */
+    }
 }

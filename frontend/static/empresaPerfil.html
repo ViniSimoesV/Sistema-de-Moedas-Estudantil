@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Empresa - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/energia.css">
+</head>
+<body class="perfil-page">
+
+    <canvas id="energyCanvas"></canvas>
+    <div id="navbar"></div>
+
+    <main class="perfil-container">
+        <!-- Coluna 1: Branding -->
+        <aside class="perfil-sidebar">
+            <div class="perfil-card glass">
+                <div class="avatar-container">
+                    <img src="../assets/Lumen.png" alt="Logo Empresa" class="perfil-avatar">
+                </div>
+                <h3 class="user-name">Tech Solutions</h3>
+                
+                <div class="lumen-balance">
+                    <div class="lumen-values" style="text-align: center;">
+                        <span class="lumen-count">452</span>
+                        <p class="lumen-label">Cupons Resgatados</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Coluna 2: Informações -->
+        <section class="perfil-content">
+            <div class="content-card glass">
+                <header class="card-header">
+                    <h4 class="module-title">Dados Institucionais</h4>
+                </header>
+                <div class="data-grid">
+                    <div class="data-group">
+                        <span class="data-label">CNPJ</span>
+                        <p class="data-value">00.000.000/0001-00</p>
+                    </div>
+                    <div class="data-group">
+                        <span class="data-label">Ramo de Atuação</span>
+                        <p class="data-value">Tecnologia e Educação</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn-edit-text">Editar informações</button>
+                </div>
+            </div>
+
+            <div class="content-card glass">
+                <header class="card-header">
+                    <h4 class="module-title">Minhas Vantagens</h4>
+                </header>
+                <div class="module-body centered">
+                    <!-- Texto de desempenho removido para simplificar -->
+                    <button class="btn btn-confirmar btn-small">Adicionar Nova Vantagem</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/navbarEmpresa.js" defer></script>
+    <script src="../js/energia.js" defer></script>
+</body>
+</html>

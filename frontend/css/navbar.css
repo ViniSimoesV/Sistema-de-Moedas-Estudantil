@@ -39,3 +39,28 @@
     opacity: 1;
     color: var(--lumen-gold);
 }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem 3%; /* Reduz o recuo lateral ao mínimo */
+        flex-direction: column; /* Coloca os links abaixo do logo */
+        gap: 0.8rem;
+        height: auto; /* Permite que a navbar cresça verticalmente */
+    }
+
+    .nav-links {
+        gap: 1rem; /* Diminui o espaço entre os links[cite: 3] */
+        width: 100%;
+        justify-content: center; /* Centraliza os links na segunda linha[cite: 6] */
+    }
+
+    .nav-link {
+        font-size: 0.8rem; /* Fonte menor para caber tudo[cite: 3] */
+        margin: 0; /* Remove margens residuais[cite: 6] */
+    }
+
+    .logo {
+        font-size: 1.1rem; /* Logo menor para não dominar a tela[cite: 6] */
+    }
+}
