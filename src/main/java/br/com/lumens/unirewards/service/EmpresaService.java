@@ -1,8 +1,10 @@
 package br.com.lumens.unirewards.service;
 
+import br.com.lumens.unirewards.dto.EmpresaDTO;
 import br.com.lumens.unirewards.model.Empresa;
 import br.com.lumens.unirewards.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,34 +17,55 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    // CREATE / UPDATE: O save() serve para ambos
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
-    public Empresa salvar(Empresa empresa) {
-        // adicionar validações para verificar se o e-mail já existe
-        if (empresaRepository.findByCnpj(empresa.getCnpj()).isPresent()) {
+    public Empresa salvar(EmpresaDTO dto) {
+        // Validação de CNPJ único
+        if (empresaRepository.findByCnpj(dto.getCnpj()).isPresent()) {
             throw new IllegalArgumentException("Já existe uma empresa cadastrada com este CNPJ.");
         }
+
+        Empresa empresa = new Empresa();
+        
+        // Dados de Usuario 
+        empresa.setNome(dto.getNome());
+        empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
+        empresa.setUrlFotoPerfil(dto.getUrlFotoPerfil());
+        empresa.setTipoUsuario("EMPRESA");
+
+        // Dados específicos de Empresa
+        empresa.setCnpj(dto.getCnpj());
+
         return empresaRepository.save(empresa);
     }
 
-    // READ: Busca todas as empresas
+    @Transactional
+    public Empresa atualizar(Long id, EmpresaDTO dto) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        empresa.setNome(dto.getNome());
+        empresa.setUrlFotoPerfil(dto.getUrlFotoPerfil());
+        
+        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+            empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
+
+        return empresaRepository.save(empresa);
+    }
+
     public List<Empresa> listarTodas() {
         return empresaRepository.findAll();
     }
 
-    // READ: Busca por ID para o Perfil
     public Optional<Empresa> buscarPorId(Long id) {
         return empresaRepository.findById(id);
     }
 
-    // DELETE
     @Transactional
     public void excluir(Long id) {
         empresaRepository.deleteById(id);
-    }
-
-    // Método auxiliar para o login
-    public Optional<Empresa> buscarPorCnpj(String cnpj) {
-        return empresaRepository.findByCnpj(cnpj);
     }
 }
