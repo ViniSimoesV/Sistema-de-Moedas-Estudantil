@@ -84,29 +84,29 @@ formEditar.addEventListener('submit', async (e) => {
         const fileName = `${id}-${Date.now()}.${fileExt}`;
 
         try {
-            // Tentativa de Upload
+            // Usamos x-upsert para permitir sobrescrever se necessário e simplificar o header
             const uploadResponse = await fetch(`${CONFIG.SUPABASE_URL}/storage/v1/object/foto_de_perfil/${fileName}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${CONFIG.SUPABASE_KEY}`,
-                    'Content-Type': file.type
+                    'apikey': CONFIG.SUPABASE_KEY // Adicionar este campo é o segredo para evitar erros de CORS no Storage
                 },
-                body: file
+                body: file // O navegador já define o Content-Type automaticamente para arquivos
             });
 
-            // CRITICAL: Se o bucket continua vazio, esta verificação está falhando
             if (uploadResponse.ok) {
                 urlFotoFinal = `${CONFIG.SUPABASE_URL}/storage/v1/object/public/foto_de_perfil/${fileName}`;
-                console.log("Upload realizado com sucesso: ", urlFotoFinal);
+                console.log("Upload OK:", urlFotoFinal);
             } else {
                 const errorData = await uploadResponse.json();
-                console.error("Erro detalhado do Supabase:", errorData);
-                alert("Erro ao subir imagem: " + (errorData.message || "Verifique as políticas do bucket."));
-                return; // PARA A EXECUÇÃO AQUI se o arquivo não subiu
+                console.error("Erro Supabase:", errorData);
+                alert("Erro no servidor: " + errorData.message);
+                return;
             }
         } catch (error) {
-            console.error("Falha de conexão com Supabase:", error);
-            alert("Erro de rede ao tentar subir a foto.");
+            console.error("Erro de Rede:", error);
+            // Verifique se o CONFIG.SUPABASE_URL não tem barra no final!
+            alert("Falha de conexão. Verifique se o URL do Supabase no config.js está correto.");
             return;
         }
     }

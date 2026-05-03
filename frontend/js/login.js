@@ -22,8 +22,6 @@ formLogin.addEventListener('submit', async (event) => {
             localStorage.setItem('usuarioId', usuario.id);
             localStorage.setItem('tipoUsuario', usuario.tipoUsuario);
 
-            alert(`Bem-vindo, ${usuario.nome}!`);
-
             // Redireciona conforme o tipo de usuário
             if (usuario.tipoUsuario === 'ALUNO') {
                 window.location.href = 'alunoPerfil.html';
