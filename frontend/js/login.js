@@ -16,17 +16,22 @@ formLogin.addEventListener('submit', async (event) => {
         });
 
         if (response.ok) {
-            const usuario = await response.json();
+            const text = await response.text(); // Pega como texto puro primeiro
+            console.log("CONTEÚDO RECEBIDO DO SERVIDOR:", text); 
             
-            // Salva dados essenciais para os perfis carregarem
-            localStorage.setItem('usuarioId', usuario.id);
-            localStorage.setItem('tipoUsuario', usuario.tipoUsuario);
+            try {
+                const usuario = JSON.parse(text); // Tenta converter manualmente
+                localStorage.setItem('usuarioId', usuario.id);
+                localStorage.setItem('tipoUsuario', usuario.tipoUsuario);
 
-            // Redireciona conforme o tipo de usuário
-            if (usuario.tipoUsuario === 'ALUNO') {
-                window.location.href = 'alunoPerfil.html';
-            } else if (usuario.tipoUsuario === 'EMPRESA') {
-                window.location.href = 'empresaPerfil.html';
+                if (usuario.tipoUsuario === 'ALUNO') {
+                    window.location.href = 'alunoPerfil.html';
+                } else if (usuario.tipoUsuario === 'EMPRESA') {
+                    window.location.href = 'empresaPerfil.html';
+                }
+            } catch (e) {
+                console.error("FALHA AO CONVERTER JSON:", e);
+                alert("O servidor enviou um formato inválido. Veja o console.");
             }
         } else {
             alert('E-mail ou senha incorretos.');

@@ -1,5 +1,7 @@
 package br.com.lumens.unirewards.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +19,7 @@ public abstract class Usuario {
     private String nome;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String senha;
 
     @Column(name = "tipo_usuario")

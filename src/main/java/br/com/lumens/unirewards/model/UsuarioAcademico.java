@@ -1,5 +1,7 @@
 package br.com.lumens.unirewards.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,8 +19,9 @@ public abstract class UsuarioAcademico extends Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "instituicao_id") 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "instituicao_id")
+    @JsonIgnoreProperties("academicos")
     private Instituicao instituicao;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)

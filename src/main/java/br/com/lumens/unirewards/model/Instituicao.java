@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "instituicoes")
 @Data
@@ -22,6 +24,7 @@ public class Instituicao {
     private String nome;
 
     @OneToMany(mappedBy = "instituicao")
+    @JsonIgnore
     private List<UsuarioAcademico> academicos;
 
     public void lancarListaProfessores(List<Professor> lista) {

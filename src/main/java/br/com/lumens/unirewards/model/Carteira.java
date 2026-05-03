@@ -26,6 +26,7 @@ public class Carteira {
     @OneToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
     @JsonBackReference
+    @JsonIgnore
     private UsuarioAcademico usuario;
 
     // Métodos para receber Lúmens do semestre e verificar saldo
