@@ -1,20 +1,31 @@
 let currentType = 'aluno';
 const form = document.getElementById('form-cadastro');
 
+document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-type');
+        setFormType(type);
+    });
+});
+
 function setFormType(type) {
     currentType = type;
     
-    // Atualiza botões
+    // Atualiza o estado visual dos botões
     document.querySelectorAll('.type-btn').forEach(btn => {
+        // Remove a classe active de todos
         btn.classList.remove('active');
 
-        const btnAction = btn.getAttribute('onclick');
-        if(btnAction && btnAction.includes(type)) btn.classList.add('active');
+        // Adiciona apenas no botão que tem o data-type clicado
+        if (btn.getAttribute('data-type') === type) {
+            btn.classList.add('active');
+        }
     });
 
     // Referências dos campos
     const inputNome = document.getElementById('nome');
     const inputDoc = document.getElementById('documento');
+    const inputEmail = document.getElementById('email');
     const groupVinculo = document.getElementById('group-vinculo');
     const selectVinculo = document.getElementById('vinculo');
 
@@ -22,16 +33,22 @@ function setFormType(type) {
     if (type === 'aluno') {
         inputNome.placeholder = "Nome Completo";
         inputDoc.placeholder = "CPF";
+        inputEmail.style.display = "block";
+        inputEmail.required = true;
         groupVinculo.style.display = "block";
         selectVinculo.required = true;
     } else if (type === 'empresa') {
         inputNome.placeholder = "Nome da Empresa";
         inputDoc.placeholder = "CNPJ";
+        inputEmail.style.display = "none";
+        inputEmail.required = false;
         groupVinculo.style.display = "none";
         selectVinculo.required = false;
     } else if (type === 'instituicao') {
         inputNome.placeholder = "Nome da Instituição";
         inputDoc.placeholder = "CNPJ / Registro MEC";
+        inputEmail.style.display = "none";
+        inputEmail.required = false;
         groupVinculo.style.display = "none";
     }
 };

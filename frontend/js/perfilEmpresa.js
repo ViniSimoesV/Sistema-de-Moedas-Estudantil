@@ -4,6 +4,11 @@ const modal = document.getElementById('modalEditar');
 const btnEditar = document.querySelector('.btn-edit-text');
 const btnFechar = document.getElementById('btnFecharModal');
 const formEditar = document.getElementById('formEditarPerfil');
+const btnExcluir = document.getElementById('btnExcluirConta');
+const modalExcluir = document.getElementById('modalConfirmarExclusao');
+const btnAbrirExcluir = document.getElementById('btnExcluirConta');
+const btnCancelarExcluir = document.getElementById('btnCancelarExclusao');
+const btnConfirmarFinal = document.getElementById('btnConfirmarExclusaoReal');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const empresaId = localStorage.getItem('usuarioId'); 
@@ -131,5 +136,31 @@ formEditar.addEventListener('submit', async (e) => {
         }
     } catch (error) {
         console.error("Erro ao salvar no Java:", error);
+    }
+});
+
+
+// Exclusão de conta
+btnExcluir.addEventListener('click', async () => {
+    const confirmacao = confirm("Tem certeza absoluta? Todos os seus dados e vantagens serão apagados permanentemente.");
+    
+    if (confirmacao) {
+        const id = localStorage.getItem('usuarioId');
+        
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/api/empresas/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert("Conta excluída com sucesso.");
+                localStorage.clear(); // Limpa os dados de login
+                window.location.href = 'login.html';
+            } else {
+                alert("Erro ao excluir conta. Tente novamente mais tarde.");
+            }
+        } catch (error) {
+            console.error("Erro na requisição de exclusão:", error);
+        }
     }
 });

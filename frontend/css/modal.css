@@ -115,6 +115,13 @@
     background: var(--btn-confirm-hover);
 }
 
+.btnExcluirConta:hover {
+    background: #ff4d4d;
+    color: white;
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.4);
+    border-color: #ff4d4d;
+}
+
 
 /* Responsividade */
 /* Media Query para dispositivos móveis */
