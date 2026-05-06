@@ -234,32 +234,39 @@
 /* Responsividade */
 /* Media Query para Celulares e Tablets */
 @media (max-width: 768px) {
+
+    .perfil-page {
+        padding-top: 20px !important;
+        padding-bottom: 90px; 
+    }
+
     .perfil-container {
-        grid-template-columns: 1fr; /* Muda de 2 colunas para uma */
-        gap: 2rem;
-        padding: 2rem 1rem;
-        padding-top: 100px; /* Mantém o respiro para a navbar[cite: 4] */
+        grid-template-columns: 1fr; 
+        gap: 1.5rem;
+        padding: 1rem !important;
     }
 
     .perfil-sidebar {
-        width: 100%; /* Sidebar ocupa a largura total[cite: 4] */
+        width: 100%;
     }
 
     .avatar-container {
-        width: 140px; /* Reduz um pouco o tamanho do avatar no mobile[cite: 4] */
+        width: 140px; 
         height: 140px;
     }
 
     .title {
-        font-size: 2.5rem; /* Ajusta títulos hero para mobile[cite: 6] */
+        font-size: 2.5rem;
     }
 
     .lumen-balance {
-        flex-direction: column; /* Alinha ícone e saldo verticalmente[cite: 4] */
+        flex-direction: column; 
         text-align: center;
     }
 
     .lumen-values {
         text-align: center;
     }
+
+    
 }

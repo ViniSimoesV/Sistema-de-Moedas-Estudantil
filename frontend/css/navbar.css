@@ -42,25 +42,63 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
+
     .navbar {
-        padding: 1rem 3%; /* Reduz o recuo lateral ao mínimo */
-        flex-direction: column; /* Coloca os links abaixo do logo */
-        gap: 0.8rem;
-        height: auto; /* Permite que a navbar cresça verticalmente */
-    }
-
-    .nav-links {
-        gap: 1rem; /* Diminui o espaço entre os links[cite: 3] */
-        width: 100%;
-        justify-content: center; /* Centraliza os links na segunda linha[cite: 6] */
-    }
-
-    .nav-link {
-        font-size: 0.8rem; /* Fonte menor para caber tudo[cite: 3] */
-        margin: 0; /* Remove margens residuais[cite: 6] */
+        top: auto; 
+        bottom: 0; 
+        padding: 0 0.5rem; 
+        height: 65px;      
+        flex-direction: row; 
+        justify-content: center;
+        border-bottom: none;
+        border-top: 1px solid rgba(255, 215, 0, 0.2); 
+        border-radius: 20px 20px 0 0; 
+        background: rgba(27, 38, 59, 0.98); 
     }
 
     .logo {
-        font-size: 1.1rem; /* Logo menor para não dominar a tela[cite: 6] */
+        display: none; 
+    }
+
+    .nav-links {
+        width: 100%;
+        display: flex;
+        justify-content: space-around; 
+        align-items: center;
+        gap: 0;
+    }
+
+    .nav-link {
+        font-size: 0.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px; 
+        opacity: 0.6;
+        transition: 0.3s;
+        flex: 1; 
+        min-width: 0;
+    }
+
+    .nav-link .material-symbols-outlined {
+        font-size: 1.3rem; 
+    }
+
+    .nav-link.active {
+        opacity: 1;
+        color: var(--white); 
+        position: relative;
+    }
+
+    .nav-link.active::before {
+        content: "";
+        position: absolute;
+        top: 2.4rem; 
+        bottom: auto;
+        width: 2.5rem; 
+        height: 0.2rem;
+        background: var(--white); 
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
     }
 }
