@@ -4,7 +4,7 @@ const alunoId = localStorage.getItem('usuarioId');
 let dadosAtuaisAluno = {}; // Armazena dados para evitar NULL no banco[cite: 57]
 
 document.addEventListener('DOMContentLoaded', async () => {
-    //if (!alunoId) { window.location.href = 'login.html'; return; }
+    if (!alunoId) { window.location.href = 'login.html'; return; }
     await carregarDadosAluno(alunoId);
     configurarEventos();
 });
