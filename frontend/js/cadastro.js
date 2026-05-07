@@ -106,7 +106,9 @@ form.addEventListener('submit', async (event) => {
             message: `Cadastro realizado com sucesso!`,
             type: 'success'
         }));
-            window.location.href = 'login.html';
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 100);
         } else {
             const erro = await response.json();
             showAlert(`Erro: ${erro.erro || 'Falha no cadastro.'}`, 'error');

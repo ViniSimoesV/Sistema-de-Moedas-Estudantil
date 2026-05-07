@@ -4,10 +4,10 @@ import { showAlert } from './config.js';
 const formLogin = document.getElementById('form-login');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    const pendingData = sessionStorage.getItem('pendingAlert');
     
-    if (pendingAlert) {
-        const { message, type } = JSON.parse(pendingAlert);
+    if (pendingData) {
+        const { message, type } = JSON.parse(pendingData);
         
         showAlert(message, type);
         
