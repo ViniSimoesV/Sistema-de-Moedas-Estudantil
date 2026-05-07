@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { showAlert } from './config.js';
 
 const alunoId = localStorage.getItem('usuarioId');
 let dadosAtuaisAluno = {}; // Armazena dados para evitar NULL no banco[cite: 57]

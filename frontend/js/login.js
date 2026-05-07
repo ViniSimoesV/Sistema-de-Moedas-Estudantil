@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { showAlert } from './config.js';
 
 const formLogin = document.getElementById('form-login');
 

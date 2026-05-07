@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { showAlert } from './config.js';
 
 const modal = document.getElementById('modalEditar');
 const btnEditar = document.querySelector('.btn-edit-text');

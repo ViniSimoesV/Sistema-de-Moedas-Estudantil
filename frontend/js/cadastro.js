@@ -1,7 +1,10 @@
 import { CONFIG } from './config.js';
+import { showAlert } from './config.js';
 
 let currentType = 'aluno';
 const form = document.getElementById('form-cadastro');
+
+showAlert('Bem-vindo ao cadastro!', 'success');
 
 document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {

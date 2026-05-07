@@ -168,6 +168,45 @@ body {
     padding-right: 50px;
 }
 
+/* Container de Alertas Customizados */
+.custom-alert-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.custom-alert {
+    background: rgba(27, 38, 59, 0.95); /* --navy-dark com opacidade */
+    color: var(--white);
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--lumen-gold);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    min-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease forwards;
+}
+
+.custom-alert.error { border-left-color: #ff4d4d; }
+.custom-alert.success { border-left-color: var(--confirm-green); }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { transform: translateX(100%); opacity: 0; }
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     /* Ajuste do Herói para empilhar conteúdo e imagem */

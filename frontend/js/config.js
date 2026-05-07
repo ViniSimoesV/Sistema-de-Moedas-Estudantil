@@ -9,3 +9,32 @@ export const CONFIG = {
     SUPABASE_URL: 'https://logixvrbnxyuklwwouad.supabase.co/',
     SUPABASE_KEY: 'sb_publishable_hTOjl9pkgv_KwUiOMxw3mA_LY9wxc4c'
 };
+
+export function showAlert(message, type = 'info') {
+    // Cria o container se não existir
+    let container = document.querySelector('.custom-alert-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'custom-alert-container';
+        document.body.appendChild(container);
+    }
+
+    // Cria o alerta
+    const alert = document.createElement('div');
+    alert.className = `custom-alert ${type}`;
+    alert.innerHTML = `
+        <span>${message}</span>
+        <button style="background:none; border:none; color:white; cursor:pointer; margin-left:10px;">&times;</button>
+    `;
+
+    container.appendChild(alert);
+
+    // Remove automaticamente após 4 segundos
+    setTimeout(() => {
+        alert.style.animation = 'fadeOut 0.5s ease forwards';
+        setTimeout(() => alert.remove(), 500);
+    }, 4000);
+
+    // Fechar no clique do 'x'
+    alert.querySelector('button').onclick = () => alert.remove();
+}
