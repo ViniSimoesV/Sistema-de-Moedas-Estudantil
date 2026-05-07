@@ -3,6 +3,19 @@ import { showAlert } from './config.js';
 
 const formLogin = document.getElementById('form-login');
 
+document.addEventListener('DOMContentLoaded', () => {
+    const pendingAlert = sessionStorage.getItem('pendingAlert');
+    
+    if (pendingAlert) {
+        const { message, type } = JSON.parse(pendingAlert);
+        
+        showAlert(message, type);
+        
+        // Limpa para não aparecer de novo se o usuário der F5
+        sessionStorage.removeItem('pendingAlert');
+    }
+});
+
 formLogin.addEventListener('submit', async (event) => {
     event.preventDefault();
 

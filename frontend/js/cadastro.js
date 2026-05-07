@@ -104,8 +104,10 @@ form.addEventListener('submit', async (event) => {
         });
 
         if (response.ok) {
-            // Não tentamos mais dar parse no JSON aqui
-            showAlert(`Cadastro de ${currentType} realizado com sucesso!`, 'success');
+            sessionStorage.setItem('pendingAlert', JSON.stringify({
+            message: `Cadastro de ${currentType} realizado com sucesso!`,
+            type: 'success'
+        }));
             window.location.href = 'login.html';
         } else {
             const erro = await response.json();
