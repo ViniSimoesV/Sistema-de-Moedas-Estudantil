@@ -110,12 +110,12 @@ function configurarEventos() {
                     console.log("Upload OK:", urlFotoFinal);
                 } else {
                     const errorData = await uploadResponse.json();
-                    alert("Erro no servidor de imagens: " + errorData.message);
+                    showAlert("Erro no servidor de imagens: " + errorData.message, 'error');
                     return;
                 }
             } catch (error) {
                 console.error("Erro de Rede:", error);
-                alert("Falha de conexão com o servidor de imagens.");
+                showAlert("Falha de conexão com o servidor de imagens.", 'error');
                 return;
             }
         }
@@ -181,10 +181,10 @@ async function enviarPut(payload, modalId) {
         } else {
             const erroData = await res.json();
             console.error("Erro do Servidor:", erroData);
-            alert("Erro ao salvar: " + (erroData.mensagem || "Verifique os dados."));
+            showAlert("Erro ao salvar: " + (erroData.mensagem || "Verifique os dados."), 'error');
         }
     } catch (e) {
         console.error("Erro na requisição:", e);
-        alert("Erro de conexão com o servidor.");
+        showAlert("Erro de conexão com o servidor.", 'error');
     }
 }

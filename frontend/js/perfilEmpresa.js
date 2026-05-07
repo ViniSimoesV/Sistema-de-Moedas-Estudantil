@@ -106,13 +106,13 @@ formEditar.addEventListener('submit', async (e) => {
             } else {
                 const errorData = await uploadResponse.json();
                 console.error("Erro Supabase:", errorData);
-                alert("Erro no servidor: " + errorData.message);
+                showAlert("Erro no servidor: " + errorData.message, 'error');
                 return;
             }
         } catch (error) {
             console.error("Erro de Rede:", error);
             // Verifique se o CONFIG.SUPABASE_URL não tem barra no final!
-            alert("Falha de conexão. Verifique se o URL do Supabase no config.js está correto.");
+            showAlert("Falha de conexão. Verifique se o URL do Supabase no config.js está correto.", 'error');
             return;
         }
     }
@@ -132,11 +132,12 @@ formEditar.addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            alert("Perfil atualizado com sucesso!");
+            showAlert("Perfil atualizado com sucesso!", 'success');
             location.reload();
         }
     } catch (error) {
         console.error("Erro ao salvar no Java:", error);
+        showAlert("Erro ao salvar o perfil.", 'error');
     }
 });
 
@@ -154,14 +155,15 @@ btnExcluir.addEventListener('click', async () => {
             });
 
             if (response.ok) {
-                alert("Conta excluída com sucesso.");
+                showAlert("Conta excluída com sucesso.", 'success');
                 localStorage.clear(); // Limpa os dados de login
                 window.location.href = 'login.html';
             } else {
-                alert("Erro ao excluir conta. Tente novamente mais tarde.");
+                showAlert("Erro ao excluir conta. Tente novamente mais tarde.", 'error');
             }
         } catch (error) {
             console.error("Erro na requisição de exclusão:", error);
+            showAlert("Erro na requisição de exclusão.", 'error');
         }
     }
 });

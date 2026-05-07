@@ -105,15 +105,15 @@ form.addEventListener('submit', async (event) => {
 
         if (response.ok) {
             // Não tentamos mais dar parse no JSON aqui
-            alert(`Cadastro de ${currentType} realizado com sucesso!`);
+            showAlert(`Cadastro de ${currentType} realizado com sucesso!`, 'success');
             window.location.href = 'login.html';
         } else {
             const erro = await response.json();
-            alert(`Erro: ${erro.erro || 'Falha no cadastro.'}`);
+            showAlert(`Erro: ${erro.erro || 'Falha no cadastro.'}`, 'error');
         }
         window.location.href = 'login.html';
     } catch (error) {
         console.error('Erro na conexão:', error);
-        alert('Não foi possível conectar ao servidor.');
+        showAlert('Não foi possível conectar ao servidor.', 'error');
     }
 });

@@ -32,13 +32,13 @@ formLogin.addEventListener('submit', async (event) => {
                 }
             } catch (e) {
                 console.error("FALHA AO CONVERTER JSON:", e);
-                alert("O servidor enviou um formato inválido. Veja o console.");
+                showAlert("O servidor enviou um formato inválido. Veja o console.", 'error');
             }
         } else {
-            alert('E-mail ou senha incorretos.');
+            showAlert('E-mail ou senha incorretos.', 'error');
         }
     } catch (error) {
         console.error('Erro ao conectar:', error);
-        alert('Não foi possível conectar ao servidor.');
+        showAlert('Não foi possível conectar ao servidor.', 'error');
     }
 });
