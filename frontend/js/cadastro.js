@@ -4,8 +4,6 @@ import { showAlert } from './config.js';
 let currentType = 'aluno';
 const form = document.getElementById('form-cadastro');
 
-showAlert('Bem-vindo ao cadastro!', 'success');
-
 document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const type = btn.getAttribute('data-type');
@@ -105,7 +103,7 @@ form.addEventListener('submit', async (event) => {
 
         if (response.ok) {
             sessionStorage.setItem('pendingAlert', JSON.stringify({
-            message: `Cadastro de ${currentType} realizado com sucesso!`,
+            message: `Cadastro realizado com sucesso!`,
             type: 'success'
         }));
             window.location.href = 'login.html';
