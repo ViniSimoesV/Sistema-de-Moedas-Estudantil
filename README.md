@@ -188,18 +188,15 @@ Você pode incluir:
 - **Decisões arquiteturais importantes**
 - **Trade-offs** ou limitações relevantes
 
-### Exemplos de diagramas
+### Diagramas
 
 Para melhor visualização e entendimento da estrutura do sistema, os diagramas principais estão organizados lado a lado.
 
-| Diagrama de Arquitetura | Detalhe da Arquitetura |
-| :---: | :---: |
-| **Diagrama de Componentes** | **Diagrama de Classe** | 
-| <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/Diagrama/Diagrama de Componentes - Plant UML.png" alt="Logo do Projeto" width="200px" height="200px"/> |  <img src="https://raw.githubusercontent.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/main/Diagrama/Diagrama de Classe.pdf" alt="Logo do Projeto" width="200px" height="200px"/> |
-| **Modelo de Dados (Entidades)** | **Fluxo de Autenticação** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Entidade-Relacionamento (DER)" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Sequência de Login" width="120px" height="120px"> |
-| **Infraestrutura (Cloud)** | **API Gateway (Rotas)** |
-| <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Diagrama de Deploy na AWS/Vercel" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Mapa de Endpoints da API" width="120px" height="120px"> |
+**Diagrama de Componentes**
+<img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/documentos/Diagrama/DUC.png" alt="Diagrama de Caso de Uso" width="250px" height="250px"/>   
+
+**Diagrama de Classe**
+<img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/documentos/Diagrama/Diagrama%20de%20Classe%20img.png" alt="Diagrama de Classe" width="250px" height="250px"/>
 
 ---
 
