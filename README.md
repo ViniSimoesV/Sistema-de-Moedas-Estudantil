@@ -24,16 +24,16 @@
 ![Java](https://img.shields.io/badge/Java-17-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) 
 ![Maven](https://img.shields.io/badge/Maven-3.9.9-007ec6?style=for-the-badge&logo=apachemaven&logoColor=white) 
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-007ec6?style=for-the-badge&logo=springboot&logoColor=white) 
-![GitHub repo size](https://img.shields.io/github/repo-size/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=files) 
-![GitHub directory file count](https://img.shields.io/github/directory-file-count/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=files) 
-![GitHub stars](https://img.shields.io/github/stars/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=github) 
-![GitHub forks](https://img.shields.io/github/forks/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=git) 
-![GitHub language count](https://img.shields.io/github/languages/count/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=python) 
+![GitHub repo size](https://img.shields.io/github/repo-size/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=files) 
+![GitHub directory file count](https://img.shields.io/github/directory-file-count/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=files) 
+![GitHub stars](https://img.shields.io/github/stars/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=github) 
+![GitHub forks](https://img.shields.io/github/forks/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=git) 
+![GitHub language count](https://img.shields.io/github/languages/count/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=python) 
 ![GitHub license](https://img.shields.io/github/license/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&color=007ec6&logo=opensourceinitiative) 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&color=007ec6&logo=gitkraken) 
-![GitHub last commit](https://img.shields.io/github/last-commit/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software?style=for-the-badge&logo=clockify) 
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&color=007ec6&logo=gitkraken) 
+![GitHub last commit](https://img.shields.io/github/last-commit/ViniSimoesV/Sistema-de-Moedas-Estudantil?style=for-the-badge&logo=clockify) 
 ![Vercel](https://vercelbadge.vercel.app/api/joaopauloaramuni/joaopauloaramuni-portfolio?style=for-the-badge) 
-![Views Counter](https://views-counter.vercel.app/badge?pageId=https%3A%2F%2Fgithub%2Ecom%2Fjoaopauloaramuni%2Flaboratorio-de-desenvolvimento-de-software&leftColor=555555&rightColor=007ec6&type=total&label=RepoViews)
+![Views Counter](https://views-counter.vercel.app/badge?pageId=https%3A%2F%2Fgithub%2Ecom%2FViniSimoesV%2FSistema-de-Moedas-Estudantil&leftColor=555555&rightColor=007ec6&type=total&label=RepoViews)
 
 ---
 
@@ -75,10 +75,8 @@
 ---
 
 ## 🔗 Links Úteis
-* 🌐 **Demo Online:** [Acesse a Aplicação Web](<link-da-demo-web>)
-  > 💻 **Descrição:** Link para a aplicação em ambiente de produção (Ex: hospedado na Vercel, Netlify ou AWS S3).
-* 📖 **Documentação:** [Leia a Wiki/Docs](<link-para-docs>)
-  > 📚 **Descrição:** Acesso à documentação técnica completa do projeto (Ex: Swagger/OpenAPI para API, ou Wiki interna).
+* 🌐 **Demo Online:** [Acesse a Aplicação Web](<https://unirewards.vercel.app/>)
+  > 💻 **Descrição:** Link para a aplicação em ambiente de produção.
 
 ---
 
@@ -171,9 +169,8 @@ As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construç
 ### ⚙️ Infraestrutura & DevOps
 
 * **Containerização:** Docker
-* **Orquestração:** [Ex: Kubernetes (K8s)]
-* **Cloud:**  Vercel, Render
-* **CI/CD:** [Ex: GitHub Actions, Jenkins, SonarQube]
+* **Orquestração:** Kubernetes
+* **Cloud:**  Vercel, Render, Supabase
 
 ---
 
@@ -185,7 +182,7 @@ Você pode incluir:
 
 - **Visão geral da arquitetura** Camadas, MVC
 - **Principais componentes** e o papel de cada um
-- **Padrões de design adotados** Repository, Service Layer, DTOs, Facade, Security
+- **Padrões de design adotados** Repository, Service, DTOs, Facade, Security
 - **Fluxo de dados** entre as partes do sistema
 - **Tecnologias utilizadas em cada camada**
 - **Decisões arquiteturais importantes**
