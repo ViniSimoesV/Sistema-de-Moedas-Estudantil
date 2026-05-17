@@ -16,10 +16,7 @@ function setFormType(type) {
     
     // Atualiza o estado visual dos botões
     document.querySelectorAll('.type-btn').forEach(btn => {
-        // Remove a classe active de todos
         btn.classList.remove('active');
-
-        // Adiciona apenas no botão que tem o data-type clicado
         if (btn.getAttribute('data-type') === type) {
             btn.classList.add('active');
         }
@@ -32,7 +29,7 @@ function setFormType(type) {
     const groupVinculo = document.getElementById('group-vinculo');
     const selectVinculo = document.getElementById('vinculo');
 
-    // Lógica de troca
+    // Lógica de troca de interface
     if (type === 'aluno') {
         inputNome.placeholder = "Nome Completo";
         inputDoc.placeholder = "CPF";
@@ -49,10 +46,11 @@ function setFormType(type) {
         selectVinculo.required = false;
     } else if (type === 'instituicao') {
         inputNome.placeholder = "Nome da Instituição";
-        inputDoc.placeholder = "CNPJ / Registro MEC";
+        inputDoc.placeholder = "Sigla da Instituição";
         inputEmail.style.display = "none";
         inputEmail.required = false;
         groupVinculo.style.display = "none";
+        selectVinculo.required = false;
     }
 };
 
@@ -91,10 +89,17 @@ form.addEventListener('submit', async (event) => {
             cnpj: dados.documento,
             urlFotoPerfil: ""
         };
+    } else if (currentType === 'instituicao') {
+        endpoint = '/api/instituicoes';
+        payload = {
+            nome: dados.nome,
+            sigla: dados.documento, 
+            senha: dados.senha,
+            urlFotoPerfil: ""
+        };
     }
 
     try {
-        // Use a URL base correta (localhost para dev ou vercel para prod)
         const response = await fetch(`${CONFIG.API_URL}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -103,9 +108,9 @@ form.addEventListener('submit', async (event) => {
 
         if (response.ok) {
             sessionStorage.setItem('pendingAlert', JSON.stringify({
-            message: `Cadastro realizado com sucesso!`,
-            type: 'success'
-        }));
+                message: `Cadastro de ${currentType} realizado com sucesso!`,
+                type: 'success'
+            }));
             setTimeout(() => {
                 window.location.href = 'login.html';
             }, 100);
@@ -113,7 +118,6 @@ form.addEventListener('submit', async (event) => {
             const erro = await response.json();
             showAlert(`Erro: ${erro.erro || 'Falha no cadastro.'}`, 'error');
         }
-        window.location.href = 'login.html';
     } catch (error) {
         console.error('Erro na conexão:', error);
         showAlert('Não foi possível conectar ao servidor.', 'error');

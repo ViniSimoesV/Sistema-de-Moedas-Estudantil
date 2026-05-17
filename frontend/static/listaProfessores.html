@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Professores - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/perfil.css"> 
+    <link rel="stylesheet" href="../css/energia.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/listaProfessores.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+</head>
+
+<body class="perfil-page">
+
+    <canvas id="energyCanvas"></canvas>
+    <div id="navbar"></div>
+
+    <main class="perfil-container" style="max-width: 1200px; display: block; margin: 2rem auto;">
+        <section class="perfil-content" style="width: 100%;">
+            <div class="content-card glass">
+                
+                <header class="professores-header">
+                    <h4 class="module-title">Corpo Docente</h4>
+                    <div class="actions-group">
+                        <button class="btn btn-confirmar" id="btnUploadLista">
+                            <span class="material-symbols-outlined">upload_file</span>
+                            Upload de Lista
+                        </button>
+                        <button class="btn btn-cancelar" id="btnNovoProfessor">
+                            <span class="material-symbols-outlined">person_add</span>
+                            Adicionar Manual
+                        </button>
+                    </div>
+                </header>
+
+                <div class="table-container">
+                    <table class="glass-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>E-mail</th>
+                                <th>Departamento</th>
+                                <th style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaProfessoresBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-secondary);">Carregando professores...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="modalProfessorManual" class="modal-overlay">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h4 class="module-title">Novo Professor</h4>
+            </div>
+            <form id="formProfessorManual">
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="profNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label>CPF</label>
+                        <input type="text" id="profCpf" placeholder="Apenas números" required>
+                    </div>
+                    <div class="input-group">
+                        <label>E-mail Institucional</label>
+                        <input type="email" id="profEmail" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Departamento</label>
+                        <input type="text" id="profDepartamento" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancelar" onclick="fecharModal('modalProfessorManual')">Cancelar</button>
+                    <button type="submit" class="btn btn-confirmar">Cadastrar Professor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalUploadLista" class="modal-overlay">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h4 class="module-title">Lançar Lista de Professores</h4>
+            </div>
+            <form id="formUploadLista">
+                <div class="modal-body">
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                        Faça o upload de um ficheiro CSV contendo os dados dos professores. O ficheiro deve ter as colunas exatas nesta ordem: <strong>Nome, CPF, Email, Departamento</strong>.
+                    </p>
+                    <div class="input-group">
+                        <input type="file" id="arquivoCsv" accept=".csv" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancelar" onclick="fecharModal('modalUploadLista')">Cancelar</button>
+                    <button type="submit" class="btn btn-confirmar">Processar Ficheiro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditarProfessor" class="modal-overlay">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h4 class="module-title">Editar Professor</h4>
+            </div>
+            <form id="formEditarProfessor">
+                <input type="hidden" id="editProfId">
+                
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="editProfNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label>CPF</label>
+                        <input type="text" id="editProfCpf" required>
+                    </div>
+                    <div class="input-group">
+                        <label>E-mail Institucional</label>
+                        <input type="email" id="editProfEmail" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Departamento</label>
+                        <input type="text" id="editProfDepartamento" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancelar" onclick="fecharModal('modalEditarProfessor')">Cancelar</button>
+                    <button type="submit" class="btn btn-confirmar">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalExcluirProfessor" class="modal-overlay">
+        <div class="modal-content glass" style="max-width: 400px; text-align: center;">
+            <div class="modal-body" style="padding: 2rem 1rem;">
+                <span class="material-symbols-outlined" style="font-size: 4rem; color: #ff4d4d; margin-bottom: 1rem;">warning</span>
+                <h4 style="margin-bottom: 1rem;">Tem certeza?</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">
+                    A conta deste professor e a sua carteira de Lúmens serão apagadas permanentemente. Esta ação não pode ser desfeita.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn btn-cancelar" onclick="fecharModal('modalExcluirProfessor')">Cancelar</button>
+                    <button class="btn" id="btnConfirmarExclusao" style="background: #ff4d4d; color: white;">Sim, Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/listaProfessores.js" defer></script>
+    <script src="../js/navbarInstituicao.js" defer></script>
+    <script src="../js/energia.js" defer></script>
+    <script>
+        function fecharModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* Estilos específicos para a tabela de professores */
+.main {
+    display: block; 
+    margin: 2rem auto;
+}
+
+.professores-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.actions-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.actions-group .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    gap: 0.5rem; /* Espaço perfeito entre o ícone e o texto */
+    white-space: nowrap; /* Proíbe o texto de quebrar para a linha de baixo */
+    padding: 0.8rem 1.5rem; /* Ajuste de respiro interno */
+    margin-left: 15px;
+}
+
+.actions-group .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.actions-group .btn-cancelar {
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+.actions-group .btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--text-primary);
+}
+
+.actions-group .btn .material-symbols-outlined {
+    margin: 0 !important; 
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.glass-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.glass-table th, .glass-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-table th {
+    color: var(--lumen-gold);
+    font-weight: 700;
+}
+
+.glass-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.3s ease;
+    padding: 5px;
+}
+
+.btn-icon:hover {
+    color: var(--lumen-gold);
+}
+
+.btn-icon.danger:hover {
+    color: #ff4d4d;
+}

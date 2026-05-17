@@ -8,9 +8,7 @@ import java.util.Optional;
 @Repository
 public interface InstituicaoRepository extends JpaRepository<Instituicao, Long> {
     
-    // Método útil para validar se uma instituição já existe pelo nome
-    Optional<Instituicao> findByNome(String nome);
-    
-    // Verifica existência por nome para evitar duplicatas no cadastro de instituições
-    boolean existsByNome(String nome);
+    Optional<Instituicao> findBySigla(String sigla);
+    boolean existsBySigla(String sigla);
+
 }

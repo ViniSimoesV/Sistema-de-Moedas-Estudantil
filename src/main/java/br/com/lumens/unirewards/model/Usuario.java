@@ -1,6 +1,7 @@
 package br.com.lumens.unirewards.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,8 +19,8 @@ public abstract class Usuario {
     @Column(nullable = false)
     private String nome;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
-    @JsonIgnore
     private String senha;
 
     @Column(name = "tipo_usuario")
