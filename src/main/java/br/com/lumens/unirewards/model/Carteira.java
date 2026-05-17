@@ -1,7 +1,7 @@
 package br.com.lumens.unirewards.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,9 +24,8 @@ public class Carteira {
 
     // Um usuário tem uma carteira, e a carteira pertence a um usuário (professor/aluno)
     @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
+    @JoinColumn(name = "usuario_id") 
     @JsonBackReference
-    @JsonIgnore
     private UsuarioAcademico usuario;
 
     // Métodos para receber Lúmens do semestre e verificar saldo

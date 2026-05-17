@@ -4,6 +4,7 @@ import br.com.lumens.unirewards.dto.ProfessorDTO;
 import br.com.lumens.unirewards.model.Carteira;
 import br.com.lumens.unirewards.model.Instituicao;
 import br.com.lumens.unirewards.model.Professor;
+import br.com.lumens.unirewards.repository.CarteiraRepository;
 import br.com.lumens.unirewards.repository.InstituicaoRepository;
 import br.com.lumens.unirewards.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfessorService {
@@ -28,11 +30,13 @@ public class ProfessorService {
     private InstituicaoRepository instituicaoRepository;
 
     @Autowired
+    private CarteiraRepository carteiraRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public Professor salvar(ProfessorDTO dto) {
-        // 1. Valida se a instituição existe
         Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())
                 .orElseThrow(() -> new IllegalArgumentException("Instituição não encontrada no sistema!"));
 
@@ -42,30 +46,37 @@ public class ProfessorService {
 
         Professor professor = new Professor();
         
-        // 2. Preenche os dados de Usuario
         professor.setNome(dto.getNome());
-        professor.setSenha(passwordEncoder.encode("123")); // Senha padrão solicitada
+        professor.setSenha(passwordEncoder.encode("123")); 
         professor.setTipoUsuario("PROFESSOR");
-        professor.setUrlFotoPerfil("");
+        
+        // Verifica se a foto foi enviada, senão coloca vazio
+        if (dto.getUrlFotoPerfil() != null) {
+            professor.setUrlFotoPerfil(dto.getUrlFotoPerfil());
+        } else {
+            professor.setUrlFotoPerfil("");
+        }
 
-        // 3. Preenche os dados de UsuarioAcademico
         professor.setCpf(dto.getCpf());
         professor.setEmail(dto.getEmail());
         professor.setInstituicao(instituicao);
-
-        // 4. Preenche os dados de Professor
         professor.setDepartamento(dto.getDepartamento());
 
-        // 5. Criação da Carteira Inicial
-        Carteira carteira = new Carteira();
-        // Nota: Substitua "setSaldoAtual" pelo nome exato que estiver na sua classe Carteira.java
-        carteira.setSaldoAtual(1000); 
-        carteira.setUsuario(professor); // Faz a ligação com o dono da carteira
-        
-        // Como você usou CascadeType.ALL na model, ao salvar o professor, a carteira salva automaticamente!
-        professor.setCarteira(carteira); 
+        // Salva o professor PRIMEIRO. Isso força o banco a gerar o usuario_id.
+        Professor professorSalvo = professorRepository.save(professor);
 
-        return professorRepository.save(professor);
+        // DEPOIS, cria e vincula a carteira ao professor salvo
+        Carteira carteira = new Carteira();
+        carteira.setSaldoAtual(1000); 
+        carteira.setUsuario(professorSalvo); 
+        
+        // Salva a carteira de forma explícita e direta na tabela
+        carteiraRepository.save(carteira);
+        
+        // Atualiza o objeto para retornar bonitinho
+        professorSalvo.setCarteira(carteira);
+
+        return professorSalvo;
     }
 
     @Transactional
@@ -86,19 +97,28 @@ public class ProfessorService {
         professor.setEmail(dto.getEmail());
         professor.setDepartamento(dto.getDepartamento());
 
-        return professorRepository.save(professor);
-    }
-
-    // Método para excluir o professor pelo ID
-    @Transactional
-    public void excluir(Long id) {
-        if (professorRepository.existsById(id)) {
-            professorRepository.deleteById(id);
+        // Só atualiza a foto se for enviada uma nova
+        if (dto.getUrlFotoPerfil() != null && !dto.getUrlFotoPerfil().isEmpty()) {
+            professor.setUrlFotoPerfil(dto.getUrlFotoPerfil());
         }
-    }
 
-    public List<Professor> listarPorInstituicao(Long instituicaoId) {
-        return professorRepository.findByInstituicaoId(instituicaoId);
+        // SALVA as alterações do professor
+        Professor professorSalvo = professorRepository.save(professor);
+
+        // BUSCA de forma explícita a carteira associada para garantir o vínculo no retorno do JSON
+        Optional<Carteira> carteiraOpt = carteiraRepository.findByUsuarioId(id);
+        if (carteiraOpt.isPresent()) {
+            professorSalvo.setCarteira(carteiraOpt.get());
+        } else {
+            // Fallback de segurança: se por algum motivo bizarro o professor não tiver carteira, cria uma
+            Carteira novaCarteira = new Carteira();
+            novaCarteira.setSaldoAtual(0);
+            novaCarteira.setUsuario(professorSalvo);
+            carteiraRepository.save(novaCarteira);
+            professorSalvo.setCarteira(novaCarteira);
+        }
+
+        return professorSalvo;
     }
 
     // Método para ler o CSV e cadastrar em lote
@@ -139,5 +159,31 @@ public class ProfessorService {
             }
         }
         return salvos;
+    }
+
+
+    // Método para excluir o professor pelo ID
+    @Transactional
+    public void excluir(Long id) {
+        if (professorRepository.existsById(id)) {
+            professorRepository.deleteById(id);
+        }
+    }
+
+    public List<Professor> listarPorInstituicao(Long instituicaoId) {
+        return professorRepository.findByInstituicaoId(instituicaoId);
+    }
+
+    public Optional<Professor> buscarPorId(Long id) {
+        Optional<Professor> professorOpt = professorRepository.findById(id);
+    
+        // Se o professor existir, buscamos a carteira dele no banco e associamos explicitamente
+        professorOpt.ifPresent(professor -> {
+            carteiraRepository.findByUsuarioId(id).ifPresent(carteira -> {
+                professor.setCarteira(carteira);
+            });
+        });
+        
+        return professorOpt;
     }
 }

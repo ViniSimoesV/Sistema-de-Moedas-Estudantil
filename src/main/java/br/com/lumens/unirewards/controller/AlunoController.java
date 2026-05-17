@@ -52,4 +52,10 @@ public class AlunoController {
         alunoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/instituicao/{instituicaoId}")
+    public ResponseEntity<List<Aluno>> listarPorInstituicao(@PathVariable Long instituicaoId) {
+        List<Aluno> alunos = alunoService.listarPorInstituicao(instituicaoId);
+        return ResponseEntity.ok(alunos);
+    }
 }

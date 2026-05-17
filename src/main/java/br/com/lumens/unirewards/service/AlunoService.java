@@ -123,4 +123,9 @@ public class AlunoService {
     public Optional<Aluno> buscarPorEmail(String email) {
         return alunoRepository.findByEmail(email);
     }
+
+    // Método auxiliar para o id
+    public List<Aluno> listarPorInstituicao(Long instituicaoId) {
+    return alunoRepository.findByInstituicaoId(instituicaoId);
+}
 }

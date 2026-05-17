@@ -9,4 +9,5 @@ public class ProfessorDTO {
     private String email;
     private String departamento;
     private Long instituicaoId; 
+    private String urlFotoPerfil;
 }

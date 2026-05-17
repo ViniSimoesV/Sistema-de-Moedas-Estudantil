@@ -63,7 +63,9 @@ formLogin.addEventListener('submit', async (event) => {
                 } else if (usuario.tipoUsuario === 'EMPRESA') {
                     window.location.href = 'empresaPerfil.html';
                 } else if (usuario.tipoUsuario === 'INSTITUICAO') {
-                    window.location.href = 'instituicaoPerfil.html'; // Nova rota adicionada!
+                    window.location.href = 'instituicaoPerfil.html'; 
+                } else if (usuario.tipoUsuario === 'PROFESSOR') {
+                    window.location.href = 'professorPerfil.html'; 
                 }
             } catch (e) {
                 console.error("FALHA AO CONVERTER JSON:", e);

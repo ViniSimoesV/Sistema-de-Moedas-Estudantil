@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferências - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/energia.css">
+    <link rel="stylesheet" href="../css/transacoes.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body class="perfil-page">
+
+    <canvas id="energyCanvas"></canvas>
+    <div id="navbar"></div>
+
+    <main class="transacoes-container">
+        <section class="transfer-section">
+            <div class="content-card glass">
+                <header class="card-header-transacao">
+                    <span class="material-symbols-outlined icon-header">send_money</span>
+                    <div>
+                        <h4 class="module-title">Nova Transferência</h4>
+                        <p class="subtitle-transacao" id="instrucaoTipoUsuario">Envie suas recompensas de forma rápida</p>
+                    </div>
+                </header>
+
+                <form id="formTransferência">
+                    <div class="input-group">
+                        <label id="labelDestinatario" for="selectDestinatario">Selecione o Destinatário</label>
+                        <div class="select-wrapper">
+                            <select id="selectDestinatario" required>
+                                <option value="" disabled selected>Carregando opções...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 1.5rem;">
+                        <label for="inputQuantidade">Quantidade de Lúmens</label>
+                        <div class="input-with-icon">
+                            <img src="../assets/Lumen.png" alt="Lúmen" class="input-lumen-icon">
+                            <input type="number" id="inputQuantidade" min="1" placeholder="Ex: 50" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 1.5rem;">
+                        <label for="inputMotivo">Motivo / Justificativa</label>
+                        <textarea id="inputMotivo" rows="3" placeholder="Escreva uma breve mensagem sobre o motivo deste envio..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-confirmar btn-block" style="margin-top: 2rem; width: 100%;">
+                        <span class="material-symbols-outlined" style="margin-right: 8px;">verified_user</span>
+                        Confirmar Envio
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <aside class="info-sidebar">
+            <div class="perfil-card glass balance-highlight-card">
+                <p class="balance-title">Seu Saldo Disponível</p>
+                <div class="lumen-balance-big">
+                    <img src="../assets/Lumen.png" alt="Lúmen" class="wallet-lumen-big">
+                    <span class="lumen-count" id="saldoDisponivel">0</span>
+                </div>
+                <p class="lumen-label-transacao" id="labelTipoSaldo">Lúmens prontos para distribuição</p>
+            </div>
+
+            <div class="content-card glass tip-card" style="margin-top: 1.5rem;">
+                <div class="tip-header">
+                    <span class="material-symbols-outlined text-gold">info</span>
+                    <h5 class="tip-title">Lembrete de Segurança</h5>
+                </div>
+                <p class="tip-text">
+                    Toda transação realizada na rede UniRewards é registrada de forma permanente no extrato acadêmico e não pode ser revertida. Certifique-se dos dados do aluno antes de enviar.
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <script type="module" src="../js/transacoes.js" defer></script>
+    <script src="../js/energia.js" defer></script>
+</body>
+</html>

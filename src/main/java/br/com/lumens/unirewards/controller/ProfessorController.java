@@ -35,8 +35,11 @@ public class ProfessorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody ProfessorDTO dto) {
         try {
-            Professor atualizado = professorService.atualizar(id, dto);
-            return ResponseEntity.ok(atualizado);
+            // Captura o objeto que o método do Service salvou e estruturou
+            Professor professorSalvo = professorService.atualizar(id, dto);
+            
+            // Retorna o objeto completo de volta para o Front-end
+            return ResponseEntity.ok(professorSalvo);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", e.getMessage()));
         }
@@ -47,13 +50,6 @@ public class ProfessorController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         professorService.excluir(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Rota para a Instituição buscar apenas os seus professores
-    @GetMapping("/instituicao/{instituicaoId}")
-    public ResponseEntity<List<Professor>> listarPorInstituicao(@PathVariable Long instituicaoId) {
-        List<Professor> professores = professorService.listarPorInstituicao(instituicaoId);
-        return ResponseEntity.ok(professores);
     }
 
     // Rota para o upload do CSV
@@ -68,5 +64,20 @@ public class ProfessorController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("erro", "Erro ao processar ficheiro: " + e.getMessage()));
         }
+    }
+
+    // Rota para a Instituição buscar apenas os seus professores
+    @GetMapping("/instituicao/{instituicaoId}")
+    public ResponseEntity<List<Professor>> listarPorInstituicao(@PathVariable Long instituicaoId) {
+        List<Professor> professores = professorService.listarPorInstituicao(instituicaoId);
+        return ResponseEntity.ok(professores);
+    }
+
+    // Rota para buscar os dados do professor logado (para o Perfil)
+    @GetMapping("/{id}")
+    public ResponseEntity<Professor> buscarPorId(@PathVariable Long id) {
+        return professorService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

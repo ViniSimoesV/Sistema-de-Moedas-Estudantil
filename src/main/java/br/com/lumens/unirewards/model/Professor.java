@@ -1,5 +1,8 @@
 package br.com.lumens.unirewards.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +20,6 @@ public class Professor extends UsuarioAcademico {
     
     // Professor possui uma carteira para armazenar os Lúmens
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Carteira carteira;
 }
