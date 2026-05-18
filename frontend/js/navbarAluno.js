@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="material-symbols-outlined">person</span>
                     Perfil
                 </a>
+                <a href="transacoes.html" class="nav-link">
+                    <span class="material-symbols-outlined">send_money</span>
+                    Transferir
+                </a>
                 <a href="loja.html" class="nav-link">
                     <span class="material-symbols-outlined">shopping_bag</span>
                     Loja
@@ -27,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Lógica limpa para destacar a página atual com a classe padrão 'active'
         const currentPage = window.location.pathname.split('/').pop();
+        const navLinks = document.querySelectorAll('.nav-link');
 
         navLinks.forEach(link => {
             if (link.getAttribute('href') === currentPage) {

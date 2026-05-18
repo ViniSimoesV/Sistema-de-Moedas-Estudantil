@@ -5,6 +5,7 @@ import br.com.lumens.unirewards.model.Aluno;
 import br.com.lumens.unirewards.model.Carteira;
 import br.com.lumens.unirewards.model.Instituicao;
 import br.com.lumens.unirewards.repository.AlunoRepository;
+import br.com.lumens.unirewards.repository.CarteiraRepository;
 import br.com.lumens.unirewards.repository.InstituicaoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class AlunoService {
 
     @Autowired
     private InstituicaoRepository instituicaoRepository;
+
+    @Autowired
+    private CarteiraRepository carteiraRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -80,7 +84,16 @@ public class AlunoService {
 
     // READ: Busca por ID para o Perfil
     public Optional<Aluno> buscarPorId(Long id) {
-        return alunoRepository.findById(id);
+        Optional<Aluno> alunoOpt = alunoRepository.findById(id);
+        
+        // Se o aluno existir, buscamos a carteira dele no banco e associamos explicitamente
+        alunoOpt.ifPresent(aluno -> {
+            carteiraRepository.findByUsuarioId(id).ifPresent(carteira -> {
+                aluno.setCarteira(carteira);
+            });
+        });
+        
+        return alunoOpt;
     }
 
     // UPDATE: Atualiza um aluno existente
