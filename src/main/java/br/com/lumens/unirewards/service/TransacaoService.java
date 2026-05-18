@@ -1,5 +1,7 @@
 package br.com.lumens.unirewards.service;
 
+import br.com.lumens.unirewards.config.RabbitMQConfig;
+import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.TransacaoRequestDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
@@ -26,6 +28,9 @@ public class TransacaoService {
 
     @Autowired
     private TransacaoProfessorRepository transacaoProfessorRepository;
+
+    @Autowired
+    private org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
     @Transactional
     public void processarTransferencia(TransacaoRequestDTO dto) {
@@ -72,6 +77,30 @@ public class TransacaoService {
             logProfessor.setMensagem(dto.getMotivo());
             transacaoProfessorRepository.save(logProfessor);
 
+            // --- INÍCIO DO DESPACHO RABBITMQ (PROFESSOR -> ALUNO) ---
+            
+            // 1. Despacha e-mail para o Aluno (Recebeu)
+            EmailTransacaoDTO emailAluno = new EmailTransacaoDTO();
+            emailAluno.setEmailDestino(alunoDestinatario.getEmail());
+            emailAluno.setNomeDestino(alunoDestinatario.getNome());
+            emailAluno.setNomeOutraParte("Prof. " + professorRemetente.getNome());
+            emailAluno.setValor(dto.getValor());
+            emailAluno.setMotivo(dto.getMotivo());
+            emailAluno.setTipo("RECEBIDO");
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailAluno);
+
+            // 2. Despacha e-mail para o Professor (Enviou)
+            EmailTransacaoDTO emailProf = new EmailTransacaoDTO();
+            emailProf.setEmailDestino(professorRemetente.getEmail());
+            emailProf.setNomeDestino(professorRemetente.getNome());
+            emailProf.setNomeOutraParte(alunoDestinatario.getNome());
+            emailProf.setValor(dto.getValor());
+            emailProf.setMotivo(dto.getMotivo());
+            emailProf.setTipo("ENVIADO");
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailProf);
+            
+            // --- FIM DO DESPACHO ---
+
         } else if ("ALUNO".equalsIgnoreCase(dto.getTipoRemetente())) {
             
             // FLUXO ALUNO -> ALUNO (Peer-to-Peer)
@@ -108,6 +137,30 @@ public class TransacaoService {
             logAluno.setValor(dto.getValor());
             logAluno.setMotivo(dto.getMotivo());
             transacaoAlunoRepository.save(logAluno);
+
+            // --- INÍCIO DO DESPACHO RABBITMQ (ALUNO -> ALUNO) ---
+            
+            // 1. Despacha e-mail para o Aluno Destinatário (Recebeu)
+            EmailTransacaoDTO emailRecebedor = new EmailTransacaoDTO();
+            emailRecebedor.setEmailDestino(alunoDestinatario.getEmail());
+            emailRecebedor.setNomeDestino(alunoDestinatario.getNome());
+            emailRecebedor.setNomeOutraParte(alunoRemetente.getNome());
+            emailRecebedor.setValor(dto.getValor());
+            emailRecebedor.setMotivo(dto.getMotivo());
+            emailRecebedor.setTipo("RECEBIDO");
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailRecebedor);
+
+            // 2. Despacha e-mail para o Aluno Remetente (Enviou)
+            EmailTransacaoDTO emailRemetente = new EmailTransacaoDTO();
+            emailRemetente.setEmailDestino(alunoRemetente.getEmail());
+            emailRemetente.setNomeDestino(alunoRemetente.getNome());
+            emailRemetente.setNomeOutraParte(alunoDestinatario.getNome());
+            emailRemetente.setValor(dto.getValor());
+            emailRemetente.setMotivo(dto.getMotivo());
+            emailRemetente.setTipo("ENVIADO");
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailRemetente);
+
+            // --- FIM DO DESPACHO ---
 
         } else {
             throw new IllegalArgumentException("Tipo de perfil remetente não suportado para transferências.");
