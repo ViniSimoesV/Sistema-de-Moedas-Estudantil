@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="material-symbols-outlined">send_money</span>
                     Transferir
                 </a>
-                <a href="professorExtrato.html" class="nav-link">
+                <a href="extrato.html" class="nav-link">
                     <span class="material-symbols-outlined">receipt_long</span>
                     Extrato
                 </a>

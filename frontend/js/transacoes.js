@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <a href="inventario.html" class="nav-link">
                         <span class="material-symbols-outlined">inventory</span> Inventário
                     </a>
+                    <a href="extrato.html" class="nav-link">
+                        <span class="material-symbols-outlined">receipt_long</span> Extrato
+                    </a>
                     <a href="#" id="btnSair" class="nav-link">
                         <span class="material-symbols-outlined">exit_to_app</span> Sair
                     </a>

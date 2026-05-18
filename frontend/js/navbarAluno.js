@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="material-symbols-outlined">inventory</span>
                     Inventário
                 </a>
-                <a href="professorExtrato.html" class="nav-link">
+                <a href="extrato.html" class="nav-link">
                     <span class="material-symbols-outlined">receipt_long</span>
                     Extrato
                 </a>

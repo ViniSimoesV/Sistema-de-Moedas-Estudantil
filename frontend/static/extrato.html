@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrato de Lúmens - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/energia.css">
+    <link rel="stylesheet" href="../css/extrato.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body class="perfil-page">
+
+    <canvas id="energyCanvas"></canvas>
+    <div id="navbar"></div>
+
+    <main class="extrato-container">
+        <header class="extrato-header">
+            <div class="header-title-group">
+                <span class="material-symbols-outlined icon-header-extrato">receipt_long</span>
+                <div>
+                    <h4 class="module-title">Extrato de Conta</h4>
+                    <p class="subtitle-extrato">Histórico completo de entrada e saída de recompensas</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="overview-cards">
+            <div class="overview-card glass">
+                <span class="material-symbols-outlined text-green">arrow_downward</span>
+                <div class="card-info">
+                    <p class="card-label">Total Recebido</p>
+                    <h3 class="card-value text-green" id="totalRecebido">+ 0</h3>
+                </div>
+            </div>
+            <div class="overview-card glass">
+                <span class="material-symbols-outlined text-red">arrow_upward</span>
+                <div class="card-info">
+                    <p class="card-label">Total Enviado</p>
+                    <h3 class="card-value text-red" id="totalEnviado">- 0</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <div class="content-card glass">
+                <div class="timeline-header">
+                    <h5 class="list-title">Movimentações Recentes</h5>
+                    <span class="transaction-count" id="contadorTransacoes">0 operações</span>
+                </div>
+
+                <div class="transactions-stack" id="containerExtrato">
+                    <div class="transaction-item entry">
+                        <div class="item-left">
+                            <span class="material-symbols-outlined type-icon">add_circle</span>
+                            <div class="item-details">
+                                <p class="item-title">Recebido de <strong>Prof. Carlos Oliveira</strong></p>
+                                <span class="item-date">18 de Maio de 2026 às 15:30</span>
+                                <p class="item-reason">"Ótimo desempenho no laboratório de Engenharia de Software!"</p>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="item-amount">+ 150 Lúmens</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item exit">
+                        <div class="item-left">
+                            <span class="material-symbols-outlined type-icon">remove_circle</span>
+                            <div class="item-details">
+                                <p class="item-title">Enviado para <strong>Caio Lins (Estudante)</strong></p>
+                                <span class="item-date">18 de Maio de 2026 às 14:15</span>
+                                <p class="item-reason">"Tava te devendo pela ajuda no trabalho de AEDs II."</p>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="item-amount">- 50 Lúmens</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="extratoVazio" class="empty-state hidden">
+                    <span class="material-symbols-outlined empty-icon">history_toggle_off</span>
+                    <p>Nenhuma movimentação localizada nesta conta até o momento.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../js/extrato.js" defer></script>
+    <script src="../js/energia.js" defer></script>
+</body>
+</html>

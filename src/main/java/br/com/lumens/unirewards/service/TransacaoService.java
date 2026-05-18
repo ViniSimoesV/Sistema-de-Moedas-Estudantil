@@ -3,11 +3,11 @@ package br.com.lumens.unirewards.service;
 import br.com.lumens.unirewards.dto.TransacaoRequestDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
-import br.com.lumens.unirewards.repository.TransacaoProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 @Service
 public class TransacaoService {
@@ -112,5 +112,21 @@ public class TransacaoService {
         } else {
             throw new IllegalArgumentException("Tipo de perfil remetente não suportado para transferências.");
         }
+    }
+
+    public List<TransacaoProfessor> listarExtratoProfessor(Long professorId) {
+        return transacaoProfessorRepository.findByProfessorIdOrderByDataEnvioDesc(professorId);
+    }
+
+    public java.util.Map<String, Object> listarExtratoAluno(Long alunoId) {
+        List<TransacaoProfessor> recebidosProfessores = transacaoProfessorRepository.findByAlunoIdOrderByDataEnvioDesc(alunoId);
+        List<TransacaoAluno> enviadosParaAlunos = transacaoAlunoRepository.findByRemetenteIdOrderByDataEnvioDesc(alunoId);
+        List<TransacaoAluno> recebidosDeAlunos = transacaoAlunoRepository.findByDestinatarioIdOrderByDataEnvioDesc(alunoId);
+
+        java.util.Map<String, Object> extratoCompleto = new java.util.HashMap<>();
+        extratoCompleto.put("recebidosProfessores", recebidosProfessores);
+        extratoCompleto.put("enviadosAlunos", enviadosParaAlunos);
+        extratoCompleto.put("recebidosAlunos", recebidosDeAlunos);
+        return extratoCompleto;
     }
 }
