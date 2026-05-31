@@ -1,0 +1,97 @@
+@startuml
+
+actor "Usuário\n(Professor / Aluno)" as usuario
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+queue "Fila (RabbitMQ)" as mq
+
+== Transferência Professor para Aluno ==
+autonumber 1.1
+usuario -> api: POST /api/transacoes (TransacaoRequestDTO)
+activate api
+api -> db: SELECT busca Aluno Destinatário por ID (findById)
+activate db
+db --> api: Retorna Aluno Destinatário ou Vazio
+deactivate db
+
+alt Destinatário Encontrado e Valor > 0
+    api -> db: SELECT busca Professor usuario por ID (findById)
+    activate db
+    db --> api: Retorna Professor
+    deactivate db
+    api -> db: SELECT busca Carteira Professor (findByUsuarioId)
+    activate db
+    db --> api: Retorna Carteira do Professor
+    deactivate db
+
+    alt Saldo Suficiente
+        api -> db: SELECT busca Carteira Aluno Destinatário (findByUsuarioId)
+        activate db
+        db --> api: Retorna Carteira do Aluno
+        deactivate db
+        api -> api: Subtrai valor do Professor e adiciona ao Aluno
+        api -> db: UPDATE carteiras (carteiraRepository.save)
+        activate db
+        db --> api: Confirmação de saldos atualizados
+        deactivate db
+        api -> db: INSERT log na tabela (transacaoProfessorRepository.save)
+        activate db
+        db --> api: Retorna log salvo
+        deactivate db
+        api -> mq: Despacha e-mail para Aluno (RECEBIDO)
+        api -> mq: Despacha e-mail para Professor (ENVIADO)
+        api --> usuario: 200 OK ("Transferência processada com sucesso!")
+    else Saldo Insuficiente
+        api --> usuario: 400 Bad Request ("Saldo insuficiente na carteira...")
+    end
+else Destinatário Não Encontrado ou Valor Inválido
+    api --> usuario: 400 Bad Request ("Aluno destinatário não localizado..." ou "A quantidade de Lúmens...")
+end
+deactivate api
+
+== Transferência Aluno para Aluno ==
+autonumber 2.1
+usuario -> api: POST /api/transacoes (TransacaoRequestDTO)
+activate api
+api -> api: Verifica se usuario ID == Destinatário ID
+api -> db: SELECT busca Aluno Destinatário por ID (findById)
+activate db
+db --> api: Retorna Aluno Destinatário ou Vazio
+deactivate db
+
+alt Diferentes IDs, Destinatário Encontrado e Valor > 0
+    api -> db: SELECT busca Aluno usuario por ID (findById)
+    activate db
+    db --> api: Retorna Aluno usuario
+    deactivate db
+    api -> db: SELECT busca Carteira usuario (findByUsuarioId)
+    activate db
+    db --> api: Retorna Carteira do usuario
+    deactivate db
+
+    alt Saldo Suficiente
+        api -> db: SELECT busca Carteira Destinatário (findByUsuarioId)
+        activate db
+        db --> api: Retorna Carteira do Destinatário
+        deactivate db
+        api -> api: Subtrai valor do usuario e adiciona ao Destinatário
+        api -> db: UPDATE carteiras (carteiraRepository.save)
+        activate db
+        db --> api: Confirmação de saldos atualizados
+        deactivate db
+        api -> db: INSERT log na tabela (transacaoAlunoRepository.save)
+        activate db
+        db --> api: Retorna log salvo
+        deactivate db
+        api -> mq: Despacha e-mail para Destinatário (RECEBIDO)
+        api -> mq: Despacha e-mail para usuario (ENVIADO)
+        api --> usuario: 200 OK ("Transferência processada com sucesso!")
+    else Saldo Insuficiente
+        api --> usuario: 400 Bad Request ("Saldo de Lúmens insuficiente...")
+    end
+else Mesma Conta, Não Encontrado ou Valor Inválido
+    api --> usuario: 400 Bad Request ("Operação inválida..." ou "Aluno destinatário não localizado...")
+end
+deactivate api
+
+@enduml

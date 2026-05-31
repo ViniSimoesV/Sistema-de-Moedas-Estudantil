@@ -1,0 +1,105 @@
+@startuml
+
+actor "Empresa" as empresa
+actor "Aluno" as aluno
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+queue "Fila (RabbitMQ)" as mq
+
+== Cadastrar Vantagem ==
+autonumber 1.1
+empresa -> api: POST /api/vantagens (VantagemDTO: nome, descricao, custo, urlFoto, empresaId)
+activate api
+api -> db: SELECT busca Empresa por ID (findById)
+activate db
+db --> api: Retorna Empresa
+deactivate db
+api -> db: INSERT nova vantagem (vantagemRepository.save)
+activate db
+db --> api: Retorna Vantagem salva
+deactivate db
+api --> empresa: 201 Created (Vantagem cadastrada)
+deactivate api
+
+== Visualizar Vantagens da Empresa ==
+autonumber 2.1
+empresa -> api: GET /api/vantagens/empresa/{empresaId}
+activate api
+api -> db: SELECT busca vantagens da empresa (findByEmpresaId)
+activate db
+db --> api: Retorna lista de vantagens
+deactivate db
+api --> empresa: 200 OK (Exibe catálogo de vantagens)
+deactivate api
+
+== Editar Vantagem ==
+autonumber 3.1
+empresa -> api: PUT /api/vantagens/{id} (VantagemDTO: nome, descricao, custo, urlFoto)
+activate api
+api -> db: SELECT busca Vantagem por ID (findById)
+activate db
+db --> api: Retorna Vantagem
+deactivate db
+api -> api: Atualiza campos (editarVantagem)
+api -> db: UPDATE dados da vantagem (vantagemRepository.save)
+activate db
+db --> api: Retorna Vantagem atualizada
+deactivate db
+api --> empresa: 200 OK (Dados atualizados)
+deactivate api
+
+== Excluir Vantagem ==
+autonumber 4.1
+empresa -> api: DELETE /api/vantagens/{id}
+activate api
+api -> db: SELECT verifica se ID existe (existsById)
+activate db
+db --> api: Retorna resultado
+deactivate db
+api -> db: DELETE vantagem por ID (deleteById)
+activate db
+db --> api: Confirmação de exclusão
+deactivate db
+api --> empresa: 204 No Content (Excluída)
+deactivate api
+
+== Resgatar Vantagem (Aluno) ==
+autonumber 5.1
+aluno -> api: POST /api/resgates (ResgateDTO: alunoId, vantagemId)
+activate api
+api -> db: SELECT busca Aluno e sua Carteira (findById / findByUsuarioId)
+activate db
+db --> api: Retorna Aluno e Carteira
+deactivate db
+api -> db: SELECT busca Vantagem (findById)
+activate db
+db --> api: Retorna Vantagem (com custo associado)
+deactivate db
+
+alt Saldo Suficiente (carteira.saldoAtual >= vantagem.custo)
+    api -> api: Subtrai custo em Lúmens da Carteira do Aluno
+    api -> db: UPDATE Carteira (carteiraRepository.save)
+    activate db
+    db --> api: Confirmação de saldo atualizado
+    deactivate db
+    
+    api -> api: Incrementa contador 'totalResgatados' da Empresa
+    api -> db: UPDATE Empresa (empresaRepository.save)
+    activate db
+    db --> api: Confirmação de atualização da Empresa
+    deactivate db
+
+    api -> api: Gera código único e payload do QR Code para o Cupom
+    api -> db: INSERT log na tabela de resgates (resgateRepository.save)
+    activate db
+    db --> api: Retorna Resgate salvo
+    deactivate db
+    
+    api -> mq: Despacha e-mail para Aluno (EmailCupomDTO: email, nome, qrCode, dadosVantagem)
+    api --> aluno: 200 OK ("Resgate realizado com sucesso! Cupom enviado para o seu e-mail.")
+else Saldo Insuficiente
+    api --> aluno: 400 Bad Request ("Saldo de Lúmens insuficiente para este resgate.")
+end
+deactivate api
+
+@enduml

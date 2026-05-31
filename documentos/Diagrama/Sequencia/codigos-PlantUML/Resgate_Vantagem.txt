@@ -1,0 +1,71 @@
+@startuml
+
+actor "Aluno" as aluno
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+queue "Fila (RabbitMQ)" as mq
+
+== Visualizar Loja de Vantagens ==
+autonumber 1.1
+aluno -> api: GET /api/vantagens
+activate api
+api -> db: SELECT busca todas as vantagens ativas (findAll)
+activate db
+db --> api: Retorna lista de vantagens
+deactivate db
+api --> aluno: 200 OK (Exibe catálogo geral da loja)
+deactivate api
+
+== Filtrar Vantagens (Tipo / Preço) ==
+autonumber 2.1
+aluno -> api: GET /api/vantagens/filtro?tipo={ramo}&precoMax={valor}
+activate api
+api -> db: SELECT busca vantagens com filtros (findByTipoAndCustoLessThanEqual)
+activate db
+db --> api: Retorna lista filtrada
+deactivate db
+api --> aluno: 200 OK (Exibe catálogo filtrado)
+deactivate api
+
+== Selecionar e Pagar (Resgatar Vantagem) ==
+autonumber 3.1
+aluno -> api: POST /api/resgates (ResgateDTO: alunoId, vantagemId)
+activate api
+
+api -> db: SELECT busca Aluno e sua Carteira (findById / findByUsuarioId)
+activate db
+db --> api: Retorna Aluno e Carteira
+deactivate db
+
+api -> db: SELECT busca Vantagem (findById)
+activate db
+db --> api: Retorna Vantagem (com custo em Lúmens associado)
+deactivate db
+
+alt Saldo Suficiente (carteira.saldoAtual >= vantagem.custo)
+    api -> api: Subtrai custo em Lúmens da Carteira do Aluno
+    api -> db: UPDATE Carteira (carteiraRepository.save)
+    activate db
+    db --> api: Confirmação de saldo atualizado
+    deactivate db
+    
+    api -> api: Incrementa contador 'totalResgatados' da Empresa parceira
+    api -> db: UPDATE Empresa (empresaRepository.save)
+    activate db
+    db --> api: Confirmação de atualização da Empresa
+    deactivate db
+
+    api -> api: Gera código único (Hash/UUID) e payload do QR Code
+    api -> db: INSERT log na tabela de resgates (resgateRepository.save)
+    activate db
+    db --> api: Retorna Resgate salvo
+    deactivate db
+    
+    api -> mq: Despacha e-mail para Aluno (EmailCupomDTO: email, nome, qrCode, dadosVantagem)
+    api --> aluno: 200 OK ("Pagamento aprovado! Cupom e QR Code enviados para o seu e-mail.")
+else Saldo Insuficiente
+    api --> aluno: 400 Bad Request ("Saldo de Lúmens insuficiente para realizar este resgate.")
+end
+deactivate api
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+
+actor "Usuário\n(Professor / Aluno)" as usuario
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+
+== Verificar Extrato (Professor) ==
+autonumber 1.1
+usuario -> api: GET /api/transacoes/professor/{id}
+activate api
+
+alt Requisição processada com sucesso
+    api -> db: SELECT transações enviadas (findByProfessorIdOrderByDataEnvioDesc)
+    activate db
+    db --> api: Retorna lista de transações do professor
+    deactivate db
+    api --> usuario: 200 OK (Lista de transações)
+else Erro interno
+    api --> usuario: 500 Internal Server Error ("Erro ao buscar extrato do professor.")
+end
+deactivate api
+
+== Verificar Extrato (Aluno) ==
+autonumber 2.1
+usuario -> api: GET /api/transacoes/aluno/{id}
+activate api
+
+alt Requisição processada com sucesso
+    api -> db: SELECT recebidos de professores (findByAlunoIdOrderByDataEnvioDesc)
+    activate db
+    db --> api: Retorna lista (recebidosProfessores)
+    deactivate db
+    
+    api -> db: SELECT enviados para alunos (findByRemetenteIdOrderByDataEnvioDesc)
+    activate db
+    db --> api: Retorna lista (enviadosAlunos)
+    deactivate db
+    
+    api -> db: SELECT recebidos de alunos (findByDestinatarioIdOrderByDataEnvioDesc)
+    activate db
+    db --> api: Retorna lista (recebidosAlunos)
+    deactivate db
+    
+    api -> api: Agrupa as três listas em um Objeto/Map (extratoCompleto)
+    api --> usuario: 200 OK (Objeto com extrato completo)
+else Erro interno
+    api --> usuario: 500 Internal Server Error ("Erro ao buscar extrato do aluno.")
+end
+deactivate api
+
+@enduml

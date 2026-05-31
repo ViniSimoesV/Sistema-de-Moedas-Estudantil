@@ -1,0 +1,81 @@
+@startuml
+
+actor "Aluno" as aluno
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+
+== Cadastrar Conta (Aluno) ==
+autonumber 1.1
+aluno -> api: POST /api/alunos (AlunoDTO)
+activate api
+api -> db: SELECT busca Instituição por ID (findById)
+activate db
+db --> api: Retorna Instituição ou Vazio
+deactivate db
+
+alt Instituição Encontrada (Sucesso)
+    api -> api: Codifica senha (BCrypt), define tipoUsuario="ALUNO" e nivel=1
+    api -> api: Instancia nova Carteira com 0 Lúmens
+    api -> db: INSERT novo aluno e carteira vinculada (alunoRepository.save)
+    activate db
+    db --> api: Retorna Aluno salvo
+    deactivate db
+    api --> aluno: 201 Created (Conta criada)
+else Instituição Não Encontrada (Falha)
+    api --> aluno: Erro (RuntimeException: "Instituição não encontrada")
+end
+deactivate api
+
+== Visualizar Conta / Perfil ==
+autonumber 2.1
+aluno -> api: GET /api/alunos/{id}
+activate api
+api -> db: SELECT busca aluno por ID (findById)
+activate db
+db --> api: Retorna aluno ou Vazio
+deactivate db
+
+alt Aluno Encontrado
+    api -> db: SELECT carteira do aluno (findByUsuarioId)
+    activate db
+    db --> api: Retorna carteira
+    deactivate db
+    api --> aluno: 200 OK (Exibe dados do aluno + carteira)
+else Não Encontrado
+    api --> aluno: 404 Not Found
+end
+deactivate api
+
+== Editar Conta ==
+autonumber 3.1
+aluno -> api: PUT /api/alunos/{id} (AlunoDTO)
+activate api
+api -> db: SELECT busca aluno por ID (findById)
+activate db
+db --> api: Retorna aluno ou Vazio
+deactivate db
+
+alt Aluno Encontrado
+    api -> api: Atualiza dados (Codifica nova senha, se enviada)
+    api -> db: UPDATE dados do aluno (alunoRepository.save)
+    activate db
+    db --> api: Retorna aluno atualizado
+    deactivate db
+    api --> aluno: 200 OK (Dados atualizados)
+else Não Encontrado
+    api --> aluno: Erro (RuntimeException: "Aluno não encontrado")
+end
+deactivate api
+
+== Excluir Conta ==
+autonumber 4.1
+aluno -> api: DELETE /api/alunos/{id}
+activate api
+api -> db: DELETE aluno por ID (deleteById)
+activate db
+db --> api: Confirmação de exclusão
+deactivate db
+api --> aluno: 204 No Content (Conta excluída)
+deactivate api
+
+@enduml

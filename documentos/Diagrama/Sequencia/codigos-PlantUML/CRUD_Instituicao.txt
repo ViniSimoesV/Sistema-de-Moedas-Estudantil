@@ -1,0 +1,84 @@
+@startuml
+
+actor "Administrador" as admin
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+
+== Cadastrar Instituição ==
+autonumber 1.1
+admin -> api: POST /api/instituicoes (Objeto Instituicao)
+activate api
+api -> db: SELECT verifica se sigla existe (existsBySigla)
+activate db
+db --> api: Retorna resultado (Verdadeiro/Falso)
+deactivate db
+
+alt Sigla não existe (Sucesso)
+    api -> api: Codifica senha (BCrypt) e define tipoUsuario = "INSTITUICAO"
+    api -> db: INSERT nova instituição (repository.save)
+    activate db
+    db --> api: Retorna Instituicao salva
+    deactivate db
+    api --> admin: 201 Created (Instituição cadastrada)
+else Sigla já cadastrada (Falha)
+    api --> admin: 400 Bad Request (Erro: "Esta sigla já está cadastrada!")
+end
+deactivate api
+
+== Visualizar Dados da Instituição ==
+autonumber 2.1
+admin -> api: GET /api/instituicoes/{id}
+activate api
+api -> db: SELECT dados da instituição por ID (findById)
+activate db
+db --> api: Retorna perfil da instituição ou Vazio
+deactivate db
+
+alt Instituição Encontrada
+    api --> admin: 200 OK (Exibe dados)
+else Não Encontrada
+    api --> admin: 404 Not Found
+end
+deactivate api
+
+== Editar Instituição ==
+autonumber 3.1
+admin -> api: PUT /api/instituicoes/{id} (nome, sigla, urlFotoPerfil)
+activate api
+api -> db: SELECT busca instituição por ID (findById)
+activate db
+db --> api: Retorna instituição ou Vazio
+deactivate db
+
+alt Instituição Encontrada
+    api -> db: UPDATE dados da instituição (nome, sigla, urlFotoPerfil)
+    activate db
+    db --> api: Retorna instituição atualizada
+    deactivate db
+    api --> admin: 200 OK (Dados atualizados)
+else Não Encontrada
+    api --> admin: 404 Not Found
+end
+deactivate api
+
+== Excluir Instituição ==
+autonumber 4.1
+admin -> api: DELETE /api/instituicoes/{id}
+activate api
+api -> db: SELECT verifica se ID existe (existsById)
+activate db
+db --> api: Retorna resultado (Verdadeiro/Falso)
+deactivate db
+
+alt ID Existe
+    api -> db: DELETE instituição por ID (deleteById)
+    activate db
+    db --> api: Confirmação de exclusão
+    deactivate db
+    api --> admin: 204 No Content (Excluída)
+else Não Encontrada
+    api --> admin: 404 Not Found
+end
+deactivate api
+
+@enduml

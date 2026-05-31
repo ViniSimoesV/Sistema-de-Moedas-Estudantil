@@ -1,0 +1,92 @@
+@startuml
+
+actor "Empresa" as empresa
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+
+== Cadastrar Empresa ==
+autonumber 1.1
+empresa -> api: POST /api/empresas (EmpresaDTO)
+activate api
+api -> db: SELECT verifica se CNPJ existe (findByCnpj)
+activate db
+db --> api: Retorna resultado (Verdadeiro/Falso)
+deactivate db
+
+alt CNPJ não cadastrado (Sucesso)
+    api -> api: Codifica senha (BCrypt) e define tipoUsuario = "EMPRESA"
+    api -> db: INSERT nova empresa (empresaRepository.save)
+    activate db
+    db --> api: Retorna Empresa salva
+    deactivate db
+    api --> empresa: 200 OK (Empresa cadastrada)
+else CNPJ já cadastrado (Falha)
+    api --> empresa: Erro (IllegalArgumentException: "Já existe uma empresa...")
+end
+deactivate api
+
+== Login da Empresa ==
+autonumber 2.1
+empresa -> api: POST /api/empresas/login (cnpj, senha)
+activate api
+api -> db: SELECT busca empresa por CNPJ (findByCnpj)
+activate db
+db --> api: Retorna Empresa ou Vazio
+deactivate db
+
+alt Empresa Encontrada e Senha Válida (BCrypt.matches)
+    api --> empresa: 200 OK (Retorna id, nome, cnpj, tipoUsuario)
+else CNPJ ou Senha Incorretos
+    api --> empresa: 401 Unauthorized (Erro: "CNPJ ou palavra-passe incorretos.")
+end
+deactivate api
+
+== Visualizar Perfil da Empresa ==
+autonumber 3.1
+empresa -> api: GET /api/empresas/{id}
+activate api
+api -> db: SELECT busca empresa por ID (findById)
+activate db
+db --> api: Retorna empresa ou Vazio
+deactivate db
+
+alt Empresa Encontrada
+    api --> empresa: 200 OK (Exibe dados)
+else Não Encontrada
+    api --> empresa: 404 Not Found
+end
+deactivate api
+
+== Editar Empresa ==
+autonumber 4.1
+empresa -> api: PUT /api/empresas/{id} (EmpresaDTO)
+activate api
+api -> db: SELECT busca empresa por ID (findById)
+activate db
+db --> api: Retorna empresa ou Vazio
+deactivate db
+
+alt Empresa Encontrada
+    api -> api: Atualiza dados (Codifica nova senha, se enviada)
+    api -> db: UPDATE dados da empresa (empresaRepository.save)
+    activate db
+    db --> api: Retorna empresa atualizada
+    deactivate db
+    api --> empresa: 200 OK (Dados atualizados)
+else Não Encontrada
+    api --> empresa: Erro (RuntimeException: "Empresa não encontrada")
+end
+deactivate api
+
+== Excluir Empresa ==
+autonumber 5.1
+empresa -> api: DELETE /api/empresas/{id}
+activate api
+api -> db: DELETE empresa por ID (deleteById)
+activate db
+db --> api: Confirmação de exclusão
+deactivate db
+api --> empresa: 204 No Content (Excluída)
+deactivate api
+
+@enduml

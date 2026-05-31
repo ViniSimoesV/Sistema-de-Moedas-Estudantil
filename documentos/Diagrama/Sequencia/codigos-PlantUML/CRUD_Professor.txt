@@ -1,0 +1,116 @@
+@startuml
+
+actor "Instituição" as admin
+actor "Professor" as prof
+participant "API UniRewards" as api
+database "Banco de Dados" as db
+
+== Cadastrar Professor Individual ==
+autonumber 1.1
+admin -> api: POST /api/professores (ProfessorDTO)
+activate api
+api -> db: SELECT verifica CPF e Email (existsByCpf / existsByEmail)
+activate db
+db --> api: Retorna resultado (Verdadeiro/Falso)
+deactivate db
+
+alt CPF e Email não cadastrados (Sucesso)
+    api -> api: Codifica senha (BCrypt) e define tipoUsuario = "PROFESSOR"
+    api -> db: INSERT novo professor (professorRepository.save)
+    activate db
+    db --> api: Retorna Professor salvo
+    deactivate db
+    api -> db: INSERT nova carteira com 1000 Lúmens (carteiraRepository.save)
+    activate db
+    db --> api: Retorna Carteira salva
+    deactivate db
+    api --> admin: 201 Created (Professor cadastrado)
+else CPF ou Email já existem (Falha)
+    api --> admin: 400 Bad Request (Erro: "Já existe um professor...")
+end
+deactivate api
+
+== Cadastrar Professores em Lote (CSV) ==
+autonumber 2.1
+admin -> api: POST /api/professores/upload (MultipartFile, instituicaoId)
+activate api
+alt Arquivo processado com sucesso
+    api -> api: Lê arquivo CSV e ignora cabeçalho
+    loop Para cada linha com dados válidos
+        api -> db: Verifica CPF/Email e realiza os mesmos INSERTs
+    end
+    api --> admin: 200 OK (X professores cadastrados com sucesso)
+else Erro na leitura do arquivo
+    api --> admin: 400 Bad Request (Erro ao processar ficheiro)
+end
+deactivate api
+
+== Visualizar Professor (Perfil) ==
+autonumber 3.1
+prof -> api: GET /api/professores/{id}
+activate api
+api -> db: SELECT professor por ID (findById)
+activate db
+db --> api: Retorna professor ou Vazio
+deactivate db
+
+alt Professor Encontrado
+    api -> db: SELECT carteira do professor (findByUsuarioId)
+    activate db
+    db --> api: Retorna carteira
+    deactivate db
+    api --> prof: 200 OK (Exibe dados do professor + carteira)
+else Não Encontrado
+    api --> prof: 404 Not Found
+end
+deactivate api
+
+== Editar Professor ==
+autonumber 4.1
+prof -> api: PUT /api/professores/{id} (ProfessorDTO)
+activate api
+api -> db: SELECT busca professor por ID (findById)
+activate db
+db --> api: Retorna professor
+deactivate db
+
+alt Validação Ok e Encontrado
+    api -> db: SELECT verifica novos CPF/Email (caso alterados)
+    activate db
+    db --> api: Retorna validação
+    deactivate db
+    api -> db: UPDATE dados do professor (save)
+    activate db
+    db --> api: Retorna professor atualizado
+    deactivate db
+    api -> db: SELECT carteira para garantir vínculo no retorno
+    activate db
+    db --> api: Retorna carteira
+    deactivate db
+    api --> prof: 200 OK (Dados atualizados)
+else CPF/Email duplicados ou Não Encontrado
+    api --> prof: 400 Bad Request / 404 Not Found
+end
+deactivate api
+
+== Excluir Professor ==
+autonumber 5.1
+admin -> api: DELETE /api/professores/{id}
+activate api
+api -> db: SELECT verifica se ID existe (existsById)
+activate db
+db --> api: Retorna resultado
+deactivate db
+
+alt ID Existe
+    api -> db: DELETE professor por ID (deleteById)
+    activate db
+    db --> api: Confirmação de exclusão
+    deactivate db
+    api --> admin: 204 No Content (Excluído)
+else Não Encontrado
+    api --> admin: 404 Not Found
+end
+deactivate api
+
+@enduml
