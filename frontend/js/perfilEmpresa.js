@@ -30,29 +30,79 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.querySelector('.user-name').textContent = empresa.nome;
             document.querySelector('.data-value').textContent = empresa.cnpj;
 
-            // 2. Ramo de Atuação
+            // 2. PREENCHE O TOTAL DE CUPONS RESGATADOS
+            const countCupons = document.querySelector('.lumen-count');
+            if (countCupons) {
+                countCupons.textContent = empresa.totalResgatados || 0;
+            }
+
+            // 3. BUSCA E PREENCHE O TOTAL DE VANTAGENS ATIVAS
+            carregarTotalVantagensCadastradas(empresaId);
+
+            // 4. Ramo de Atuação
             const ramoElement = document.querySelector('.ramo-valor') || document.querySelectorAll('.data-value')[1];
             if (ramoElement) {
                 ramoElement.textContent = empresa.ramoAtuacao || "Não informado";
             }
             
-            // 3. Contador de Vantagens (O que você pediu)
+            // 5. Contador de Vantagens
             const countElement = document.querySelector('.lumen-count');
             if (countElement) {
                 countElement.textContent = empresa.totalResgatados || 0;
             }
             
-            // 4. Foto de Perfil
+            // 6. Foto de Perfil
             if (empresa.urlFotoPerfil) {
                 document.querySelector('.perfil-avatar').src = empresa.urlFotoPerfil;
             }
 
-            
+            // 7. Carregar as top 3 vantagens resgatadas
+            carregarTopVantagens(empresaId);
         }
     } catch (error) {
         console.error('Erro ao carregar perfil:', error);
     }
 });
+
+
+async function carregarTopVantagens(empresaId) {
+    const container = document.getElementById('topVantagensContainer');
+    
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/api/vantagens/empresa/${empresaId}/top3`);
+        
+        if (response.ok) {
+            const vantagens = await response.json();
+            container.innerHTML = ''; 
+            
+            if (vantagens.length === 0) {
+                container.innerHTML = `<p class="text-center-muted">Nenhuma vantagem resgatada ainda.</p>`;
+                return;
+            }
+
+            vantagens.forEach(v => {
+                // Se a foto não existir, usa o Lúmen como fallback
+                const imagemSrc = v.urlFoto ? v.urlFoto : '../assets/Lumen.png';
+                
+                container.innerHTML += `
+                    <div class="glass top-vantagem-card">
+                        <img src="${imagemSrc}" alt="Foto Vantagem" class="top-vantagem-img">
+                        <div class="top-vantagem-info">
+                            <h5>${v.nome}</h5>
+                        </div>
+                        <div class="top-vantagem-badge">
+                            <span class="badge-value">${v.quantidadeResgates}</span>
+                            <span class="badge-label">Resgatados</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao buscar top vantagens:", error);
+        container.innerHTML = `<p style="color: #ff4d4d;" class="text-center-muted">Erro ao carregar vantagens.</p>`;
+    }
+}
 
 
 // Abrir modal
@@ -167,3 +217,19 @@ btnExcluir.addEventListener('click', async () => {
         }
     }
 });
+
+async function carregarTotalVantagensCadastradas(empresaId) {
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/api/vantagens/empresa/${empresaId}`);
+        if (response.ok) {
+            const vantagens = await response.json();
+            const countVantagens = document.querySelector('.vantagens-count');
+            if (countVantagens) {
+                // Conta quantos itens vieram da lista
+                countVantagens.textContent = vantagens.length; 
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao buscar o total de vantagens:", error);
+    }
+}

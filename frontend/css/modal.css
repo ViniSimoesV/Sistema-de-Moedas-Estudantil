@@ -82,6 +82,19 @@
     border: 1px solid #333;
     background: #0d1117;
     color: white;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.modal-body input[type="number"]::-webkit-outer-spin-button,
+.modal-body input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal-body input[type="number"] {
+    -moz-appearance: textfield; /* Correção para o Firefox */
 }
 
 /* Botões */
@@ -120,6 +133,23 @@
     color: white;
     box-shadow: 0 0 12px rgba(255, 77, 77, 0.4);
     border-color: #ff4d4d;
+}
+
+/* QR Code */
+#qrcodeContainer {
+    background: white; /* Fundo branco obrigatório para o leitor ler */
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* Opcional: Centralizar melhor no modal */
+#qrcodeContainer img {
+    display: block;
+    margin: 0 auto;
 }
 
 

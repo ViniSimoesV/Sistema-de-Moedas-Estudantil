@@ -46,10 +46,17 @@
 /* Responsividade */
 @media (max-width: 768px) {
 
+    /* Reorganização da ordem APENAS no mobile */
+    .nav-item-transferir { order: 1; }
+    .nav-item-inventario { order: 2; }
+    .nav-item-perfil { order: 3; }
+    .nav-item-loja { order: 4; }
+    .nav-item-extrato { order: 5; }
+    
     .navbar {
         top: auto; 
         bottom: 0; 
-        padding: 0 0.5rem; 
+        padding: 0; /* Removido daqui para não dar conflito */
         height: 65px;      
         flex-direction: row; 
         justify-content: center;
@@ -65,10 +72,12 @@
 
     .nav-links {
         width: 100%;
+        height: 100%;
         display: flex;
-        justify-content: space-around; 
+        justify-content: center; 
         align-items: center;
         gap: 0;
+        padding: 0 0.5rem;
     }
 
     .nav-link {
@@ -76,10 +85,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center; 
+        text-align: center; 
         gap: 2px; 
         opacity: 0.6;
         transition: 0.3s;
-        flex: 1; 
+        flex: 1 1 0px; 
+        width: 20%;
         min-width: 0;
     }
 
@@ -104,5 +116,9 @@
         background: var(--white); 
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+        
+        /* O SEGREDO DO ALINHAMENTO PERFEITO: */
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

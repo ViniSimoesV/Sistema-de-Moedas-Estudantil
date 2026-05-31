@@ -1,6 +1,7 @@
 package br.com.lumens.unirewards.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,6 +25,7 @@ public class Empresa extends Usuario {
     private String ramoAtuacao;
 
     // Uma empresa oferece várias vantagens
+    @JsonIgnore
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private List<Vantagem> vantagens;
 

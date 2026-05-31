@@ -21,27 +21,33 @@
     <div id="navbar"></div>
 
     <main class="perfil-container">
-        <!-- Coluna 1: Gamificação e Status (Módulo Esquerdo) -->
+        <!-- Status e Informações Pessoais -->
         <aside class="perfil-sidebar">
             <div class="perfil-card glass">
                 <div class="avatar-container">
                     <img src="../assets/avatar_placeholder.png" alt="Avatar do Aluno" class="perfil-avatar">
-                    <span class="level-badge"></span> <!-- Preenchido pelo JS -->
+                    <span class="level-badge"></span> 
                 </div>
-                <h3 class="user-name"></h3> <!-- Preenchido pelo JS -->
-                <p class="user-rank"></p> <!-- Preenchido pelo JS -->
+                <h3 class="user-name"></h3> 
+                <p class="user-rank"></p> 
                 
                 <div class="lumen-balance">
                     <img src="../assets/Lumen.png" alt="Lúmen" class="wallet-lumen">
                     <div class="lumen-values">
-                        <span class="lumen-count"></span> <!-- Preenchido pelo JS -->
+                        <span class="lumen-count"></span> 
                         <p class="lumen-label">Lúmens disponíveis</p>
                     </div>
                 </div>
+                
+                <!-- Botão de Sair no Perfil -->
+                <button class="btn-logout-profile" onclick="localStorage.clear(); window.location.href='../index.html'">
+                    <span class="material-symbols-outlined">logout</span>
+                    Sair da Conta
+                </button>
             </div>
         </aside>
 
-        <!-- Coluna 2: Dados e Histórico -->
+        <!-- Dados e Histórico -->
         <section class="perfil-content">
             <!-- Módulo Acadêmico -->
             <div class="content-card glass">
@@ -52,11 +58,11 @@
                 <div class="data-grid">
                     <div class="data-group">
                         <span class="data-label">Curso</span>
-                        <p class="data-value"></p> <!-- Preenchido pelo JS -->
+                        <p class="data-value"></p> 
                     </div>
                     <div class="data-group">
                         <span class="data-label">Instituição</span>
-                        <p class="data-value"></p> <!-- Preenchido pelo JS -->
+                        <p class="data-value"></p> 
                     </div>
                 </div>
                 <div class="card-footer">

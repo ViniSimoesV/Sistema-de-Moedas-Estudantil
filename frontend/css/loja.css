@@ -1,0 +1,198 @@
+/* =========================================
+   BARRA DE PESQUISA E FILTROS
+   ========================================= */
+.loja-filtros {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    flex-wrap: wrap;
+}
+
+.loja-filtros .input-group {
+    margin-bottom: 0;
+    flex-grow: 1;
+    min-width: 200px;
+}
+
+.loja-filtros input, .loja-filtros select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+.loja-filtros input:focus, .loja-filtros select:focus {
+    outline: none;
+    border-color: var(--lumen-gold);
+}
+
+/* =========================================
+   SALDO DO ALUNO (TOPO)
+   ========================================= */
+.saldo-topo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(241, 196, 15, 0.1);
+    padding: 8px 15px;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(241, 196, 15, 0.3);
+}
+
+.saldo-topo-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.saldo-topo-icone {
+    width: 20px;
+    height: 20px;
+}
+
+.saldo-topo-valor {
+    color: var(--lumen-gold);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   CARDS DE VANTAGENS (ESPECÍFICO LOJA)
+   ========================================= */
+.vantagem-empresa-badge {
+    font-size: 0.65rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 10px;
+    color: var(--text-secondary);
+}
+
+.loja-desc-margin {
+    margin-top: 10px;
+}
+
+.lumen-icon-md {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.actions-center {
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.empty-state-padding {
+    padding: 2rem;
+}
+
+/* =========================================
+   MODAIS DE RESGATE E SUCESSO
+   ========================================= */
+.modal-center-content {
+    max-width: 450px;
+    text-align: center;
+}
+
+.modal-sucesso-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-body-padded {
+    padding: 2rem 1rem;
+}
+
+.modal-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.icon-gold { color: var(--lumen-gold); }
+.icon-green { color: #4caf50; }
+
+.modal-title-spacing {
+    margin-bottom: 0.5rem;
+}
+
+.modal-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.custo-box {
+    background: rgba(0,0,0,0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.custo-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+
+.custo-value-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.custo-value {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.modal-buttons-center {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.cupom-display {
+    background: var(--lumen-gold);
+    color: black;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
+/* =========================================
+   RESPONSIVIDADE DA LOJA (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Faz o título e o saldo ficarem empilhados no celular */
+    .header-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+
+    /* Ajusta o campo de busca para ocupar a tela toda */
+    .loja-filtros {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .loja-filtros .input-group {
+        width: 100%;
+        min-width: unset;
+    }
+}

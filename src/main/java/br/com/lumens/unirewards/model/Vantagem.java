@@ -28,6 +28,9 @@ public class Vantagem {
     @Column(nullable = false)
     private Integer custo; // Valor em Lúmens para resgate
 
+    @Column(name = "quantidade_resgates", nullable = false)
+    private Integer quantidadeResgates = 0;
+
     // Relacionamento ManyToOne: Muitas vantagens pertencem a uma única Empresa
     @ManyToOne
     @JoinColumn(name = "empresa_id", nullable = false)

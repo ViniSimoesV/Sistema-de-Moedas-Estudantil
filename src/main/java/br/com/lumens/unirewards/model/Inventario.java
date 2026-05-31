@@ -1,6 +1,7 @@
 package br.com.lumens.unirewards.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class Inventario {
 
     @ManyToOne
     @JoinColumn(name = "aluno_id", nullable = false)
+    @JsonIgnore
     private Aluno aluno;
 
     @ManyToOne

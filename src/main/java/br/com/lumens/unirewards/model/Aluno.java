@@ -1,6 +1,7 @@
 package br.com.lumens.unirewards.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,6 +40,7 @@ public class Aluno extends UsuarioAcademico {
 
     // Dentro de Aluno.java
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Inventario> cupons;
 
     // Métodos

@@ -1,0 +1,270 @@
+/* =========================================
+   1. UTILITÁRIOS E ESTRUTURA GERAL
+   ========================================= */
+.vantagens-main-container {
+    display: block; 
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.vantagens-section {
+    width: 100%;
+}
+
+/* Força os elementos do cabeçalho a ficarem na mesma linha */
+.header-flex {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+    gap: 1rem;
+}
+
+/* Remove as bordas do título e proíbe ele de ocupar 100% da largura */
+.title-no-border {
+    margin-bottom: 0 !important;
+    border: none !important;
+    padding-bottom: 0 !important;
+    width: auto !important;
+    display: inline-block !important; 
+}
+
+.text-center-muted {
+    color: var(--text-secondary);
+    width: 100%;
+    text-align: center;
+}
+
+.col-span-full {
+    grid-column: 1 / -1;
+}
+
+/* =========================================
+   2. WIDGET "TOP 3 VANTAGENS" (Perfil Empresa)
+   ========================================= */
+.top-vantagens-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    text-align: left;
+    margin-top: 1.5rem;
+}
+
+.top-vantagem-card {
+    padding: 1.2rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.top-vantagem-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.top-vantagem-img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.top-vantagem-info {
+    flex-grow: 1; 
+}
+
+.top-vantagem-info h5 {
+    color: var(--lumen-gold);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Crachá (Badge) de Resgates */
+.top-vantagem-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(241, 196, 15, 0.1);
+    border: 1px solid rgba(241, 196, 15, 0.5);
+    border-radius: 8px;
+    padding: 10px 15px;
+    min-width: 90px;
+}
+
+.badge-value {
+    color: var(--lumen-gold);
+    font-size: 1.3rem;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.badge-label {
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   3. CATÁLOGO E CARDS DE VANTAGENS (Gerenciamento e Loja)
+   ========================================= */
+.vantagens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.vantagem-card {
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03); /* Fundo sutil */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.vantagem-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.vantagem-img-container {
+    height: 120px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+.vantagem-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vantagem-title {
+    color: var(--lumen-gold);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.vantagem-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.vantagem-custo {
+    font-weight: bold;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* =========================================
+   4. BOTÕES E AÇÕES
+   ========================================= */
+.actions-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.actions-group .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    gap: 0.5rem;
+    white-space: nowrap;
+    padding: 0.8rem 1.5rem;
+}
+
+.actions-group .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.actions-group .btn .material-symbols-outlined {
+    margin: 0 !important; 
+}
+
+.vantagem-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1rem;
+}
+
+.btn-action {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+}
+
+.btn-danger {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.btn-danger:hover {
+    background: #ff4d4d;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.4);
+}
+
+.btn-small-text {
+    font-size: 0.75rem;
+    white-space: nowrap; /* Evita que o botão quebre em duas linhas */
+}
+
+/* =========================================
+   5. COMPONENTES DE FORMULÁRIO (Modais)
+   ========================================= */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.textarea-dark {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    resize: vertical;
+    font-family: inherit;
+}
+
+.textarea-dark:focus {
+    outline: none;
+    border-color: var(--lumen-gold);
+}
+
+
+@media (max-width: 768px) {
+    .actions-group .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    
+}

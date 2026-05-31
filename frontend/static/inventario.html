@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Inventário - UniRewards</title>
+    <link rel="icon" href="../assets/Lumen.png" type="image/png">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/energia.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/vantagem.css">
+    <link rel="stylesheet" href="../css/loja.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body class="perfil-page">
+
+    <canvas id="energyCanvas"></canvas>
+    <div id="navbar"></div>
+
+    <main class="perfil-container vantagens-main-container">
+        <section class="vantagens-section">
+            <div class="content-card glass">
+                <header class="vantagens-header header-flex">
+                    <h4 class="module-title title-no-border">Meus Cupons e Vantagens</h4>
+                </header>
+                
+                <!-- Grid onde os cupons resgatados aparecerão -->
+                <div id="listaInventario" class="vantagens-grid"> 
+                    <p class="text-center-muted col-span-full empty-state-padding">Buscando seu inventário...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para Exibir o Cupom em Tela Cheia -->
+    <div id="modalCupom" class="modal-overlay">
+        <div class="modal-content glass modal-sucesso-content">
+            <div class="modal-body modal-body-padded">
+                <span class="material-symbols-outlined modal-icon-large icon-gold">local_activity</span>
+                <h4 class="modal-title-spacing" id="cupomTitulo">Nome da Vantagem</h4>
+                <p class="modal-desc">
+                    Apresente o código abaixo no estabelecimento parceiro para validar sua vantagem.
+                </p>
+                
+                <div class="cupom-display" id="codigoCupomExibicao">
+                    XXXXXX
+                </div>
+                
+                <div id="qrcodeContainer" style="background: white; padding: 10px; border-radius: 8px; display: inline-block; margin-top: 15px;"></div>
+
+                <button class="btn btn-confirmar btn-full-width" onclick="document.getElementById('modalCupom').classList.remove('active')">Fechar Aba</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script type="module" src="../js/inventarioAluno.js" defer></script>
+    <script src="../js/navbarAluno.js" defer></script>
+    <script src="../js/energia.js" defer></script>
+</body>
+</html>
