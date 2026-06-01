@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String FILA_EMAILS_TRANSACOES = "emails.transacoes.fila";
+    public static final String FILA_EMAILS_CUPONS = "emails.cupons.fila";
 
     @Bean
     public Queue filaEmails() {
@@ -19,9 +20,14 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue filaCupons() {
+        return new Queue(FILA_EMAILS_CUPONS, true);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule()); // Previne erros de conversão com LocalDateTime
+        mapper.registerModule(new JavaTimeModule());
         return new Jackson2JsonMessageConverter(mapper);
     }
 }

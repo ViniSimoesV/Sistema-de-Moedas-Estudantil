@@ -23,6 +23,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(dto.getEmailDestino());
+            helper.setFrom("unirewards.suporte@gmail.com", "UniRewards");
             
             String assunto = dto.getTipo().equals("RECEBIDO") 
                 ? "✨ Você recebeu novos Lúmens!" 

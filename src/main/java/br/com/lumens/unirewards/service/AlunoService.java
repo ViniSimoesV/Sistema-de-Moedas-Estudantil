@@ -68,13 +68,20 @@ public class AlunoService {
         aluno.setBairro(dto.getBairro());
         aluno.setCidade(dto.getCidade());
 
-        // CRIAÇÃO AUTOMÁTICA DA CARTEIRA
+        // salva o aluno para ele ganhar o ID 
+        Aluno alunoSalvo = alunoRepository.save(aluno);
+
+        // cria a carteira e vinculamos o aluno que já tem ID
         Carteira carteira = new Carteira();
         carteira.setSaldoAtual(0);
-        carteira.setUsuario(aluno); // Vincula a carteira ao aluno
-        aluno.setCarteira(carteira);
-
-        return alunoRepository.save(aluno);
+        carteira.setUsuario(alunoSalvo);
+        
+        // salva a carteira diretamente no repositório do aluno
+        carteiraRepository.save(carteira);
+        
+        // retornamos o aluno atualizado
+        alunoSalvo.setCarteira(carteira);
+        return alunoSalvo;
     }
 
     // READ: Busca todos os alunos

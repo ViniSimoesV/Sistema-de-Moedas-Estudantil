@@ -85,7 +85,8 @@ public class PagamentoService {
         // Enviando o código do cupom no motivo. No microserviço de e-mail, isso será transformado no QR Code
         emailAluno.setMotivo("Cupom: " + inventario.getCodigoCupom() + " | Vantagem: " + vantagem.getNome());
         emailAluno.setTipo("CUPOM_ALUNO"); 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailAluno);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, emailAluno);
 
         // E-mail para a Empresa (Aviso de que um produto foi resgatado)
         EmailTransacaoDTO emailEmpresa = new EmailTransacaoDTO();
@@ -96,7 +97,8 @@ public class PagamentoService {
         emailEmpresa.setValor(vantagem.getCusto());
         emailEmpresa.setMotivo("Nova vantagem resgatada: " + vantagem.getNome());
         emailEmpresa.setTipo("AVISO_EMPRESA");
-        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailEmpresa);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, emailEmpresa);
 
         return inventario; // Retornamos o inventário para que o front-end mostre o código na tela imediatamente
     }

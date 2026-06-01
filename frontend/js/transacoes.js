@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <a href="transacoes.html" class="nav-link nav-item-transferir">
                         <span class="material-symbols-outlined">send_money</span> Transferir
                     </a>
-                    <a href="professorExtrato.html" class="nav-link nav-item-extrato">
+                    <a href="extrato.html" class="nav-link nav-item-extrato">
                         <span class="material-symbols-outlined">receipt_long</span> Extrato
                     </a>
                 </nav>

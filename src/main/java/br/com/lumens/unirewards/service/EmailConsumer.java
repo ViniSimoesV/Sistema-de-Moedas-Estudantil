@@ -19,13 +19,14 @@ public class EmailConsumer {
     @Autowired
     private QrCodeService qrCodeService;
 
-    @RabbitListener(queues = RabbitMQConfig.FILA_EMAILS_TRANSACOES)
+    @RabbitListener(queues = RabbitMQConfig.FILA_EMAILS_CUPONS)
     public void processarEmail(EmailTransacaoDTO emailDto) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(emailDto.getEmailDestino());
+            helper.setFrom("unirewards.suporte@gmail.com", "UniRewards");
             helper.setSubject("🏷️ UniRewards | Comprovante de Resgate");
             
             // Gera o QR Code com o código que está dentro do motivo (configurado no PagamentoService)

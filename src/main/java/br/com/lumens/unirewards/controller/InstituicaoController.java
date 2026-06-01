@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,7 +62,11 @@ public class InstituicaoController {
                 .body(Map.of("erro", "Sigla ou senha incorretos."));
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<Instituicao>> listarTodas() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<Instituicao> buscarPorId(@PathVariable Long id) {
         return repository.findById(id)

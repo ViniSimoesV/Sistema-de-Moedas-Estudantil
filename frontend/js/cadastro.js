@@ -123,3 +123,27 @@ form.addEventListener('submit', async (event) => {
         showAlert('Não foi possível conectar ao servidor.', 'error');
     }
 });
+
+// --- CARREGAR INSTITUIÇÕES DINAMICAMENTE ---
+document.addEventListener('DOMContentLoaded', carregarInstituicoes);
+
+async function carregarInstituicoes() {
+    try {
+        const response = await fetch(`${CONFIG.API_URL}/api/instituicoes`);
+        if (response.ok) {
+            const instituicoes = await response.json();
+            const selectVinculo = document.getElementById('vinculo');
+            
+            // Limpa o select e adiciona a opção padrão
+            selectVinculo.innerHTML = '<option value="" disabled selected>Selecione sua Instituição</option>';
+            
+            // Preenche com os dados do banco
+            instituicoes.forEach(inst => {
+                selectVinculo.innerHTML += `<option value="${inst.id}">${inst.nome} (${inst.sigla})</option>`;
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao carregar instituições:", error);
+        document.getElementById('vinculo').innerHTML = '<option value="" disabled selected>Erro ao carregar instituições</option>';
+    }
+}

@@ -102,9 +102,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     data: t.dataEnvio || t.dataTransferencia || t.data,
                     valor: (isSaida ? '- ' : '+ ') + t.valor + ' Lúmens',
                     tipo: isSaida ? 'exit' : 'entry',
-                    motivo: t.motivo || ''
+                    motivo: t.motivo || t.mensagem || ''
                 };
-            });
+            }); 
         };
 
         if (tipoUsuario === 'PROFESSOR') {
