@@ -34,6 +34,9 @@ public class PagamentoService {
     @Autowired
     private org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private EmailConsumer emailConsumer;
+
     @Transactional
     public Inventario resgatarVantagem(ResgateDTO dto) {
         // 1. Busca Aluno e Vantagem
@@ -109,6 +112,7 @@ public class PagamentoService {
             rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, email);
         } catch (AmqpException e) {
             System.err.println("Falha ao publicar e-mail de cupom no RabbitMQ: " + e.getMessage());
+            emailConsumer.processarEmail(email);
         }
     }
 }

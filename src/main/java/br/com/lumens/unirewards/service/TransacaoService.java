@@ -33,6 +33,9 @@ public class TransacaoService {
     @Autowired
     private org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     public void processarTransferencia(TransacaoRequestDTO dto) {
 
@@ -178,6 +181,7 @@ public class TransacaoService {
             rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, email);
         } catch (AmqpException e) {
             System.err.println("Falha ao publicar e-mail de transacao no RabbitMQ: " + e.getMessage());
+            emailService.processarEmailTransacao(email);
         }
     }
 
