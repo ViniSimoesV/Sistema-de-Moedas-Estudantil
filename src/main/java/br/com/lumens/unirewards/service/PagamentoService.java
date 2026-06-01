@@ -1,11 +1,9 @@
 package br.com.lumens.unirewards.service;
 
-import br.com.lumens.unirewards.config.RabbitMQConfig;
 import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.ResgateDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
-import org.springframework.amqp.AmqpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +28,6 @@ public class PagamentoService {
 
     @Autowired
     private InventarioRepository inventarioRepository;
-
-    @Autowired
-    private org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
     @Autowired
     private EmailConsumer emailConsumer;
@@ -108,11 +103,6 @@ public class PagamentoService {
     }
 
     private void publicarEmailCupom(EmailTransacaoDTO email) {
-        try {
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, email);
-        } catch (AmqpException e) {
-            System.err.println("Falha ao publicar e-mail de cupom no RabbitMQ: " + e.getMessage());
-            emailConsumer.processarEmail(email);
-        }
+        emailConsumer.processarEmail(email);
     }
 }

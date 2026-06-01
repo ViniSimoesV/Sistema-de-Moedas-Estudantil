@@ -22,6 +22,7 @@ public class EmailConsumer {
     @RabbitListener(queues = RabbitMQConfig.FILA_EMAILS_CUPONS)
     public void processarEmail(EmailTransacaoDTO emailDto) {
         try {
+            System.out.println("Enviando e-mail de resgate via SMTP para: " + emailDto.getEmailDestino());
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 

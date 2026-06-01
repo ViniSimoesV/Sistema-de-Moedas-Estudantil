@@ -19,6 +19,7 @@ public class EmailService {
     @RabbitListener(queues = RabbitMQConfig.FILA_EMAILS_TRANSACOES)
     public void processarEmailTransacao(EmailTransacaoDTO dto) {
         try {
+            System.out.println("Enviando e-mail de transacao via SMTP para: " + dto.getEmailDestino());
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
