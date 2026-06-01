@@ -5,6 +5,7 @@ import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.TransacaoRequestDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
+import org.springframework.amqp.AmqpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +91,7 @@ public class TransacaoService {
             emailAluno.setValor(dto.getValor());
             emailAluno.setMotivo(dto.getMotivo());
             emailAluno.setTipo("RECEBIDO");
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailAluno);
+            publicarEmailTransacao(emailAluno);
 
             // 2. Despacha e-mail para o Professor (Enviou)
             EmailTransacaoDTO emailProf = new EmailTransacaoDTO();
@@ -100,7 +101,7 @@ public class TransacaoService {
             emailProf.setValor(dto.getValor());
             emailProf.setMotivo(dto.getMotivo());
             emailProf.setTipo("ENVIADO");
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailProf);
+            publicarEmailTransacao(emailProf);
             
             // --- FIM DO DESPACHO ---
 
@@ -151,7 +152,7 @@ public class TransacaoService {
             emailRecebedor.setValor(dto.getValor());
             emailRecebedor.setMotivo(dto.getMotivo());
             emailRecebedor.setTipo("RECEBIDO");
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailRecebedor);
+            publicarEmailTransacao(emailRecebedor);
 
             // 2. Despacha e-mail para o Aluno Remetente (Enviou)
             EmailTransacaoDTO emailRemetente = new EmailTransacaoDTO();
@@ -161,7 +162,7 @@ public class TransacaoService {
             emailRemetente.setValor(dto.getValor());
             emailRemetente.setMotivo(dto.getMotivo());
             emailRemetente.setTipo("ENVIADO");
-            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, emailRemetente);
+            publicarEmailTransacao(emailRemetente);
 
             // --- FIM DO DESPACHO ---
 
@@ -172,7 +173,13 @@ public class TransacaoService {
         
     }
 
-    
+    private void publicarEmailTransacao(EmailTransacaoDTO email) {
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, email);
+        } catch (AmqpException e) {
+            System.err.println("Falha ao publicar e-mail de transacao no RabbitMQ: " + e.getMessage());
+        }
+    }
 
     public List<TransacaoProfessor> listarExtratoProfessor(Long professorId) {
         return transacaoProfessorRepository.findByProfessorIdOrderByDataEnvioDesc(professorId);

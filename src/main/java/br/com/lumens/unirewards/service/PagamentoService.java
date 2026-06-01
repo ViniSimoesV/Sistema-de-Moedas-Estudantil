@@ -5,6 +5,7 @@ import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.ResgateDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
+import org.springframework.amqp.AmqpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,7 +87,7 @@ public class PagamentoService {
         emailAluno.setMotivo("Cupom: " + inventario.getCodigoCupom() + " | Vantagem: " + vantagem.getNome());
         emailAluno.setTipo("CUPOM_ALUNO"); 
 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, emailAluno);
+        publicarEmailCupom(emailAluno);
 
         // E-mail para a Empresa (Aviso de que um produto foi resgatado)
         EmailTransacaoDTO emailEmpresa = new EmailTransacaoDTO();
@@ -98,8 +99,16 @@ public class PagamentoService {
         emailEmpresa.setMotivo("Nova vantagem resgatada: " + vantagem.getNome());
         emailEmpresa.setTipo("AVISO_EMPRESA");
 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, emailEmpresa);
+        publicarEmailCupom(emailEmpresa);
 
         return inventario; // Retornamos o inventário para que o front-end mostre o código na tela imediatamente
+    }
+
+    private void publicarEmailCupom(EmailTransacaoDTO email) {
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, email);
+        } catch (AmqpException e) {
+            System.err.println("Falha ao publicar e-mail de cupom no RabbitMQ: " + e.getMessage());
+        }
     }
 }
