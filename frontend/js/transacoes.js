@@ -17,17 +17,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             <header class="navbar">
                 <div class="logo">Uni<span>Rewards</span></div>
                 <nav class="nav-links">
-                    <a href="professorPerfil.html" class="nav-link">
+                    <a href="professorPerfil.html" class="nav-link nav-item-perfil">
                         <span class="material-symbols-outlined">person</span> Perfil
                     </a>
-                    <a href="transacoes.html" class="nav-link active">
+                    <a href="transacoes.html" class="nav-link nav-item-transferir">
                         <span class="material-symbols-outlined">send_money</span> Transferir
                     </a>
-                    <a href="professorExtrato.html" class="nav-link">
+                    <a href="professorExtrato.html" class="nav-link nav-item-extrato">
                         <span class="material-symbols-outlined">receipt_long</span> Extrato
-                    </a>
-                    <a href="#" id="btnSair" class="nav-link">
-                        <span class="material-symbols-outlined">exit_to_app</span> Sair
                     </a>
                 </nav>
             </header>
@@ -37,33 +34,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             <header class="navbar">
                 <div class="logo">Uni<span>Rewards</span></div>
                 <nav class="nav-links">
-                    <a href="alunoPerfil.html" class="nav-link">
+                    <a href="alunoPerfil.html" class="nav-link nav-item-perfil">
                         <span class="material-symbols-outlined">person</span> Perfil
                     </a>
-                    <a href="transacoes.html" class="nav-link active">
+                    <a href="transacoes.html" class="nav-link nav-item-transferir">
                         <span class="material-symbols-outlined">send_money</span> Transferir
                     </a>
-                    <a href="loja.html" class="nav-link">
+                    <a href="lojaAluno.html" class="nav-link nav-item-loja">
                         <span class="material-symbols-outlined">shopping_bag</span> Loja
                     </a>
-                    <a href="inventario.html" class="nav-link">
+                    <a href="inventario.html" class="nav-link nav-item-inventario">
                         <span class="material-symbols-outlined">inventory</span> Inventário
                     </a>
-                    <a href="extrato.html" class="nav-link">
+                    <a href="extrato.html" class="nav-link nav-item-extrato">
                         <span class="material-symbols-outlined">receipt_long</span> Extrato
-                    </a>
-                    <a href="#" id="btnSair" class="nav-link">
-                        <span class="material-symbols-outlined">exit_to_app</span> Sair
                     </a>
                 </nav>
             </header>
             `;
         }
 
-        document.getElementById('btnSair')?.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            localStorage.clear();
-            window.location.href = '../index.html'; 
+        // Lógica para destacar a página atual
+        const currentPage = window.location.pathname.split('/').pop();
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
         });
     }
 

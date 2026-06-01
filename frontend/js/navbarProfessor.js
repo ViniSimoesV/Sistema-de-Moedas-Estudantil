@@ -18,10 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="material-symbols-outlined">receipt_long</span>
                     Extrato
                 </a>
-                <a href="#" id="btnSair" class="nav-link">
-                    <span class="material-symbols-outlined">exit_to_app</span>
-                    Sair
-                </a>
             </nav>
         </header>
         `;

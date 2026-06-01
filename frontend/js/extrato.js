@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // 1. INJEÇÃO DINÂMICA DA NAVBAR HÍBRIDA
+    // 1. INJEÇÃO DINÂMICA DA NAVBAR
     const navContainer = document.getElementById('navbar');
     if (navContainer) {
         if (tipoUsuario === 'PROFESSOR') {
@@ -17,193 +17,184 @@ document.addEventListener('DOMContentLoaded', async () => {
             <header class="navbar">
                 <div class="logo">Uni<span>Rewards</span></div>
                 <nav class="nav-links">
-                    <a href="professorPerfil.html" class="nav-link">
+                    <a href="professorPerfil.html" class="nav-link nav-item-perfil">
                         <span class="material-symbols-outlined">person</span> Perfil
                     </a>
-                    <a href="transacoes.html" class="nav-link">
+                    <a href="transacoes.html" class="nav-link nav-item-transferir">
                         <span class="material-symbols-outlined">send_money</span> Transferir
                     </a>
-                    <a href="extrato.html" class="nav-link active">
+                    <a href="extrato.html" class="nav-link nav-item-extrato active">
                         <span class="material-symbols-outlined">receipt_long</span> Extrato
-                    </a>
-                    <a href="#" id="btnSair" class="nav-link">
-                        <span class="material-symbols-outlined">exit_to_app</span> Sair
                     </a>
                 </nav>
             </header>
             `;
-        } else {
+        } else if (tipoUsuario === 'ALUNO') {
             navContainer.innerHTML = `
             <header class="navbar">
                 <div class="logo">Uni<span>Rewards</span></div>
                 <nav class="nav-links">
-                    <a href="alunoPerfil.html" class="nav-link">
+                    <a href="alunoPerfil.html" class="nav-link nav-item-perfil">
                         <span class="material-symbols-outlined">person</span> Perfil
                     </a>
-                    <a href="transacoes.html" class="nav-link">
+                    <a href="transacoes.html" class="nav-link nav-item-transferir">
                         <span class="material-symbols-outlined">send_money</span> Transferir
                     </a>
-                    <a href="loja.html" class="nav-link">
-                        <span class="material-symbols-outlined">shopping_bag</span> Loja
-                    </a>
-                    <a href="inventario.html" class="nav-link">
+                    <a href="inventario.html" class="nav-link nav-item-inventario">
                         <span class="material-symbols-outlined">inventory</span> Inventário
                     </a>
-                    <a href="extrato.html" class="nav-link active">
-                        <span class="material-symbols-outlined">receipt_long</span> Extrato
+                    <a href="lojaAluno.html" class="nav-link nav-item-loja">
+                        <span class="material-symbols-outlined">shopping_bag</span> Loja
                     </a>
-                    <a href="#" id="btnSair" class="nav-link">
-                        <span class="material-symbols-outlined">exit_to_app</span> Sair
+                    <a href="extrato.html" class="nav-link nav-item-extrato active">
+                        <span class="material-symbols-outlined">receipt_long</span> Extrato
                     </a>
                 </nav>
             </header>
             `;
         }
-
-        document.getElementById('btnSair')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.clear();
-            window.location.href = '../index.html';
-        });
     }
 
-    const containerExtrato = document.getElementById('containerExtrato');
-    const totalRecebidoEl = document.getElementById('totalRecebido');
-    const totalEnviadoEl = document.getElementById('totalEnviado');
-    const contadorTransacoesEl = document.getElementById('contadorTransacoes');
-    const extratoVazioEl = document.getElementById('extratoVazio');
+    const containerExtrato = document.getElementById('containerExtrato'); 
+    const extratoVazio = document.getElementById('extratoVazio');
+    const totalRecebidoEl = document.getElementById('totalRecebido'); 
+    const totalEnviadoEl = document.getElementById('totalEnviado');   
+    const contadorTransacoes = document.getElementById('contadorTransacoes');
 
-    // Limpa os dados estáticos/prefixos do HTML de molde
-    containerExtrato.innerHTML = '';
+    if (!containerExtrato) return;
 
-    // Função auxiliar para formatar a data ISO de forma elegante
-    function formatarData(dataIso) {
-        if (!dataIso) return 'Data desconhecida';
-        const data = new Date(dataIso);
-        return data.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        }) + ' às ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    }
-
-    // 2. RENDERIZAÇÃO DOS FLUXOS DE DADOS
     try {
+        let listaUnificada = [];
+        let acumuladoRecebido = 0;
+        let acumuladoEnviado = 0;
+
+        // Função utilitária para extrair arrays mesmo se o backend mandar um Objeto (Map)
+        const extrairLista = (dados) => {
+            if (Array.isArray(dados)) return dados;
+            if (typeof dados === 'object' && dados !== null) {
+                let extraido = [];
+                Object.values(dados).forEach(val => {
+                    if (Array.isArray(val)) extraido = extraido.concat(val);
+                });
+                return extraido;
+            }
+            return [];
+        };
+
+        // Função para mapear Transações (comum para Aluno e Professor)
+        const mapearTransacoes = (transacoes) => {
+            return transacoes.map(t => {
+                // Tenta achar os nomes independente de como o Java mapeou
+                const remetenteObj = t.remetente || t.professor || t.origem;
+                const destinatarioObj = t.destinatario || t.aluno || t.destino;
+
+                const remetenteId = remetenteObj ? remetenteObj.id : null;
+                const remetenteNome = remetenteObj ? remetenteObj.nome : 'Instituição';
+                const destinatarioNome = destinatarioObj ? destinatarioObj.nome : 'Usuário';
+
+                const isSaida = (remetenteId == usuarioId);
+
+                if (isSaida) acumuladoEnviado += t.valor;
+                else acumuladoRecebido += t.valor;
+
+                return {
+                    titulo: isSaida ? `Enviado para ${destinatarioNome}` : `Recebido de ${remetenteNome}`,
+                    data: t.dataEnvio || t.dataTransferencia || t.data,
+                    valor: (isSaida ? '- ' : '+ ') + t.valor + ' Lúmens',
+                    tipo: isSaida ? 'exit' : 'entry',
+                    motivo: t.motivo || ''
+                };
+            });
+        };
+
         if (tipoUsuario === 'PROFESSOR') {
-            // Histórico do Professor: Apenas distribuições de saídas
-            const response = await fetch(`${CONFIG.API_URL}/api/transacoes/professor/${usuarioId}`);
-            if (response.ok) {
-                const transacoes = await response.json();
-                
-                let totalDistribuido = 0;
-                contadorTransacoesEl.textContent = `${transacoes.length} distribuições`;
-
-                if (transacoes.length === 0) {
-                    extratoVazioEl.classList.remove('hidden');
-                    return;
-                }
-
-                transacoes.forEach(t => {
-                    totalDistribuido += t.valor;
-                    const itemHtml = `
-                    <div class="transaction-item exit">
-                        <div class="item-left">
-                            <span class="material-symbols-outlined type-icon">remove_circle</span>
-                            <div class="item-details">
-                                <p class="item-title">Envio de prêmio para <strong>${t.aluno.nome}</strong></p>
-                                <span class="item-date">${formatarData(t.dataEnvio)}</span>
-                                <p class="item-reason">"${t.mensagem || 'Sem justificativa informada.'}"</p>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <span class="item-amount">- ${t.valor} Lúmens</span>
-                        </div>
-                    </div>`;
-                    containerExtrato.insertAdjacentHTML('beforeend', itemHtml);
-                });
-
-                totalRecebidoEl.textContent = "0";
-                totalEnviadoEl.textContent = `- ${totalDistribuido}`;
+            const resTransacoes = await fetch(`${CONFIG.API_URL}/api/transacoes/professor/${usuarioId}`);
+            if (resTransacoes.ok) {
+                const dataT = await resTransacoes.json();
+                const transacoes = extrairLista(dataT);
+                listaUnificada = mapearTransacoes(transacoes);
             }
-        } else {
-            // Histórico do Aluno: Mistura entradas (professores/colegas) e saídas (colegas)
-            const response = await fetch(`${CONFIG.API_URL}/api/transacoes/aluno/${usuarioId}`);
-            if (response.ok) {
-                const dados = await response.json();
-                
-                let listaUnificada = [];
-                let acumuladoRecebido = 0;
-                let acumuladoEnviado = 0;
+        } else if (tipoUsuario === 'ALUNO') {
+            const [resTransacoes, resPagamentos] = await Promise.all([
+                fetch(`${CONFIG.API_URL}/api/transacoes/aluno/${usuarioId}`),
+                fetch(`${CONFIG.API_URL}/api/pagamentos/aluno/${usuarioId}`)
+            ]);
 
-                // Processa entradas vindas de Professores
-                dados.recebidosProfessores.forEach(t => {
-                    acumuladoRecebido += t.valor;
-                    listaUnificada.push({
-                        tipo: 'entry',
-                        titulo: `Recompensa recebida do <strong>Prof. ${t.professor.nome}</strong>`,
-                        data: t.dataEnvio,
-                        motivo: t.mensagem,
-                        valor: `+ ${t.valor} Lúmens`
-                    });
-                });
+            let transacoes = [];
+            let pagamentos = [];
 
-                // Processa entradas vindas de outros Alunos
-                dados.recebidosAlunos.forEach(t => {
-                    acumuladoRecebido += t.valor;
-                    listaUnificada.push({
-                        tipo: 'entry',
-                        titulo: `Transferência recebida de <strong>${t.remetente.nome}</strong>`,
-                        data: t.dataEnvio,
-                        motivo: t.motivo,
-                        valor: `+ ${t.valor} Lúmens`
-                    });
-                });
-
-                // Processa saídas enviadas para outros Alunos
-                dados.enviadosAlunos.forEach(t => {
-                    acumuladoEnviado += t.valor;
-                    listaUnificada.push({
-                        tipo: 'exit',
-                        titulo: `Transferência enviada para <strong>${t.destinatario.nome}</strong>`,
-                        data: t.dataEnvio,
-                        motivo: t.motivo,
-                        valor: `- ${t.valor} Lúmens`
-                    });
-                });
-
-                // Ordena a pilha inteira por data decrescente (mais recente primeiro)
-                listaUnificada.sort((a, b) => new Date(b.data) - new Date(a.data));
-                contadorTransacoesEl.textContent = `${listaUnificada.length} operações`;
-
-                if (listaUnificada.length === 0) {
-                    extratoVazioEl.classList.remove('hidden');
-                    return;
-                }
-
-                listaUnificada.forEach(item => {
-                    const itemHtml = `
-                    <div class="transaction-item ${item.tipo}">
-                        <div class="item-left">
-                            <span class="material-symbols-outlined type-icon">${item.tipo === 'entry' ? 'add_circle' : 'remove_circle'}</span>
-                            <div class="item-details">
-                                <p class="item-title">${item.titulo}</p>
-                                <span class="item-date">${formatarData(item.data)}</span>
-                                <p class="item-reason">"${item.motivo || 'Sem mensagem descrita.'}"</p>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <span class="item-amount">${item.valor}</span>
-                        </div>
-                    </div>`;
-                    containerExtrato.insertAdjacentHTML('beforeend', itemHtml);
-                });
-
-                totalRecebidoEl.textContent = `+ ${acumuladoRecebido}`;
-                totalEnviadoEl.textContent = `- ${acumuladoEnviado}`;
+            if (resTransacoes.ok) {
+                const dataT = await resTransacoes.json();
+                transacoes = extrairLista(dataT);
             }
+            if (resPagamentos.ok) {
+                const dataP = await resPagamentos.json();
+                pagamentos = extrairLista(dataP);
+            }
+
+            const listaT = mapearTransacoes(transacoes);
+
+            const listaP = pagamentos.map(p => {
+                acumuladoEnviado += p.valorPago;
+                return {
+                    titulo: `Resgate na Loja: ${p.vantagem ? p.vantagem.nome : 'Vantagem'}`,
+                    data: p.dataCompra || p.data, 
+                    valor: '- ' + p.valorPago + ' Lúmens',
+                    tipo: 'exit',
+                    motivo: 'Vantagem resgatada com sucesso.'
+                };
+            });
+
+            listaUnificada = [...listaT, ...listaP];
         }
+
+        // Ordena tudo pela data (mais recente primeiro)
+        listaUnificada.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+        containerExtrato.innerHTML = '';
+
+        if (listaUnificada.length === 0) {
+            if (extratoVazio) extratoVazio.classList.remove('hidden');
+        } else {
+            if (extratoVazio) extratoVazio.classList.add('hidden');
+
+            listaUnificada.forEach(item => {
+                const itemHtml = `
+                <div class="transaction-item ${item.tipo}">
+                    <div class="item-left">
+                        <span class="material-symbols-outlined type-icon">${item.tipo === 'entry' ? 'add_circle' : 'remove_circle'}</span>
+                        <div class="item-details">
+                            <p class="item-title">${item.titulo}</p>
+                            <span class="item-date">${formatarData(item.data)}</span>
+                            <p class="item-reason">"${item.motivo || 'Sem mensagem descrita.'}"</p>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="item-amount">${item.valor}</span>
+                    </div>
+                </div>`;
+                containerExtrato.insertAdjacentHTML('beforeend', itemHtml);
+            });
+        }
+
+        // Atualizações dos painéis superiores
+        if (totalRecebidoEl) totalRecebidoEl.textContent = `+ ${acumuladoRecebido}`;
+        if (totalEnviadoEl) totalEnviadoEl.textContent = `- ${acumuladoEnviado}`;
+        if (contadorTransacoes) contadorTransacoes.textContent = `${listaUnificada.length} operações`;
+
     } catch (error) {
         console.error('Erro ao renderizar a linha do tempo do extrato:', error);
-        containerExtrato.innerHTML = `<p style="text-align:center;color:#ff4d4d;padding:2rem;">Falha de comunicação ao carregar o extrato bancário.</p>`;
+        containerExtrato.innerHTML = `<p style="text-align:center;color:#ff4d4d;padding:2rem;">Falha de comunicação ao carregar o extrato.</p>`;
     }
 });
+
+function formatarData(dataString) {
+    if (!dataString) return '';
+    const data = new Date(dataString);
+    if (isNaN(data)) return 'Data Indisponível';
+    
+    return data.toLocaleString('pt-BR', {
+        day: '2-digit', month: 'long', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+}
