@@ -34,6 +34,9 @@ public class TransacaoService {
 
     @Transactional
     public void processarTransferencia(TransacaoRequestDTO dto) {
+
+        System.out.println("Tentando conectar no RabbitMQ em: " + System.getenv("RABBITMQ_HOST"));
+        
         // 1. Validação básica de valor lógico
         if (dto.getValor() == null || dto.getValor() <= 0) {
             throw new IllegalArgumentException("A quantidade de Lúmens deve ser maior do que zero.");
