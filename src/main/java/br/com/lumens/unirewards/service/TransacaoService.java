@@ -132,7 +132,7 @@ public class TransacaoService {
             // Salva os novos saldos atualizados
             carteiraRepository.save(carteiraRemetente);
             carteiraRepository.save(carteiraDestinatario);
-
+            
             // Registra o histórico na tabela pagamentos (Aluno para Aluno)
             TransacaoAluno logAluno = new TransacaoAluno();
             logAluno.setRemetente(alunoRemetente);
@@ -168,7 +168,11 @@ public class TransacaoService {
         } else {
             throw new IllegalArgumentException("Tipo de perfil remetente não suportado para transferências.");
         }
+
+        
     }
+
+    
 
     public List<TransacaoProfessor> listarExtratoProfessor(Long professorId) {
         return transacaoProfessorRepository.findByProfessorIdOrderByDataEnvioDesc(professorId);
