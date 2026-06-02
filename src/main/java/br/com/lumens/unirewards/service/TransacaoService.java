@@ -1,11 +1,16 @@
 package br.com.lumens.unirewards.service;
 
+import br.com.lumens.unirewards.config.RabbitMQConfig;
 import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.TransacaoRequestDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -29,7 +34,7 @@ public class TransacaoService {
     private TransacaoProfessorRepository transacaoProfessorRepository;
 
     @Autowired
-    private EmailService emailService;
+    private RabbitTemplate rabbitTemplate;
 
     @Transactional
     public void processarTransferencia(TransacaoRequestDTO dto) {
@@ -172,7 +177,25 @@ public class TransacaoService {
     }
 
     private void publicarEmailTransacao(EmailTransacaoDTO email) {
-        emailService.processarEmailTransacao(email);
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    enviarEmailTransacaoParaFila(email);
+                }
+            });
+        } else {
+            enviarEmailTransacaoParaFila(email);
+        }
+    }
+
+    private void enviarEmailTransacaoParaFila(EmailTransacaoDTO email) {
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_TRANSACOES, email);
+            System.out.println("E-mail de transacao enfileirado para: " + email.getEmailDestino());
+        } catch (AmqpException e) {
+            System.err.println("Falha ao enfileirar e-mail de transacao: " + e.getMessage());
+        }
     }
 
     public List<TransacaoProfessor> listarExtratoProfessor(Long professorId) {

@@ -1,12 +1,17 @@
 package br.com.lumens.unirewards.service;
 
+import br.com.lumens.unirewards.config.RabbitMQConfig;
 import br.com.lumens.unirewards.dto.EmailTransacaoDTO;
 import br.com.lumens.unirewards.dto.ResgateDTO;
 import br.com.lumens.unirewards.model.*;
 import br.com.lumens.unirewards.repository.*;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 public class PagamentoService {
@@ -30,7 +35,7 @@ public class PagamentoService {
     private InventarioRepository inventarioRepository;
 
     @Autowired
-    private EmailConsumer emailConsumer;
+    private RabbitTemplate rabbitTemplate;
 
     @Transactional
     public Inventario resgatarVantagem(ResgateDTO dto) {
@@ -103,6 +108,24 @@ public class PagamentoService {
     }
 
     private void publicarEmailCupom(EmailTransacaoDTO email) {
-        emailConsumer.processarEmail(email);
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    enviarEmailCupomParaFila(email);
+                }
+            });
+        } else {
+            enviarEmailCupomParaFila(email);
+        }
+    }
+
+    private void enviarEmailCupomParaFila(EmailTransacaoDTO email) {
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.FILA_EMAILS_CUPONS, email);
+            System.out.println("E-mail de resgate enfileirado para: " + email.getEmailDestino());
+        } catch (AmqpException e) {
+            System.err.println("Falha ao enfileirar e-mail de resgate: " + e.getMessage());
+        }
     }
 }

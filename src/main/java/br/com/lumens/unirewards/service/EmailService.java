@@ -41,6 +41,7 @@ public class EmailService {
         } catch (Exception e) {
             System.err.println("Erro ao processar e-mail da fila: " + e.getMessage());
             e.printStackTrace();
+            throw new IllegalStateException("Erro ao processar e-mail da fila", e);
         }
     }
 

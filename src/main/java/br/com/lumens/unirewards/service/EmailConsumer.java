@@ -61,6 +61,7 @@ public class EmailConsumer {
         } catch (Exception e) {
             System.err.println("Erro ao processar e-mail de resgate: " + e.getMessage());
             e.printStackTrace();
+            throw new IllegalStateException("Erro ao processar e-mail de resgate", e);
         }
     }
 }
