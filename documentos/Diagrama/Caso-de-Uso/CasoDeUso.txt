@@ -1,0 +1,70 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+' Atores
+actor "Instituição" as inst
+actor "Empresa\nParceira" as emp
+actor "Aluno" as aluno
+actor "Usuário" as usr
+actor "Professor" as prof
+
+' Generalização (Aluno e Professor são Usuários)
+aluno -up-|> usr
+prof -up-|> usr
+
+rectangle "Sistema de Moedas Lúmen" {
+    
+    ' Casos de Uso Principais
+    usecase "HS00 - Gerenciar Instituição" as UC00
+    usecase "HS03 - Gerenciar Professor" as UC03_Prof
+    usecase "HS02 - Gerenciar Vantagem" as UC02_Vant
+    usecase "HS02 - Gerenciar Empresa" as UC02_Emp
+    usecase "HS13 - Validar Resgate\nde Vantagem" as UC13_Val
+    usecase "HS10 - Resgatar Vantagem" as UC10
+    usecase "HS01 - Gerenciar conta" as UC01
+    usecase "HS09 - Visualizar Vantagem" as UC09
+    usecase "HS06/08 - Verificar extrato" as UC06_08
+    usecase "HS05 - Visualizar alunos" as UC05
+    
+    ' Casos de Uso Secundários (Includes e Extends)
+    usecase "HS03 - Autenticado" as UC03_Auth
+    usecase "HS11 - Gerar cupom\nde resgate" as UC11
+    usecase "HS13 - Notificar\nempresa do uso" as UC13_Notif
+    usecase "HS04 - Enviar moedas" as UC04
+    usecase "HS07 - Notificar Aluno" as UC07
+}
+
+' Relações dos Atores
+inst --> UC00
+inst --> UC03_Prof
+
+emp --> UC02_Vant
+emp --> UC02_Emp
+emp --> UC13_Val
+
+aluno --> UC10
+aluno --> UC01
+aluno --> UC09
+
+usr --> UC06_08
+
+prof --> UC05
+
+' Relações de Include e Extend (Baseado no desenho original)
+UC00 ..> UC03_Auth : <<include>>
+UC03_Prof ..> UC03_Auth : <<include>>
+UC02_Vant ..> UC03_Auth : <<include>>
+UC01 ..> UC03_Auth : <<include>>
+UC09 ..> UC03_Auth : <<include>>
+UC06_08 ..> UC03_Auth : <<include>>
+UC05 ..> UC03_Auth : <<include>>
+
+UC11 ..> UC10 : <<extend>>
+UC13_Val ..> UC11 : <<include>>
+UC11 ..> UC13_Notif : <<include>>
+
+UC04 ..> UC05 : <<extend>>
+UC04 ..> UC07 : <<include>>
+
+@enduml
