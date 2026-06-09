@@ -176,26 +176,53 @@ As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construç
 
 ## 🏗 Arquitetura
 
-A arquitetura do UniRewards adota um modelo monolítico modular com comunicação assíncrona para serviços lentos (como disparo de e-mails via SMTP), garantindo alta performance nas transações financeiras e resgates.
-Os diagramas abaixo ilustram os fluxos completos do sistema, separados por módulos, conforme a estrutura do projeto.
+A arquitetura do **UniRewards** foi desenhada utilizando o modelo **Monolítico em Camadas (Layered Architecture)** no Back-end, focado em separação de responsabilidades (SoC), aliado a uma comunicação assíncrona orientada a eventos para rotinas lentas.
 
-- **Visão geral da arquitetura** Camadas, MVC
-- **Principais componentes** e o papel de cada um
-- **Padrões de design adotados** Repository, Service, DTOs, Facade, Security
-- **Fluxo de dados** entre as partes do sistema
-- **Tecnologias utilizadas em cada camada**
-- **Decisões arquiteturais importantes**
-- **Trade-offs** ou limitações relevantes
+### 🧩 Padrões de Projeto e Decisões Arquiteturais
+
+1. **Arquitetura em Camadas (MVC adaptado para REST API):**
+   - O fluxo de requisições segue a estrutura padrão do Spring Boot: `Controller` -> `Facade` / `Service` -> `Repository`. Isso garante que as rotas da API não conheçam detalhes do banco de dados, e que o banco de dados não dependa das regras de negócio.
+
+2. **Facade Pattern (`/facade`):**
+   - Empregamos o padrão Facade para orquestrar rotinas complexas que envolvem múltiplos serviços. Isso simplifica as chamadas nos Controllers e centraliza a coordenação de fluxos maiores (como cadastros compostos e validações cruzadas) em um único ponto.
+
+3. **Data Transfer Objects (`/dto`):**
+   - Utilizamos DTOs de entrada (Requests) e saída (Responses). O contrato da API é estritamente separado das Entidades (`/model`). Isso impede vazamento de dados sensíveis e o infame *Over-Posting*.
+
+4. **Tratamento Global de Exceções (`/exception`):**
+   - Centralização do tratamento de erros através de *Controller Advices*. Permite que a API retorne respostas padronizadas e limpas (`400 Bad Request`, `404 Not Found`) sempre que uma regra de negócio ou validação falhar.
+
+5. **Mensageria Assíncrona (Event-Driven):**
+   - A distribuição de e-mails de cupons e confirmações de transação foi desacoplada da thread principal (`TransacaoService`). O uso do **RabbitMQ** garante que o resgate na loja seja executado em milissegundos no banco de dados, enquanto o disparo do e-mail ocorre em segundo plano.
 
 ### Diagramas
 
 Para melhor visualização e entendimento da estrutura do sistema, os diagramas principais estão organizados lado a lado.
 
-**Diagrama de Componentes**
-<img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/documentos/Diagrama/DUC.png" alt="Diagrama de Caso de Uso" width="250px" height="250px"/>   
+| Caso de Uso Geral | Fluxo de Sequência Geral |
+| :---: | :---: |
+| <img src="documentos/Diagrama/Caso-de-Uso/Diagrama de Caso de Uso.png" alt="Diagrama de Caso de Uso" width="500px"/> | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_Geral.png" alt="Sequência Geral" width="500px"/> |
 
-**Diagrama de Classe**
-<img src="https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/blob/main/documentos/Diagrama/Diagrama%20de%20Classe%20img.png" alt="Diagrama de Classe" width="250px" height="250px"/>
+| Diagrama de Classes | Diagrama Entidade-Relacionamento |
+| :---: | :---: |
+| <img src="documentos/Diagrama/Classe/Diagrama-de-Classe-img.png" alt="Diagrama de Classes" width="500px"/> | <img src="documentos/Diagrama/DER/Diagrama Entidade-Relacionamento.png" alt="Entidade-Relacionamento" width="500px"/> |
+
+| Diagrama de Componentes |
+| :---: | 
+| <img src="documentos/Diagrama/Componentes/Diagrama de Componentes - Plant UML.png" alt="Diagrama de Componentes" width="1000px"/> | 
+
+### 📌 Diagramas de Sequência Isolados (CRUDs e Processos)
+
+| Módulo | Diagrama |
+| :--- | :--- |
+| **Transações de Lúmens** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_Transacao.png" alt="Transações" width="800px"/> |
+| **Resgate de Vantagem** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_Resgate_de_Vantagem.png" alt="Resgate" width="800px"/> |
+| **Extrato do Usuário** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_Extrato.png" alt="Extrato" width="800px"/> |
+| **CRUD de Aluno** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_CRUD_Aluno.png" alt="CRUD Aluno" width="800px"/> |
+| **CRUD de Professor** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_CRUD_Professor.png" alt="CRUD Professor" width="800px"/> |
+| **CRUD de Instituição** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_CRUD_Institucao.png" alt="CRUD Instituição" width="800px"/> |
+| **CRUD de Empresa** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_CRUD_Empresa.png" alt="CRUD Empresa" width="800px"/> |
+| **CRUD de Vantagens** | <img src="documentos/Diagrama/Sequencia/Diagrama_Sequencia_CRUD_e_Resgate_Vantagem.png" alt="CRUD Vantagens" width="800px"/> |
 
 ---
 
@@ -213,298 +240,28 @@ Certifique-se de que o usuário tenha o ambiente configurado.
 
 ### 🔑 Variáveis de Ambiente
 
-O projeto requer variáveis específicas para conexão de banco, fila e porta do servidor.
+O projeto requer variáveis específicas para conexão de banco, fila e porta do servidor. O arquivo base pode ser configurado em `src/main/resources/application.properties`.
 
-#### 1 Back-end (Spring Boot)
+#### Configurações de Banco de Dados e Fila (Exemplo Nuvem / Render)
 
-Configure estas variáveis como **variáveis de ambiente do sistema** ou em um arquivo de configuração do Spring (ex: `application.properties`/`application.yml`).
-
-| Variável | Descrição | Exemplo |
+| Variável | Descrição | Exemplo de Produção |
 | :--- | :--- | :--- |
-| `SERVER_PORT` | Porta onde o Back-end será executado. | `8080` |
-| `SPRING_DATASOURCE_URL` | URL de conexão JDBC (PostgreSQL). | `jdbc:postgresql://localhost:5432/meubanco` |
-| `SPRING_DATASOURCE_USERNAME` | Usuário do banco de dados. | `postgres` |
-| `SPRING_DATASOURCE_PASSWORD` | Senha do banco de dados. | `senha-segura-123` |
-| `JWT_SECRET` | Chave secreta para assinatura de tokens (Opcional). | `chave_super_segura_base64` |
+| `PORT` | Porta forçada do servidor. | `10000` |
+| `DB_PASSWORD` | Senha do banco (Supabase). | `<sua-senha>` |
+| `RABBITMQ_HOST` | Host do cluster de filas. | `jaragua.lmq.cloudamqp.com` |
+| `RABBITMQ_PORT` | Porta de acesso seguro (TLS). | `5671` |
+| `RABBITMQ_USER` | Usuário do VHost. | `lggfunal` |
+| `RABBITMQ_PASS` | Senha de acesso do broker. | `<sua-senha-amqp>` |
+| `RABBITMQ_VHOST` | Virtual Host dedicado. | `lggfunal` |
 
-#### 2 Front-end (React, Vite)
-
-Crie um arquivo **`.env`** na raiz da pasta `/frontend` e use o prefixo `VITE_` (ou `REACT_APP_` se estiver usando CRA) para expor as variáveis ao *bundle* da aplicação.
-
-| Variável | Descrição | Exemplo |
-| :--- | :--- | :--- |
-| `VITE_API_URL` | URL base do endpoint do Backend Spring Boot. | `http://localhost:8080/api` |
-| `VITE_EMAILJS_PUBLIC_KEY` | Chave pública para serviços de e-mail (Exemplo). | `sua_public_key_aqui` |
-| `VITE_GOOGLE_MAPS_KEY` | Chave de API para serviços de mapas (Opcional). | `AIzaSy...` |
-
----
-
-#### 3. Exemplos de Variáveis de Ambiente na Vercel
-
-A Vercel permite configurar variáveis no painel (Project Settings > Environment Variables).
-Aqui estão exemplos comuns utilizadas em aplicações front-end e full-stack:
-
----
-
-##### **Exemplo 1 – Front-end com Next.js usando API externa**
-
-```
-NEXT_PUBLIC_API_URL=https://meu-backend.vercel.app/api
-NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=G-seu_google_analytics_id_aqui
-```
-
----
-
-##### **Exemplo 2 – Aplicação Full-stack (Next.js + Prisma + PostgreSQL)**
-
-```
-DATABASE_URL=postgresql://admin:senha-super-segura@ep-meu-banco.aws.neon.tech:5432/verceldb
-NEXTAUTH_SECRET=uma_chave_muito_longa_e_segura
-NEXTAUTH_URL=https://meu-sistema.vercel.app
-```
-
----
-
-##### **Exemplo 3 – Integração com APIs externas**
-
-```
-STRIPE_SECRET_KEY=sk_live_seu_stripe_key_aqui
-OPENAI_API_KEY=sk-sua_openai_key_aqui
-SENDGRID_API_KEY=SG.sua_sendgrid_key_aqui
-```
-
----
-
-##### **Exemplo 4 – Frontend com Vite (EmailJS)**
-
-```
-VITE_EMAILJS_SERVICE_ID=seu_service_id_aqui
-VITE_EMAILJS_TEMPLATE_ID_FOR_ME=seu_template_id_for_me_aqui
-VITE_EMAILJS_TEMPLATE_ID_FOR_SENDER=seu_template_id_for_sender_aqui
-VITE_EMAILJS_PUBLIC_KEY=sua_public_key_aqui
-```
-
-> **Obs:** As variáveis de ambiente em projetos **Vite** precisam começar com `VITE_` para que o Vite as reconheça e as inclua no *bundle* do frontend; variáveis sem esse prefixo não ficam disponíveis no código do cliente.
-
----
-
-Para adicionar essas variáveis:
-
-1.  Acesse a página de Environment Variables do seu projeto no Vercel (ex.: `https://vercel.com/<seu-usuario>/<seu-projeto>/settings/environment-variables`)
-2.  Clique em **"Add"** para adicionar cada variável com o nome e valor correspondente.
-
-Alternativamente, se estiver desenvolvendo localmente, crie um arquivo **`.env.local`** dentro da pasta **`frontend`** do seu projeto com o seguinte conteúdo:
-
-```
-# Variável essencial para conectar ao Back-end Spring Boot rodando localmente (normalmente na porta 8080)
-VITE_API_URL=http://localhost:8080/api
-
-# Variáveis para integrações externas de serviço de e-mail
-VITE_EMAILJS_SERVICE_ID=seu_service_id_aqui
-VITE_EMAILJS_TEMPLATE_ID_FOR_ME=seu_template_id_for_me_aqui
-VITE_EMAILJS_TEMPLATE_ID_FOR_SENDER=seu_template_id_for_sender_aqui
-VITE_EMAILJS_PUBLIC_KEY=sua_public_key_aqui
-
-# Outras chaves de serviço
-VITE_GOOGLE_MAPS_KEY=AIzaSy...
-```
-
-> 💡 **Localização:** Garanta que este arquivo esteja em **`/frontend/.env.local`** para que o **Vite** consiga carregá-lo e disponibilizar as variáveis para o Front-end durante o desenvolvimento.
+> 💡 **Nota Arquitetural:** O `application.properties` da aplicação está configurado para negociar `TLS` na fila (`spring.rabbitmq.ssl.enabled=true`) e conta com tolerância de timeout otimizada para nuvens.
 
 ### 📦 Instalação de Dependências
 
-Clone o repositório e instale as dependências.
-
-1.  **Clone o Repositório:**
-
+1. **Clone o Repositório:**
 ```bash
-git clone <URL_DO_SEU_REPOSITÓRIO>
-cd <pasta-do-projeto>
-```
-
-2.  **Instale as Dependências (Monorepo):**
-
-Como o projeto está dividido, você precisa instalar as dependências separadamente para o Front-end (React, usando NPM/Yarn) e garantir que o Back-end (Spring Boot, usando Maven/Gradle Wrapper) tenha suas dependências resolvidas.
-
-#### Front-end (React)
-
-Acesse a pasta do Front-end e instale as dependências do Node.js:
-
-```bash
-cd frontend
-npm install
-# ou
-yarn install
-cd .. # Retorna para a raiz
-```
-
-#### Back-end (Spring Boot)
-
-O Spring Boot utiliza o **Maven Wrapper** (`./mvnw`) ou **Gradle Wrapper** (`./gradlew`) para gerenciar dependências. Execute o comando de instalação/build limpo antes de rodar.
-
-* **Usando Maven (`pom.xml`):**
-    ```bash
-    cd backend
-    ./mvnw clean install
-    cd ..
-    ```
-
-* **Usando Gradle (`build.gradle`):**
-    ```bash
-    cd backend
-    ./gradlew clean build
-    cd ..
-    ```
-
----
-
-### 💾 Inicialização do Banco de Dados (PostgreSQL)
-
-O projeto utiliza **PostgreSQL**. A forma mais fácil de inicializar o banco é via Docker (para execução sem `docker-compose`):
-
-1. **Rode o Container do PostgreSQL:**  
-   (Certifique-se que o Docker está em execução)
-
-```bash
-docker run --name minha_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=senha-segura-123 -e POSTGRES_DB=nome_do_banco -p 5432:5432 -d postgres:16
-```
-
-2. **Execute as Migrações:**  
-   O Back-end **Spring Boot** geralmente gerencia o schema do banco de dados automaticamente no startup (via Hibernate `ddl-auto`) ou utilizando ferramentas como **Flyway** ou **Liquibase**.
-
-* **Se o Spring Boot gerencia o schema (padrão):** Nenhuma ação manual é necessária, basta rodar o Back-end (veja a próxima seção).
-* **Se usar Flyway/Liquibase via Maven:**
-    ```bash
-    cd backend
-    ./mvnw flyway:migrate
-    # ou
-    ./mvnw liquibase:update
-    ```
----
-
-### ⚡ Como Executar a Aplicação
-Execute a aplicação em modo de desenvolvimento em **dois terminais separados**.
-
-#### Terminal 1: Back-end (Spring Boot)
-
-Inicie a API do Spring Boot. Ela tentará se conectar ao banco de dados rodando no Docker.
-
-```bash
-cd backend
-./mvnw spring-boot:run
-```
-🚀 *O Back-end estará disponível em **http://localhost:8080**.*
-
----
-
-#### Terminal 2: Front-end (React, Vite)
-
-Inicie o servidor de desenvolvimento do Front-end.
-
-```bash
-cd frontend
-npm run dev
-# ou
-yarn dev
-```
-🎨 *O Front-end estará disponível em **http://localhost:5173** (ou a porta configurada no Vite/CRA).*
-
----
-
-#### 🐳 Execução Local Completa com Docker Compose (Incluindo Banco de Dados)
-
-Para uma execução local que inclui o serviço de Back-end (**Spring Boot**), Front-end (**React**) e o banco de dados **PostgreSQL**, usaremos o **`docker-compose`** para orquestração.
-
-Antes de tudo, certifique-se de que o **Docker Desktop** (no Mac/Windows) ou o **serviço Docker** (em Linux) está em execução.
-
-- **No Mac/Windows**: basta abrir o aplicativo **Docker Desktop**.
-- **No Linux**: rode o comando abaixo para iniciar o serviço:
-
-```bash
-sudo systemctl start docker
-```
-
----
-
-#### 📦 Passos para build, inicialização e execução
-
-1. Acesse a pasta raiz do projeto (onde o arquivo `docker-compose.yml` está localizado):
-
-```bash
-cd /caminho/do/projeto/nome-do-projeto
-```
-
-2. Suba todos os serviços (Back-end, Front-end e Banco de Dados) definidos no `docker-compose.yml`:
-
-```bash
-docker-compose up --build -d
-```
-
-> [!NOTE]
-> 💡 O parâmetro `--build` garante que as imagens mais recentes do projeto sejam geradas, e `-d` executa em segundo plano.
-
-3. Verifique se os containers estão rodando:
-
-```bash
-docker ps
-```
-
-4. **Execute as Migrações do Banco de Dados:**
-   O Back-end **Spring Boot** geralmente gerencia o schema do banco de dados (via Flyway/Liquibase ou Hibernate) na **inicialização do serviço**.
-
-* **Verificação:** Se o serviço de Back-end (`backend` ou `api`) for o responsável pelas migrações, verifique os logs para confirmar se o processo foi concluído.
-    ```bash
-    docker logs <nome_do_container_backend>
-    ```
-* *Atenção:* O comando `npm run db:migrate` é exclusivo para Node.js e **não** deve ser usado.
-
-5. Abra no navegador:
-   O Front-end deve estar acessível na porta configurada no `docker-compose` (Exemplo: <http://localhost:3000> ou <http://localhost:5173>)
-
-6. Para parar e remover todos os containers, redes e volumes (exceto volumes nomeados):
-
-```bash
-docker-compose down
-```
-
-✅ **Em resumo:** Usar **`docker-compose`** simplifica a execução do ambiente completo, isolando as dependências de **Java (Spring Boot)** e **Node.js (React)** e garantindo que o PostgreSQL esteja disponível.
-
----
-
-## 🚀 Deploy
-Instruções claras para deploy em produção.
-
-1.  **Build do Projeto:**
-    Execute o build separadamente para os dois artefatos (JAR para o Back-end e arquivos estáticos para o Front-end).
-
-```bash
-# 1. Build do Front-end (React/Vite) - Gera a pasta /dist com arquivos estáticos
-cd frontend
-npm run build
-
-# 2. Build do Back-end (Spring Boot/Maven) - Gera o arquivo .jar executável em /target
-cd ../backend
-./mvnw clean package
-```
-
-2.  **Configuração do Ambiente de Produção:** Defina as variáveis de ambiente no seu provedor (e.g., Vercel, Railway, Heroku, DigitalOcean).
-
-> 🔑 **Variáveis Cruciais:** Certifique-se de configurar as variáveis de **conexão com o banco de dados** (`SPRING_DATASOURCE_URL`, etc.) para o Back-end e a **URL da API de produção** (`VITE_API_URL`) para o Front-end.
-
-3.  **Execução em Produção:**
-    A forma de execução depende do seu provedor, mas geralmente envolve o seguinte:
-
-```bash
-# ☕ Execução do Back-end Spring Boot (Java JAR)
-# Este comando inicia a API usando o artefato JAR gerado.
-java -jar backend/target/nome-do-do-projeto-0.0.1-SNAPSHOT.jar
-
-# 🟢 Execução do Front-end (React/Vite)
-# O Front-end (arquivos estáticos) não é executado via Node, mas servido por um servidor web.
-# Exemplo de servidor de arquivos estáticos (usando Nginx, Vercel, Netlify, etc.)
-# Para simular a produção localmente ou rodar em uma VPS simples, use o pacote 'serve':
-npm install -g serve
-serve -s frontend/dist
+git clone [https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil.git](https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil.git)
+cd Sistema-de-Moedas-Estudantil
 ```
 
 ---
@@ -515,77 +272,43 @@ Descreva o propósito das pastas principais.
 
 ```
 .
-├── .editorconfig                # ✍️ Padronização de estilo de código.
-├── .env.local                   # 🔒 Variáveis SENSÍVEIS do ambiente LOCAL (não versionado).
-├── .env.test                    # 🧪 Variáveis de ambiente para TESTES AUTOMATIZADOS.
-├── .env.staging                 # ☁️ Variáveis de ambiente para STAGING/HOMOLOGAÇÃO.
-├── .env.example                 # 🧩 Exemplo de TODAS as variáveis necessárias (sem valores sensíveis).
-├── .gitignore                   # 🧹 Ignora arquivos/pastas não versionadas (.env, node_modules, target, etc.).
-├── .vscode/                     # ⚙️ Configurações de ambiente da IDE (opcional).
-├── .github/                     # 🤖 CI/CD (Actions), templates de Issues e Pull Requests.
-├── README.md                    # 📘 Documentação principal do projeto.
-├── CONTRIBUTING.md              # 🤝 Guia de contribuição.
-├── LICENSE                      # ⚖️ Licença do projeto.
-├── docker-compose.yml           # 🐳 Orquestração dos containers (front/back/db/etc).
-├── docker-compose.override.yml  # 🐳 Configurações extras apenas para desenvolvimento.
+├── /.github                     # 🤖 Automações, fluxos CI/CD e metadados do GitHub
+├── /.mvn                        # ☕ Arquivos de configuração do Maven Wrapper
+├── /documentos                  # 📚 Base de conhecimento do projeto
+│   ├── /Apresentação            # Slides e pitches
+│   ├── /Diagrama                # Matrizes visuais do sistema
+│   │   ├── /Caso-de-Uso         # DUCs
+│   │   ├── /Classe              # Relacionamentos de objetos
+│   │   ├── /Componentes         # Diagrama de infraestrutura
+│   │   ├── /DER                 # Entidade-Relacionamento do DB
+│   │   └── /Sequencia           # Fluxos temporais completos e isolados (PlantUML)
+│   └── /Histórias de Usuário    # Backlog e requisitos transcritos
 │
-├── /frontend                    # 📁 Aplicação React
-│   ├── .env.example             # 🧩 Variáveis de ambiente do Front-end.
-│   ├── Dockerfile               # 🐳 Docker build do Front-end.
-│   ├── .eslintrc.js             # ✨ Regras do ESLint.
-│   ├── .prettierrc              # 🎨 Configuração do Prettier.
-│   ├── /public                  # 📂 Arquivos estáticos e index.html.
-│   ├── /src                     # 📂 Código-fonte React
-│   │   ├── /components          # 🧱 Componentes reutilizáveis (UI).
-│   │   ├── /pages               # 📄 Páginas/rotas da aplicação.
-│   │   ├── /services            # 🔌 Serviços e chamadas HTTP.
-│   │   ├── /hooks               # 🎣 Hooks personalizados.
-│   │   ├── /styles              # 🎨 Estilos globais, temas, Design System.
-│   │   ├── /assets              # 🖼️ Recursos estáticos importados
-│   │   │   ├── /images          # 🖼️ Imagens.
-│   │   │   ├── /icons           # 💡 Ícones.
-│   │   │   └── /fonts           # ✒️ Fontes personalizadas.
-│   │   └── /utils               # 🛠️ Funções utilitárias.
-│   ├── package.json             # 📦 Dependências e scripts.
-│   └── yarn.lock / package-lock.json # 🔒 Lockfile das dependências.
+├── /frontend                    # 💻 Código-fonte da Aplicação Web do Aluno/Instituição
+│   ├── /assets                  # Imagens gerais, logos e SVGs
+│   ├── /css                     # Folhas de estilo da plataforma
+│   ├── /js                      # Lógica de integração com a API, manipulação de DOM
+│   ├── /static                  # Arquivos imutáveis do projeto
+│   └── index.html               # Ponto de entrada (Login/Dashboards)
 │
-├── /backend                     # 📁 Aplicação Spring Boot
-│   ├── .env.example             # 🧩 Variáveis de ambiente do Back-end.
-│   ├── Dockerfile               # 🐳 Docker build do Back-end.
-│   │
-│   ├── /src/main/java           # 📂 Código-fonte Java
-│   │   └── /com/exemplo/app
-│   │       ├── /controller      # 🎮 Endpoints REST.
-│   │       ├── /service         # ⚙️ Regras e lógica de negócio.
-│   │       ├── /repository      # 🗄️ Repositórios (JPA/Hibernate).
-│   │       ├── /model           # 🧬 Entidades persistentes (JPA).
-│   │       ├── /domain          # 🌐 Objetos de Domínio puro (sem anotações).
-│   │       ├── /dto             # ✉️ Data Transfer Objects.
-│   │       ├── /config          # 🔧 Configurações gerais (DB, Swagger, CORS, etc.).
-│   │       ├── /exception       # 💥 Exceptions e handlers globais.
-│   │       └── /security        # 🛡️ Autenticação e Autorização (Spring Security).
-│   │
-│   ├── /src/main/resources      # 📂 Recursos do Spring Boot
-│   │   ├── application.yml         # ⚙️ Configuração principal da aplicação
-│   │   ├── application-dev.yml     # 🧪 Configurações específicas do ambiente de DESENVOLVIMENTO
-│   │   ├── application-prod.yml    # 🚀 Configurações específicas para PRODUÇÃO
-│   │   ├── application-test.yml    # 🧪 Configurações usadas nos testes automatizados
-│   │   ├── /static                # 🌐 Arquivos estáticos (HTML/CSS/JS).
-│   │   ├── /templates             # 🖼️ Templates Thymeleaf/Freemarker.
-│   │   ├── /messages              # 🌎 Arquivos de internacionalização (i18n).
-│   │   └── /db                    # 💾 Scripts de banco usados pela aplicação
-│   │       └── /migration         # 📜 Migrações do banco (Flyway/Liquibase).
-│   │
-│   ├── /src/test/java            # 🧪 Testes unitários e de integração.
-│   └── pom.xml / build.gradle    # 🛠️ Build e dependências.
+├── /src/main/java/br/com/lumens/unirewards  # ⚙️ Código-fonte da API Back-end Java
+│   ├── /config                  # Definições (RabbitMQConfig, Beans, Jackson)
+│   ├── /controller              # Rotas HTTP e interface da API (Endpoints)
+│   ├── /dto                     # Contratos rígidos de entrada e saída (Requests/Responses)
+│   ├── /exception               # Captura e tratamento centralizado de erros
+│   ├── /facade                  # Padronização de integrações e fluxos complexos multi-serviços
+│   ├── /model                   # Entidades JPA (Alunos, Professores, Empresas, Transações)
+│   ├── /repository              # Camada de comunicação com o PostgreSQL (Spring Data JPA)
+│   ├── /security                # Módulos de autorização e filtros de requisição
+│   ├── /service                 # Core do sistema e lógica de negócio central (Transactional)
+│   └── UniRewardsApplication.java # Bootstrap do Spring Boot
 │
-├── /scripts                      # 📜 Scripts de automação
-│   ├── dev.sh                    # 🚀 Ambiente de desenvolvimento completo.
-│   ├── build_all.sh              # 🛠️ Build geral (front + back).
-│   └── deploy.sh                 # ☁️ Deploy em produção/homologação.
+├── /src/main/resources          # 📄 Propriedades nativas do Back-end
+│   └── application.properties   # Connection Strings, Configurações de E-mail (SMTP) e Filas
 │
-├── /docs                         # 📚 Documentação, arquitetura, modelos C4, Swagger/OpenAPI.
-└── /tests                        # 🧪 Testes End-to-End (Cypress/Playwright).
+├── docker-compose.yml           # 🐳 Script local para subir cluster RabbitMQ 
+├── pom.xml                      # 📦 Central de dependências Maven do Back-end
+└── README.md                    # 📘 Documentação da aplicação (Este arquivo)
 ```
 
 ---
@@ -628,81 +351,6 @@ Para melhor visualização, as telas principais estão organizadas lado a lado.
 | **Dashboard (Visão Geral)** | **Página Admin / Configurações** |
 | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela de Dashboard" width="120px" height="120px"> | <img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" alt="Tela Administrativa" width="120px" height="120px"> |
 
-### 💻 Exemplo de Saída no Terminal (para Back-end, API, CLI)
-
-Caso o projeto seja focado em serviços de Back-end (API, microserviço, CLI), utilize esta seção para demonstrar a interação com o sistema e a resposta esperada.
-
-#### 1. Demonstração da API (Exemplo com cURL)
-
-Mostra uma chamada simples para um endpoint da API (ex: GET de listagem).
-
-```bash
-# Chama o endpoint de listagem de usuários com o token de autenticação
-curl -X GET 'http://localhost:3000/api/v1/users' \
-     -H 'Authorization: Bearer <seu-jwt-token>'
-```
-
-**Saída Esperada:**
-```json
-{
-  "total": 2,
-  "users": [
-    {
-      "id": "1a2b3c",
-      "name": "Prof. Aramuni",
-      "email": "contato@exemplo.com",
-      "status": "active"
-    },
-    {
-      "id": "4d5e6f",
-      "name": "Colaborador Teste",
-      "email": "teste@exemplo.com",
-      "status": "inactive"
-    }
-  ]
-}
-```
-
----
-
-#### 2. Demonstração de Execução de CLI/Script
-
-Mostra como executar uma ferramenta de linha de comando ou um script de manutenção do projeto (ex: rodar migrações ou um job agendado).
-
-```bash
-# Executa a ferramenta de validação de Schema
-npm run cli validate:schema --target=production
-```
-
-**Saída Esperada:**
-```text
-[INFO] Iniciando validação do banco de dados...
-[SUCCESS] 15/15 tabelas verificadas.
-[WARNING] Coluna 'descricao' na tabela 'produtos' é nullable.
-[SUCCESS] Validação concluída. Nenhum erro crítico encontrado.
-Tempo de execução: 1.25s
-```
-
----
-
-## 🧪 Testes
-
-### Testes Unitários e de Integração
-Para rodar os testes da unidade e integração:
-
-```
-npm run test
-```
-*Ferramenta utilizada: Jest, Vitest, Mocha, etc.*
-
-### Testes End-to-End (E2E)
-Para rodar os testes de ponta a ponta (E2E):
-
-```
-npm run test:e2e
-```
-*Ferramenta utilizada: Cypress, Playwright, Selenium, etc.*
-
 ---
 
 ## 🔗 Documentações utilizadas
@@ -723,7 +371,7 @@ Liste os principais contribuidores. Você pode usar links para seus perfis.
 
 | 👤 Nome | 🖼️ Foto | :octocat: GitHub | 💼 LinkedIn | 📤 Gmail |
 |---------|----------|-----------------|-------------|-----------|
-| Vinícius Simões  | <div align="center"><img src="https://avatars.githubusercontent.com/u/80927829?v=4" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/ViniSimoesV"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/user1"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:user1@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
+| Vinícius Simões  | <div align="center"><img src="https://avatars.githubusercontent.com/u/80927829?v=4" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/ViniSimoesV"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/vinicius-simoes-dev/"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="vinisv2004@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
 | Luiz Arthur  | <div align="center"><img src="https://avatars.githubusercontent.com/u/166531464?v=4" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/Chapeugenerico"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/user2"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:user2@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
 
 ---
