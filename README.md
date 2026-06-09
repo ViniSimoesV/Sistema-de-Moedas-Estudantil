@@ -137,14 +137,12 @@ O Estudantes Lúmens é uma plataforma de gamificação voltada ao engajamento a
 
 ---
 ## ✨ Funcionalidades Principais
-Liste as funcionalidades de forma clara e objetiva.
 
-- 🔐 **Autenticação Segura:** Login, Cadastro e Recuperação de Senha.
-- 📈 **Painel de Controle:** Visualização de dados em tempo real com gráficos.
-- ⚙️ **Gerenciamento de CRUD:** Criação, Leitura, Atualização e Deleção de recursos (e.g., Usuários, Itens, Posts).
-- 🌐 **Internacionalização (i18n):** Suporte a múltiplos idiomas.
-- 🔄 **Integração com APIs Externas:** Conexão com serviços de terceiros (pagamentos, mapas, autenticação, etc.).
-- 📨 **Sistema de Notificações:** Envio de alertas por e-mail, push ou notificações internas.
+- 🔐 **Autenticação e Perfis:** Múltiplos perfis de acesso (Instituição, Professor, Aluno, Empresa).
+- 💰 **Transações Acadêmicas:** Transferência de Lúmens de Professor para Aluno, e de Aluno para Aluno (Peer-to-Peer).
+- 🛍️ **Marketplace de Vantagens:** Catálogo virtual com filtros e sistema de resgate baseado em saldo.
+- 📨 **Mensageria Assíncrona:** Envio automático de cupons e comprovantes via E-mail utilizando RabbitMQ.
+- 📊 **Extratos Detalhados:** Histórico completo de envios e recebimentos para controle do usuário.
 
 ---
 
@@ -157,28 +155,29 @@ As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construç
 * **Framework/Biblioteca:** HTML
 * **Linguagem/Superset:** JavaScript ES6+
 * **Estilização:** CSS
-* **Gerenciamento de Estado:** [Ex: Redux Toolkit, Zustand, Context API]
 
 ### 🖥️ Back-end
 
 * **Linguagem/Runtime:** Java 21 (JDK), Node.js
 * **Framework:** Spring Boot 3.x
-* **Banco de Dados:** PostgreSQL
+* **Persistência:** Spring Data JPA / Hibernate
+* **Mensageria:** Spring AMQP (RabbitMQ)
+* **E-mails:** JavaMailSender
+* **Hospedagem:** Render
 * **Autenticação:** Spring Security
 
 ### ⚙️ Infraestrutura & DevOps
 
 * **Containerização:** Docker
-* **Orquestração:** Kubernetes
+* **Message Broker:** RabbitMQ hospedado no CloudAMQP
 * **Cloud:**  Vercel, Render, Supabase
 
 ---
 
 ## 🏗 Arquitetura
 
-Descreva aqui a **arquitetura completa do sistema**, explicando como as camadas, módulos e componentes foram organizados. Informe também **por que** essa arquitetura foi escolhida e **quais problemas ela ajuda a resolver**.
-
-Você pode incluir:
+A arquitetura do UniRewards adota um modelo monolítico modular com comunicação assíncrona para serviços lentos (como disparo de e-mails via SMTP), garantindo alta performance nas transações financeiras e resgates.
+Os diagramas abaixo ilustram os fluxos completos do sistema, separados por módulos, conforme a estrutura do projeto.
 
 - **Visão geral da arquitetura** Camadas, MVC
 - **Principais componentes** e o papel de cada um
@@ -205,16 +204,16 @@ Para melhor visualização e entendimento da estrutura do sistema, os diagramas 
 ### Pré-requisitos
 Certifique-se de que o usuário tenha o ambiente configurado.
 
-* **Java JDK:** Versão **17** ou superior (Necessário para o **Back-end Spring Boot**)
-* **Node.js:** Versão LTS (v18.x ou superior) (Necessário para o **Front-end React**)
-* **Gerenciador de Pacotes:** npm ou yarn
+* **Java JDK:** Versão **21** ou superior (Necessário para o **Back-end Spring Boot**)
+* **PostgreSQL:** Para rodar o banco localmente, caso não use o Supabase.
+* **RabbitMQ:** Necessário localmente caso não utilize o CloudAMQP.
 * **Docker** (Opcional, mas **altamente recomendado** para rodar o Banco de Dados)
 
 ---
 
 ### 🔑 Variáveis de Ambiente
 
-Crie arquivos `.env` específicos e/ou configure as variáveis de ambiente no seu sistema para cada parte da aplicação.
+O projeto requer variáveis específicas para conexão de banco, fila e porta do servidor.
 
 #### 1 Back-end (Spring Boot)
 
