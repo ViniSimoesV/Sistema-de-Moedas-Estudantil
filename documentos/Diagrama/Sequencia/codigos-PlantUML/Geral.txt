@@ -1,5 +1,15 @@
 @startuml
+scale 0.8
 skinparam maxMessageSize 250
+
+<style>
+sequenceDiagram {
+  padding 10
+  participant {
+    padding 10
+  }
+}
+</style>
 
 title Diagrama de Sequência Geral - Sistema UniRewards Completo
 
@@ -19,14 +29,10 @@ autonumber 1.1
 admin -> api: POST /api/instituicoes (Cadastrar)
 activate api
 api -> db: SELECT verifica se sigla existe
-activate db
 db --> api: Retorna Falso
-deactivate db
 api -> api: Codifica senha (BCrypt) e define tipoUsuario="INSTITUICAO"
 api -> db: INSERT nova instituição
-activate db
 db --> api: Retorna Instituicao salva
-deactivate db
 api --> admin: 201 Created
 deactivate api
 
@@ -34,9 +40,7 @@ autonumber 1.2
 admin -> api: GET, PUT ou DELETE /api/instituicoes/{id}
 activate api
 api -> db: Realiza operação (SELECT, UPDATE ou DELETE)
-activate db
 db --> api: Retorna resultado
-deactivate db
 api --> admin: 200 OK / 204 No Content
 deactivate api
 
@@ -47,18 +51,12 @@ autonumber 2.1
 admin -> api: POST /api/professores (Cadastrar Individual)
 activate api
 api -> db: SELECT verifica CPF e Email
-activate db
 db --> api: Retorna Falso
-deactivate db
 api -> api: Codifica senha e define tipoUsuario="PROFESSOR"
 api -> db: INSERT novo professor
-activate db
 db --> api: Retorna Professor salvo
-deactivate db
 api -> db: INSERT nova carteira com 1000 Lúmens
-activate db
 db --> api: Retorna Carteira salva
-deactivate db
 api --> admin: 201 Created
 deactivate api
 
@@ -66,9 +64,7 @@ autonumber 2.2
 prof -> api: GET, PUT ou DELETE /api/professores/{id}
 activate api
 api -> db: Realiza operação (SELECT, UPDATE ou DELETE)
-activate db
 db --> api: Retorna resultado
-deactivate db
 api --> prof: 200 OK / 204 No Content
 deactivate api
 
@@ -79,13 +75,9 @@ autonumber 3.1
 empresa -> api: POST /api/empresas (Cadastrar Empresa)
 activate api
 api -> db: SELECT verifica CNPJ
-activate db
 db --> api: Retorna Falso
-deactivate db
 api -> db: INSERT nova empresa
-activate db
 db --> api: Retorna Empresa salva
-deactivate db
 api --> empresa: 201 Created
 deactivate api
 
@@ -93,13 +85,9 @@ autonumber 3.2
 empresa -> api: POST /api/vantagens (Cadastrar Vantagem)
 activate api
 api -> db: SELECT busca Empresa por ID
-activate db
 db --> api: Retorna Empresa
-deactivate db
 api -> db: INSERT nova vantagem
-activate db
 db --> api: Retorna Vantagem salva
-deactivate db
 api --> empresa: 201 Created
 deactivate api
 
@@ -107,9 +95,7 @@ autonumber 3.3
 empresa -> api: GET, PUT ou DELETE /api/empresas ou /api/vantagens
 activate api
 api -> db: Realiza operação no banco
-activate db
 db --> api: Retorna resultado
-deactivate db
 api --> empresa: 200 OK / 204 No Content
 deactivate api
 
@@ -120,14 +106,10 @@ autonumber 4.1
 aluno -> api: POST /api/alunos (Cadastrar Conta)
 activate api
 api -> db: SELECT busca Instituição por ID
-activate db
 db --> api: Retorna Instituição
-deactivate db
-api -> api: Codifica senha, define tipoUsuario="ALUNO" e nivel=1
+api -> api: Codifica senha, define tipoUsuario="ALUNO", nivel=1
 api -> db: INSERT novo aluno e carteira (com 0 Lúmens)
-activate db
 db --> api: Retorna Aluno salvo
-deactivate db
 api --> aluno: 201 Created
 deactivate api
 
@@ -135,9 +117,7 @@ autonumber 4.2
 aluno -> api: GET, PUT ou DELETE /api/alunos/{id}
 activate api
 api -> db: Realiza operação no banco
-activate db
 db --> api: Retorna resultado
-deactivate db
 api --> aluno: 200 OK / 204 No Content
 deactivate api
 
@@ -148,23 +128,24 @@ autonumber 5.1
 prof -> api: POST /api/transacoes (Professor para Aluno)
 activate api
 api -> db: SELECT busca Aluno Destinatário, Professor Remetente e Carteiras
-activate db
 db --> api: Retorna entidades e carteiras
-deactivate db
 
 alt Saldo Suficiente
     api -> api: Subtrai valor do Professor e adiciona ao Aluno
     api -> db: UPDATE carteiras
-    activate db
     db --> api: Confirmação
-    deactivate db
     api -> db: INSERT log (transacaoProfessorRepository.save)
-    activate db
     db --> api: Retorna log salvo
-    deactivate db
-    api -> mq: Despacha e-mail para Aluno (RECEBIDO)
-    api -> mq: Despacha e-mail para Professor (ENVIADO)
+    
+    api -> mq: Envia payload de e-mails para fila
+    activate mq
+    mq --> api: Confirmação de enfileiramento
+    
     api --> prof: 200 OK ("Transferência processada com sucesso!")
+    
+    mq -> aluno: E-mail assíncrono (RECEBIDO)
+    mq -> prof: E-mail assíncrono (ENVIADO)
+    deactivate mq
 else Saldo Insuficiente
     api --> prof: 400 Bad Request
 end
@@ -175,23 +156,24 @@ aluno -> api: POST /api/transacoes (Aluno para Aluno)
 activate api
 api -> api: Verifica se Remetente != Destinatário
 api -> db: SELECT busca Alunos e Carteiras
-activate db
 db --> api: Retorna entidades e carteiras
-deactivate db
 
 alt Saldo Suficiente
     api -> api: Subtrai valor do Remetente e adiciona ao Destinatário
     api -> db: UPDATE carteiras
-    activate db
     db --> api: Confirmação
-    deactivate db
     api -> db: INSERT log (transacaoAlunoRepository.save)
-    activate db
     db --> api: Retorna log salvo
-    deactivate db
-    api -> mq: Despacha e-mail para Destinatário (RECEBIDO)
-    api -> mq: Despacha e-mail para Remetente (ENVIADO)
-    api --> aluno: 200 OK
+    
+    api -> mq: Envia payload de e-mails para fila
+    activate mq
+    mq --> api: Confirmação de enfileiramento
+    
+    api --> aluno: 200 OK ("Transferência processada com sucesso!")
+    
+    mq -> aluno: E-mail assíncrono (RECEBIDO)
+    mq -> aluno: E-mail assíncrono (ENVIADO)
+    deactivate mq
 else Saldo Insuficiente ou IDs Iguais
     api --> aluno: 400 Bad Request
 end
@@ -204,9 +186,7 @@ autonumber 6.1
 aluno -> api: GET /api/vantagens (Visualizar Loja)
 activate api
 api -> db: SELECT busca todas as vantagens ativas
-activate db
 db --> api: Retorna lista
-deactivate db
 api --> aluno: 200 OK (Catálogo)
 deactivate api
 
@@ -214,24 +194,25 @@ autonumber 6.2
 aluno -> api: POST /api/resgates (Resgatar Vantagem)
 activate api
 api -> db: SELECT busca Aluno, Carteira e Vantagem
-activate db
 db --> api: Retorna dados (com custo da vantagem)
-deactivate db
 
 alt Saldo Suficiente
     api -> api: Subtrai custo da Carteira do Aluno
     api -> db: UPDATE Carteira e UPDATE Empresa (totalResgatados++)
-    activate db
     db --> api: Confirmação de atualizações
-    deactivate db
     api -> api: Gera código único e payload do QR Code para o Cupom
     api -> db: INSERT log na tabela de resgates
-    activate db
     db --> api: Retorna Resgate salvo
-    deactivate db
-    api -> mq: Despacha e-mail para Aluno (Cupom / QR Code)
-    api -> mq: Despacha e-mail para Empresa (Aviso de Resgate)
+    
+    api -> mq: Envia payload de e-mails para fila
+    activate mq
+    mq --> api: Confirmação de enfileiramento
+    
     api --> aluno: 200 OK ("Resgate realizado com sucesso!")
+    
+    mq -> aluno: E-mail assíncrono (Cupom / QR Code)
+    mq -> empresa: E-mail assíncrono (Aviso de Resgate)
+    deactivate mq
 else Saldo Insuficiente
     api --> aluno: 400 Bad Request
 end
@@ -244,19 +225,15 @@ autonumber 7.1
 prof -> api: GET /api/transacoes/professor/{id}
 activate api
 api -> db: SELECT transações enviadas
-activate db
 db --> api: Retorna lista
-deactivate db
 api --> prof: 200 OK
 deactivate api
 
 autonumber 7.2
 aluno -> api: GET /api/transacoes/aluno/{id}
 activate api
-api -> db: SELECT recebidos (Professores), enviados (Alunos) e recebidos (Alunos)
-activate db
+api -> db: SELECT recebidos, enviados e recebidos de alunos
 db --> api: Retorna listas
-deactivate db
 api -> api: Agrupa as listas
 api --> aluno: 200 OK (Objeto de extrato completo)
 deactivate api

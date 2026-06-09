@@ -61,8 +61,15 @@ alt Saldo Suficiente (carteira.saldoAtual >= vantagem.custo)
     db --> api: Retorna Resgate salvo
     deactivate db
     
-    api -> mq: Despacha e-mail para Aluno (EmailCupomDTO: email, nome, qrCode, dadosVantagem)
+    ' Correção da Fila aplicada aqui
+    api -> mq: Envia payload de e-mails para fila
+    activate mq
+    mq --> api: Confirmação de enfileiramento
     api --> aluno: 200 OK ("Pagamento aprovado! Cupom e QR Code enviados para o seu e-mail.")
+    
+    mq -> aluno: E-mail assíncrono (Cupom / QR Code)
+    mq -> "Empresa Parceira": E-mail assíncrono (Aviso de Resgate)
+    deactivate mq
 else Saldo Insuficiente
     api --> aluno: 400 Bad Request ("Saldo de Lúmens insuficiente para realizar este resgate.")
 end

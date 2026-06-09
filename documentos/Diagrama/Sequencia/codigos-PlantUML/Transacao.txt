@@ -38,9 +38,17 @@ alt Destinatário Encontrado e Valor > 0
         activate db
         db --> api: Retorna log salvo
         deactivate db
-        api -> mq: Despacha e-mail para Aluno (RECEBIDO)
-        api -> mq: Despacha e-mail para Professor (ENVIADO)
+        
+        ' Correção da Fila aplicada aqui
+        api -> mq: Envia payload de e-mails para fila
+        activate mq
+        mq --> api: Confirmação de enfileiramento
         api --> usuario: 200 OK ("Transferência processada com sucesso!")
+        
+        mq -> "Aluno Destinatário": E-mail assíncrono (RECEBIDO)
+        mq -> usuario: E-mail assíncrono (ENVIADO)
+        deactivate mq
+        
     else Saldo Insuficiente
         api --> usuario: 400 Bad Request ("Saldo insuficiente na carteira...")
     end
@@ -83,9 +91,17 @@ alt Diferentes IDs, Destinatário Encontrado e Valor > 0
         activate db
         db --> api: Retorna log salvo
         deactivate db
-        api -> mq: Despacha e-mail para Destinatário (RECEBIDO)
-        api -> mq: Despacha e-mail para usuario (ENVIADO)
+        
+        ' Correção da Fila aplicada aqui
+        api -> mq: Envia payload de e-mails para fila
+        activate mq
+        mq --> api: Confirmação de enfileiramento
         api --> usuario: 200 OK ("Transferência processada com sucesso!")
+        
+        mq -> "Aluno Destinatário": E-mail assíncrono (RECEBIDO)
+        mq -> usuario: E-mail assíncrono (ENVIADO)
+        deactivate mq
+        
     else Saldo Insuficiente
         api --> usuario: 400 Bad Request ("Saldo de Lúmens insuficiente...")
     end
