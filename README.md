@@ -280,6 +280,7 @@ Descreva o propósito das pastas principais.
 │   │   ├── /Caso-de-Uso         # DUCs
 │   │   ├── /Classe              # Relacionamentos de objetos
 │   │   ├── /Componentes         # Diagrama de infraestrutura
+│   │   ├── /Implantação         # Diagrama de infraestrutura
 │   │   ├── /DER                 # Entidade-Relacionamento do DB
 │   │   └── /Sequencia           # Fluxos temporais completos e isolados (PlantUML)
 │   └── /Histórias de Usuário    # Backlog e requisitos transcritos
