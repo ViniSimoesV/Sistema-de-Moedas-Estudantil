@@ -1,0 +1,82 @@
+@startuml
+skinparam maxMessageSize 200
+
+title Diagrama de Comunicação: Transferência de Lúmens (Prof. -> Aluno)
+
+' Definição dos Participantes (Arquitetura UniRewards)
+actor "Professor\n(Remetente)" as prof
+control "API UniRewards\n(TransacaoService)" as api
+database "Banco de Dados\n(Supabase)" as db
+queue "Fila Mensageria\n(RabbitMQ)" as mq
+boundary "Servidor SMTP\n(Gmail)" as smtp
+
+' Configuração inicial da numeração
+autonumber 1
+
+' 1. Início do Processo
+prof -> api: solicitarTransferencia(alunoId, valor, justificativa)
+activate api
+note right of api: 1. Inicia fluxo de transferência
+
+' 2. Comunicação com Banco (Consulta)
+autonumber 2
+api -> db: validarUsuariosESaldos(profId, alunoId)
+activate db
+
+' 3. Retorno da Consulta
+autonumber 3
+db -->> api: dadosValidados(carteirasRecuperadas)
+deactivate db
+
+' 4. Processamento Interno (Regra de Negócio)
+autonumber 4
+api -> api: [self] processarDebitoECredito(valor)
+
+' 5. Persistência da Transação
+autonumber 5
+api -> db: persistirAtualizacaoELog(transacao)
+activate db
+
+' 6. Confirmação do Banco
+autonumber 6
+db -->> api: transacaoSalvaComSucesso()
+deactivate db
+
+' 7. Comunicação Assíncrona (Broker)
+autonumber 7
+api -> mq: publicarEventoNotificacao(payloadEmails)
+activate mq
+
+' 8. Retorno do Broker (Confirmação de Fila)
+autonumber 8
+mq -->> api: eventoEnfileirado(sucesso)
+deactivate mq
+
+' 9. Resposta Final ao Usuário (Síncrona)
+autonumber 9
+api -->> prof: transferenciaConcluida(200 OK)
+deactivate api
+note left of api: 9. Processo principal liberado
+
+' ==========================================
+' AÇÕES ASSÍNCRONAS (BACKGROUND)
+' ==========================================
+par Ações Paralelas de Notificação (Assíncronas)
+    
+    ' 10.1. Consumo e disparo para o Aluno
+    autonumber 10.1
+    mq -> smtp: enviarEmailRecebimento(Aluno)
+    activate smtp
+    
+    ' 10.2. Consumo e disparo para o Professor
+    autonumber 10.2
+    mq -> smtp: enviarEmailComprovante(Professor)
+    
+    ' 11.1. Resposta SMTP
+    autonumber 11.1
+    smtp -->> mq: e-mailsEntregues(sucesso)
+    deactivate smtp
+
+end par
+
+@enduml
