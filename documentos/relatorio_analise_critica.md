@@ -1,4 +1,4 @@
-# 📘 Relatório de Análise Crítica do Projeto 👨‍💻
+# Relatório de Análise Crítica do Projeto
 
 ## 1. Informações do grupo
 - **🎓 Curso:** Engenharia de Software
@@ -17,11 +17,9 @@
   
   | 👤 Integrante | 🔧 Refatoração | 🔗 Link do PR |
   |--------------|---------------|----------------|
-  | :octocat: Seu Nome Aqui | Centralização de Exceções em Controllers | [Link do seu PR] |
-  | :octocat: Seu Nome Aqui | Extract Method no Envio de E-mails | [Link do seu PR] |
-  | :octocat: Seu Nome Aqui | Extract Method de Parsing CSV | [Link do seu PR] |
-
-*(**Nota**: Os links acima devem ser atualizados quando você subir os commits e abrir os PRs)*
+  | :octocat: IsabellaLDias | Centralização de Exceções em Controllers | https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1 |
+  | :octocat: mariaoliveira27 | Extract Method no Envio de E-mails | https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1 |
+  | :octocat: sofiavasconcelosms | Extract Method de Parsing CSV | https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1 |
 
 ---
 
@@ -120,7 +118,7 @@ Abaixo seguem as 3 refatorações propostas. Todas as alterações foram feitas 
 ### 1️⃣ Refatoração 1 – Remoção de try-catch redundante nos Controllers
 
 **Arquivo:** `src/main/java/br/com/lumens/unirewards/controller/TransacaoController.java`  
-**Pull Request:** *[Link do PR]*  
+**Pull Request:** *https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1*  
 
 #### 🔴 Antes
 ```java
@@ -158,7 +156,7 @@ O sistema já conta com a classe `GlobalExceptionHandler` que intercepta `Illega
 ### 2️⃣ Refatoração 2 – Extração de Método (Extract Method) para Envio de Emails
 
 **Arquivo:** `src/main/java/br/com/lumens/unirewards/service/TransacaoService.java`  
-**Pull Request:** *[Link do PR]*  
+**Pull Request:** *https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1*  
 
 #### 🔴 Antes
 ```java
@@ -221,7 +219,7 @@ Reduz a duplicação severa no `TransacaoService`, facilitando a leitura de `pro
 ### 3️⃣ Refatoração 3 – Extração de Parsing (SRP)
 
 **Arquivo:** `src/main/java/br/com/lumens/unirewards/service/ProfessorService.java`  
-**Pull Request:** *[Link do PR]*  
+**Pull Request:** *https://github.com/ViniSimoesV/Sistema-de-Moedas-Estudantil/pull/1*  
 
 #### 🔴 Antes
 ```java
