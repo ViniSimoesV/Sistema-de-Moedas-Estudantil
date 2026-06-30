@@ -18,32 +18,17 @@ public class TransacaoController {
 
     @PostMapping
     public ResponseEntity<?> efetuarTransferencia(@RequestBody TransacaoRequestDTO dto) {
-        try {
-            transacaoService.processarTransferencia(dto);
-            return ResponseEntity.ok(Map.of("mensagem", "Transferência processada com sucesso!"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("mensagem", e.getMessage()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body(Map.of("mensagem", "Erro crítico ao processar transação no servidor."));
-        }
+        transacaoService.processarTransferencia(dto);
+        return ResponseEntity.ok(Map.of("mensagem", "Transferência processada com sucesso!"));
     }
 
     @GetMapping("/professor/{id}")
     public ResponseEntity<?> obterExtratoProfessor(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(transacaoService.listarExtratoProfessor(id));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("mensagem", "Erro ao buscar extrato do professor."));
-        }
+        return ResponseEntity.ok(transacaoService.listarExtratoProfessor(id));
     }
 
     @GetMapping("/aluno/{id}")
     public ResponseEntity<?> obterExtratoAluno(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(transacaoService.listarExtratoAluno(id));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("mensagem", "Erro ao buscar extrato do aluno."));
-        }
+        return ResponseEntity.ok(transacaoService.listarExtratoAluno(id));
     }
 }

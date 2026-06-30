@@ -85,27 +85,7 @@ public class TransacaoService {
             transacaoProfessorRepository.save(logProfessor);
 
             // --- INÍCIO DO DESPACHO RABBITMQ (PROFESSOR -> ALUNO) ---
-            
-            // 1. Despacha e-mail para o Aluno (Recebeu)
-            EmailTransacaoDTO emailAluno = new EmailTransacaoDTO();
-            emailAluno.setEmailDestino(alunoDestinatario.getEmail());
-            emailAluno.setNomeDestino(alunoDestinatario.getNome());
-            emailAluno.setNomeOutraParte("Prof. " + professorRemetente.getNome());
-            emailAluno.setValor(dto.getValor());
-            emailAluno.setMotivo(dto.getMotivo());
-            emailAluno.setTipo("RECEBIDO");
-            publicarEmailTransacao(emailAluno);
-
-            // 2. Despacha e-mail para o Professor (Enviou)
-            EmailTransacaoDTO emailProf = new EmailTransacaoDTO();
-            emailProf.setEmailDestino(professorRemetente.getEmail());
-            emailProf.setNomeDestino(professorRemetente.getNome());
-            emailProf.setNomeOutraParte(alunoDestinatario.getNome());
-            emailProf.setValor(dto.getValor());
-            emailProf.setMotivo(dto.getMotivo());
-            emailProf.setTipo("ENVIADO");
-            publicarEmailTransacao(emailProf);
-            
+            dispararEmailsTransacao(alunoDestinatario, professorRemetente, "Prof. " + professorRemetente.getNome(), dto.getValor(), dto.getMotivo());
             // --- FIM DO DESPACHO ---
 
         } else if ("ALUNO".equalsIgnoreCase(dto.getTipoRemetente())) {
@@ -146,27 +126,7 @@ public class TransacaoService {
             transacaoAlunoRepository.save(logAluno);
 
             // --- INÍCIO DO DESPACHO RABBITMQ (ALUNO -> ALUNO) ---
-            
-            // 1. Despacha e-mail para o Aluno Destinatário (Recebeu)
-            EmailTransacaoDTO emailRecebedor = new EmailTransacaoDTO();
-            emailRecebedor.setEmailDestino(alunoDestinatario.getEmail());
-            emailRecebedor.setNomeDestino(alunoDestinatario.getNome());
-            emailRecebedor.setNomeOutraParte(alunoRemetente.getNome());
-            emailRecebedor.setValor(dto.getValor());
-            emailRecebedor.setMotivo(dto.getMotivo());
-            emailRecebedor.setTipo("RECEBIDO");
-            publicarEmailTransacao(emailRecebedor);
-
-            // 2. Despacha e-mail para o Aluno Remetente (Enviou)
-            EmailTransacaoDTO emailRemetente = new EmailTransacaoDTO();
-            emailRemetente.setEmailDestino(alunoRemetente.getEmail());
-            emailRemetente.setNomeDestino(alunoRemetente.getNome());
-            emailRemetente.setNomeOutraParte(alunoDestinatario.getNome());
-            emailRemetente.setValor(dto.getValor());
-            emailRemetente.setMotivo(dto.getMotivo());
-            emailRemetente.setTipo("ENVIADO");
-            publicarEmailTransacao(emailRemetente);
-
+            dispararEmailsTransacao(alunoDestinatario, alunoRemetente, alunoRemetente.getNome(), dto.getValor(), dto.getMotivo());
             // --- FIM DO DESPACHO ---
 
         } else {
@@ -174,6 +134,26 @@ public class TransacaoService {
         }
 
         
+    }
+
+    private void dispararEmailsTransacao(UsuarioAcademico destinatario, UsuarioAcademico remetente, String nomeRemetenteExibicao, Double valor, String motivo) {
+        EmailTransacaoDTO emailRecebedor = new EmailTransacaoDTO();
+        emailRecebedor.setEmailDestino(destinatario.getEmail());
+        emailRecebedor.setNomeDestino(destinatario.getNome());
+        emailRecebedor.setNomeOutraParte(nomeRemetenteExibicao);
+        emailRecebedor.setValor(valor);
+        emailRecebedor.setMotivo(motivo);
+        emailRecebedor.setTipo("RECEBIDO");
+        publicarEmailTransacao(emailRecebedor);
+
+        EmailTransacaoDTO emailRemetente = new EmailTransacaoDTO();
+        emailRemetente.setEmailDestino(remetente.getEmail());
+        emailRemetente.setNomeDestino(remetente.getNome());
+        emailRemetente.setNomeOutraParte(destinatario.getNome());
+        emailRemetente.setValor(valor);
+        emailRemetente.setMotivo(motivo);
+        emailRemetente.setTipo("ENVIADO");
+        publicarEmailTransacao(emailRemetente);
     }
 
     private void publicarEmailTransacao(EmailTransacaoDTO email) {

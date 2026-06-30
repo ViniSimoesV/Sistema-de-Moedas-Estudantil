@@ -139,26 +139,29 @@ public class ProfessorService {
                 
                 // Divide as colunas por vírgula ou ponto-e-vírgula
                 String[] colunas = linha.split("[,;]");
+                ProfessorDTO dto = parseLinhaCsvParaDto(colunas, instituicaoId);
                 
-                if (colunas.length >= 4) {
-                    ProfessorDTO dto = new ProfessorDTO();
-                    dto.setNome(colunas[0].trim());
-                    dto.setCpf(colunas[1].trim());
-                    dto.setEmail(colunas[2].trim());
-                    dto.setDepartamento(colunas[3].trim());
-                    dto.setInstituicaoId(instituicaoId);
-                    
+                if (dto != null) {
                     try {
-                        // Reutiliza a sua regra de negócio perfeita do cadastro manual!
                         salvos.add(this.salvar(dto));
                     } catch (IllegalArgumentException e) {
-                        // Se o professor já existir (CPF/Email duplicado), ele ignora esta linha e continua o resto
                         System.out.println("Linha ignorada (duplicado): " + dto.getNome());
                     }
                 }
             }
         }
         return salvos;
+    }
+
+    private ProfessorDTO parseLinhaCsvParaDto(String[] colunas, Long instituicaoId) {
+        if (colunas.length < 4) return null;
+        ProfessorDTO dto = new ProfessorDTO();
+        dto.setNome(colunas[0].trim());
+        dto.setCpf(colunas[1].trim());
+        dto.setEmail(colunas[2].trim());
+        dto.setDepartamento(colunas[3].trim());
+        dto.setInstituicaoId(instituicaoId);
+        return dto;
     }
 
 
