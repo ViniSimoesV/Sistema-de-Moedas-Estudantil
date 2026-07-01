@@ -111,11 +111,9 @@ public class AlunoService {
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
         // 2. Atualiza apenas os campos permitidos
-        aluno.setNome(dto.getNome());
         if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
             aluno.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
-        
 
         aluno.setNome(dto.getNome());
         aluno.setEmail(dto.getEmail());
