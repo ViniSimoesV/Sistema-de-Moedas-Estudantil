@@ -36,23 +36,10 @@ public class Vantagem {
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
-    // Métodos baseados no seu diagrama de classe
-    public void cadastrarVantagem() {
-        // Lógica de persistência será feita no VantagemService
-    }
-
-    public void consultarVantagem() {
-        // Lógica de busca via Repository
-    }
-
     public void editarVantagem(String novoNome, String novaDescricao, Integer novoCusto, String novaUrl) {
         this.nome = novoNome;
         this.descricao = novaDescricao;
         this.custo = novoCusto;
         this.urlFoto = novaUrl;
-    }
-
-    public void excluirVantagem() {
-        // Lógica para desativar ou deletar a vantagem
     }
 }
